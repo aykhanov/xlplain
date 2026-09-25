@@ -1,50 +1,55 @@
 # XLPlain — GitHub Pages
 
-Готовый статический сайт для публикации по адресу:
+Сайт XLPlain опубликован по адресу:
 
 https://aykhanov.github.io/xlplain/
 
-## Как опубликовать
+## Состав сайта
 
-1. Войдите в GitHub под аккаунтом `aykhanov`.
-2. Создайте новый публичный репозиторий с точным именем `xlplain`.
-3. Загрузите в корень репозитория файлы:
-   - `index.html`
-   - `offer.html`
-   - `privacy.html`
-   - `styles.css`
-4. Откройте:
-   `Settings` → `Pages`.
-5. В блоке `Build and deployment`:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-6. Нажмите `Save`.
-7. Через несколько минут откройте:
-   https://aykhanov.github.io/xlplain/
+В корне репозитория используются:
+- `index.html` — главная страница и блок покупки;
+- `offer.html` — публичная оферта;
+- `privacy.html` — политика обработки персональных данных;
+- `success.html` — страница успешной оплаты;
+- `fail.html` — страница неуспешной оплаты;
+- `styles.css` — стили сайта.
 
-## Важно перед подачей сайта в Robokassa
+## Платёжная схема
 
-Сайт уже содержит:
-- описание XLPlain;
-- цену;
-- порядок получения цифрового продукта;
-- условия активации;
-- возврат;
-- контакты;
-- данные самозанятого;
-- публичную оферту;
-- политику обработки персональных данных.
+Форма покупки отправляет POST-запрос на Yandex Cloud Function:
 
-Кнопка «Купить XLPlain» сейчас открывает письмо на XLPlain@yandex.com.
-После активации магазина Robokassa эту ссылку нужно заменить на платежную ссылку/кнопку Robokassa.
+`https://functions.yandexcloud.net/d4eqf3vcn7fdkg0f5td4`
 
-## Где менять ссылку оплаты
+Поля формы:
+- `action=create_payment`;
+- `email=<email покупателя>`.
 
-В `index.html` найдите:
+Сервер формирует платёж Robokassa и перенаправляет покупателя на страницу оплаты.
 
-href="mailto:XLPlain@yandex.com?subject=..."
+## Безопасное состояние до запуска продаж
 
-и замените значение `href` на платежную ссылку Robokassa.
+На сервере должно оставаться:
 
-Других изменений для подключения кнопки оплаты не требуется.
+`ROBOKASSA_LIVE_ENABLED=0`
+
+Пока магазин Robokassa не активирован, кнопка `Оплатить 2 990 ₽` на сайте также оставлена с атрибутом `disabled`.
+
+После активации магазина:
+1. проверить рабочие Password #1 / Password #2;
+2. настроить в Robokassa:
+   - Result URL: `https://functions.yandexcloud.net/d4eqf3vcn7fdkg0f5td4`, метод POST;
+   - Success URL: `https://aykhanov.github.io/xlplain/success.html`, метод GET;
+   - Fail URL: `https://aykhanov.github.io/xlplain/fail.html`, метод GET;
+3. установить `ROBOKASSA_LIVE_ENABLED=1`;
+4. удалить `disabled` у кнопки оплаты в `index.html`;
+5. провести один контрольный боевой платёж.
+
+## Фискализация
+
+Используется решение Robokassa «Робочеки СМЗ».
+
+Позиция чека:
+
+`Право использования программы XLPlain (надстройка для Microsoft Excel)`
+
+Цена: 2 990 ₽.

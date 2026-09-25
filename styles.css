@@ -210,7 +210,7 @@ section {
 .card p { margin: 0; color: var(--muted); }
 
 .buy-section {
-  padding-top: 30px;
+  padding-top: 34px;
   padding-bottom: 78px;
 }
 
@@ -225,37 +225,30 @@ section {
   padding-top: 10px;
 }
 
+.purchase-copy .kicker {
+  margin-bottom: 24px;
+}
+
 .purchase-copy .section-title {
-  margin-top: 16px;
+  margin: 0 0 18px;
+}
+
+.purchase-copy .section-lead {
+  margin-bottom: 28px;
 }
 
 .purchase-benefits {
   display: grid;
   gap: 12px;
-  margin-top: 26px;
 }
 
 .purchase-benefit {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
-  gap: 14px;
-  align-items: start;
+  gap: 4px;
   padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: rgba(255,255,255,.62);
-}
-
-.benefit-mark {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--soft);
-  color: var(--accent-dark);
-  font-weight: 800;
-  line-height: 1;
 }
 
 .purchase-benefit strong,
@@ -268,7 +261,6 @@ section {
 }
 
 .purchase-benefit span {
-  margin-top: 4px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.5;
@@ -524,5 +516,4 @@ footer {
   .meta-row { flex-direction: column; gap: 2px; }
   .result-card { padding: 26px 22px; }
   .purchase-card { padding: 22px; }
-  .purchase-benefit { grid-template-columns: 34px minmax(0, 1fr); padding: 14px; }
 }

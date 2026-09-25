@@ -67,14 +67,13 @@
   <section id="demo" style="padding-top:24px">
     <div class="container">
       <h2 class="section-title">XLPlain в работе</h2>
-      <p class="section-lead">Полная демонстрация работы надстройки без ускорения: от исходных данных до готового результата.</p>
-      <div style="padding:14px;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:var(--shadow)">
-        <video controls preload="metadata" playsinline style="display:block;width:100%;height:auto;border-radius:14px;background:#111">
-          <source src="XLPlain_demo_full_web.mp4" type="video/mp4">
+      <p class="section-lead">Полная демонстрация работы надстройки в обычном темпе.</p>
+      <div style="border:1px solid var(--line);border-radius:22px;background:#111;box-shadow:var(--shadow);overflow:hidden">
+        <video controls preload="metadata" playsinline style="display:block;width:100%;aspect-ratio:2554/1394;object-fit:contain;background:#111">
+          <source src="XLPlain_demo.mp4" type="video/mp4">
           Ваш браузер не поддерживает воспроизведение видео.
         </video>
       </div>
-      <p class="small" style="margin-top:12px">Демонстрация показана в обычном темпе, чтобы можно было рассмотреть последовательность действий и результат.</p>
     </div>
   </section>
 
@@ -140,7 +139,6 @@
             </label>
           </div>
 
-          <!-- После активации магазина Robokassa удалить disabled у кнопки. -->
           <button class="button primary purchase-submit" type="submit" disabled>Оплатить 2 990 ₽</button>
         </form>
 

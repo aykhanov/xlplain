@@ -362,8 +362,7 @@ section {
 }
 
 .purchase-fallback {
-  display: grid;
-  gap: 5px;
+  display: block;
   margin-top: 20px;
   padding-top: 18px;
   border-top: 1px solid var(--line);
@@ -373,7 +372,8 @@ section {
 }
 
 .purchase-fallback a {
-  width: fit-content;
+  display: inline;
+  margin-left: 4px;
   font-weight: 700;
 }
 

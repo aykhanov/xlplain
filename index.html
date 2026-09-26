@@ -15,6 +15,7 @@
       background: #111;
       box-shadow: var(--shadow);
       overflow: hidden;
+      user-select: none;
     }
 
     .demo-player video {
@@ -23,35 +24,42 @@
       aspect-ratio: 2554 / 1394;
       object-fit: contain;
       background: #111;
+      cursor: pointer;
     }
 
-    .demo-chapters {
+    .demo-controls {
       position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 48px;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 5;
+      padding: 44px 16px 11px;
+      color: #fff;
+      background: linear-gradient(to top, rgba(0,0,0,.86), rgba(0,0,0,.58) 52%, transparent);
+    }
+
+    .demo-seek {
       display: flex;
       gap: 3px;
-      height: 7px;
-      pointer-events: auto;
+      width: 100%;
+      height: 9px;
+      cursor: pointer;
+      touch-action: none;
+      align-items: center;
     }
 
-    .demo-chapter {
+    .demo-segment {
       position: relative;
       flex: var(--chapter-size) 1 0;
-      min-width: 5px;
-      height: 7px;
-      padding: 0;
-      border: 0;
-      border-radius: 999px;
+      height: 6px;
+      min-width: 4px;
       overflow: hidden;
-      cursor: pointer;
-      background: rgba(255,255,255,.38);
-      box-shadow: 0 1px 4px rgba(0,0,0,.28);
+      border-radius: 999px;
+      background: rgba(255,255,255,.40);
+      transition: height .12s ease, background .12s ease;
     }
 
-    .demo-chapter::after {
+    .demo-segment::after {
       content: "";
       position: absolute;
       inset: 0 auto 0 0;
@@ -60,60 +68,105 @@
       border-radius: inherit;
     }
 
-    .demo-chapter:hover,
-    .demo-chapter:focus-visible {
-      background: rgba(255,255,255,.72);
-      outline: none;
-      transform: scaleY(1.35);
-      transform-origin: center;
+    .demo-seek:hover .demo-segment,
+    .demo-seek.dragging .demo-segment {
+      height: 9px;
     }
 
-    .demo-chapter.active {
+    .demo-segment.active {
       background: rgba(255,255,255,.58);
     }
 
-    .demo-chapter-tooltip {
-      position: absolute;
-      left: 16px;
-      bottom: 66px;
-      z-index: 6;
-      max-width: min(520px, calc(100% - 32px));
-      padding: 8px 11px;
-      border-radius: 9px;
-      background: rgba(12,16,18,.9);
-      color: #fff;
-      font-size: 13px;
-      line-height: 1.3;
-      box-shadow: 0 5px 18px rgba(0,0,0,.28);
-      opacity: 0;
-      transform: translateY(5px);
-      transition: opacity .15s ease, transform .15s ease;
-      pointer-events: none;
+    .demo-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 34px;
+      padding-top: 7px;
     }
 
-    .demo-chapter-tooltip.visible {
+    .demo-control-button {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .demo-control-button:hover,
+    .demo-control-button:focus-visible {
+      background: rgba(255,255,255,.14);
+      outline: none;
+    }
+
+    .demo-time {
+      flex: 0 0 auto;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      color: rgba(255,255,255,.94);
+    }
+
+    .demo-current-chapter {
+      min-width: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      color: rgba(255,255,255,.88);
+    }
+
+    .demo-tooltip {
+      position: absolute;
+      bottom: 61px;
+      z-index: 7;
+      max-width: min(520px, calc(100% - 32px));
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(12,16,18,.94);
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.3;
+      box-shadow: 0 5px 18px rgba(0,0,0,.32);
+      opacity: 0;
+      transform: translate(-50%, 4px);
+      transition: opacity .12s ease, transform .12s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .demo-tooltip.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate(-50%, 0);
     }
 
     @media (max-width: 700px) {
-      .demo-chapters {
-        left: 10px;
-        right: 10px;
-        bottom: 43px;
+      .demo-controls {
+        padding: 36px 10px 7px;
+      }
+
+      .demo-seek {
         gap: 2px;
-        height: 6px;
       }
 
-      .demo-chapter {
-        height: 6px;
+      .demo-controls-row {
+        gap: 6px;
       }
 
-      .demo-chapter-tooltip {
-        left: 10px;
-        bottom: 58px;
+      .demo-current-chapter {
+        display: none;
+      }
+
+      .demo-tooltip {
+        bottom: 54px;
         max-width: calc(100% - 20px);
-        font-size: 12px;
+        white-space: normal;
       }
     }
   </style>
@@ -178,24 +231,34 @@
     <div class="container">
       <h2 class="section-title">XLPlain в работе</h2>
       <p class="section-lead">Полная демонстрация работы надстройки в обычном темпе.</p>
-      <div class="demo-player">
-        <video id="xlplain-demo-video" controls preload="metadata" playsinline>
+      <div class="demo-player" id="demo-player">
+        <video id="xlplain-demo-video" preload="metadata" playsinline>
           <source src="https://github.com/aykhanov/xlplain/releases/download/v1.0/XLPlain_demo.mp4" type="video/mp4">
           Ваш браузер не поддерживает воспроизведение видео.
         </video>
 
-        <div id="demo-chapter-tooltip" class="demo-chapter-tooltip" aria-hidden="true"></div>
+        <div id="demo-tooltip" class="demo-tooltip" aria-hidden="true"></div>
 
-        <div class="demo-chapters" aria-label="Главы видео">
-          <button type="button" class="demo-chapter" style="--chapter-size:50" data-start="0" data-end="50" data-title="Объединение таблиц" aria-label="00:00 — Объединение таблиц" title="00:00 — Объединение таблиц"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:35" data-start="50" data-end="85" data-title="Сверка данных (2 файла)" aria-label="00:50 — Сверка данных (2 файла)" title="00:50 — Сверка данных (2 файла)"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:33" data-start="85" data-end="118" data-title="Сверка данных (папка с файлами)" aria-label="01:25 — Сверка данных (папка с файлами)" title="01:25 — Сверка данных (папка с файлами)"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:37" data-start="118" data-end="155" data-title="Очистка данных" aria-label="01:58 — Очистка данных" title="01:58 — Очистка данных"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:32" data-start="155" data-end="187" data-title="Поиск дубликатов (по 1 или нескольким полям)" aria-label="02:35 — Поиск дубликатов (по 1 или нескольким полям)" title="02:35 — Поиск дубликатов (по 1 или нескольким полям)"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:122" data-start="187" data-end="309" data-title="Сводная таблица и дашборд" aria-label="03:07 — Сводная таблица и дашборд" title="03:07 — Сводная таблица и дашборд"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:44" data-start="309" data-end="353" data-title="Работа с папками и файлами" aria-label="05:09 — Работа с папками и файлами" title="05:09 — Работа с папками и файлами"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:102" data-start="353" data-end="455" data-title="Объединение таблиц в одну" aria-label="05:53 — Объединение таблиц в одну" title="05:53 — Объединение таблиц в одну"></button>
-          <button type="button" class="demo-chapter" style="--chapter-size:16" data-start="455" data-end="471" data-title="О программе" aria-label="07:35 — О программе" title="07:35 — О программе"></button>
+        <div class="demo-controls">
+          <div id="demo-seek" class="demo-seek" role="slider" tabindex="0" aria-label="Позиция видео" aria-valuemin="0" aria-valuemax="471" aria-valuenow="0">
+            <span class="demo-segment" style="--chapter-size:50" data-start="0" data-end="50" data-title="Объединение таблиц"></span>
+            <span class="demo-segment" style="--chapter-size:35" data-start="50" data-end="85" data-title="Сверка данных (2 файла)"></span>
+            <span class="demo-segment" style="--chapter-size:33" data-start="85" data-end="118" data-title="Сверка данных (папка с файлами)"></span>
+            <span class="demo-segment" style="--chapter-size:37" data-start="118" data-end="155" data-title="Очистка данных"></span>
+            <span class="demo-segment" style="--chapter-size:32" data-start="155" data-end="187" data-title="Поиск дубликатов (по 1 или нескольким полям)"></span>
+            <span class="demo-segment" style="--chapter-size:122" data-start="187" data-end="309" data-title="Сводная таблица и дашборд"></span>
+            <span class="demo-segment" style="--chapter-size:44" data-start="309" data-end="353" data-title="Работа с папками и файлами"></span>
+            <span class="demo-segment" style="--chapter-size:102" data-start="353" data-end="455" data-title="Объединение таблиц в одну"></span>
+            <span class="demo-segment" style="--chapter-size:16" data-start="455" data-end="471" data-title="О программе"></span>
+          </div>
+
+          <div class="demo-controls-row">
+            <button id="demo-play" class="demo-control-button" type="button" aria-label="Воспроизвести" title="Воспроизвести">▶</button>
+            <div id="demo-time" class="demo-time">0:00 / 7:51</div>
+            <div id="demo-current-chapter" class="demo-current-chapter">Объединение таблиц</div>
+            <button id="demo-volume" class="demo-control-button" type="button" aria-label="Выключить звук" title="Выключить звук">🔊</button>
+            <button id="demo-fullscreen" class="demo-control-button" type="button" aria-label="На весь экран" title="На весь экран">⛶</button>
+          </div>
         </div>
       </div>
     </div>
@@ -331,61 +394,178 @@
 
 <script>
 (function () {
+  var player = document.getElementById('demo-player');
   var video = document.getElementById('xlplain-demo-video');
-  var chapters = Array.prototype.slice.call(document.querySelectorAll('.demo-chapter'));
-  var tooltip = document.getElementById('demo-chapter-tooltip');
+  var seek = document.getElementById('demo-seek');
+  var segments = Array.prototype.slice.call(document.querySelectorAll('.demo-segment'));
+  var tooltip = document.getElementById('demo-tooltip');
+  var playButton = document.getElementById('demo-play');
+  var volumeButton = document.getElementById('demo-volume');
+  var fullscreenButton = document.getElementById('demo-fullscreen');
+  var timeLabel = document.getElementById('demo-time');
+  var chapterLabel = document.getElementById('demo-current-chapter');
+  var fallbackDuration = 471;
+  var dragging = false;
 
-  if (!video || !chapters.length || !tooltip) return;
+  if (!player || !video || !seek || !segments.length) return;
 
-  chapters.forEach(function (chapter) {
-    chapter.addEventListener('click', function () {
-      video.currentTime = Number(chapter.dataset.start || 0);
-      video.play().catch(function () {});
-    });
-
-    function showTooltip() {
-      var start = Number(chapter.dataset.start || 0);
-      var minutes = Math.floor(start / 60);
-      var seconds = String(Math.floor(start % 60)).padStart(2, '0');
-      tooltip.textContent = minutes + ':' + seconds + ' — ' + chapter.dataset.title;
-      tooltip.classList.add('visible');
-      tooltip.setAttribute('aria-hidden', 'false');
-    }
-
-    function hideTooltip() {
-      tooltip.classList.remove('visible');
-      tooltip.setAttribute('aria-hidden', 'true');
-    }
-
-    chapter.addEventListener('mouseenter', showTooltip);
-    chapter.addEventListener('focus', showTooltip);
-    chapter.addEventListener('mouseleave', hideTooltip);
-    chapter.addEventListener('blur', hideTooltip);
-  });
-
-  function updateChapterProgress() {
-    var t = video.currentTime || 0;
-
-    chapters.forEach(function (chapter) {
-      var start = Number(chapter.dataset.start || 0);
-      var end = Number(chapter.dataset.end || start + 1);
-      var progress = 0;
-
-      if (t >= end) {
-        progress = 100;
-      } else if (t > start) {
-        progress = ((t - start) / (end - start)) * 100;
-      }
-
-      chapter.style.setProperty('--progress', Math.max(0, Math.min(100, progress)) + '%');
-      chapter.classList.toggle('active', t >= start && t < end);
-    });
+  function duration() {
+    return Number.isFinite(video.duration) && video.duration > 0 ? video.duration : fallbackDuration;
   }
 
-  video.addEventListener('timeupdate', updateChapterProgress);
-  video.addEventListener('seeked', updateChapterProgress);
-  video.addEventListener('loadedmetadata', updateChapterProgress);
-  updateChapterProgress();
+  function formatTime(value) {
+    value = Math.max(0, Math.floor(value || 0));
+    var minutes = Math.floor(value / 60);
+    var seconds = String(value % 60).padStart(2, '0');
+    return minutes + ':' + seconds;
+  }
+
+  function chapterForTime(value) {
+    for (var i = segments.length - 1; i >= 0; i--) {
+      if (value >= Number(segments[i].dataset.start || 0)) return segments[i];
+    }
+    return segments[0];
+  }
+
+  function updateUI() {
+    var t = video.currentTime || 0;
+    var d = duration();
+
+    segments.forEach(function (segment) {
+      var start = Number(segment.dataset.start || 0);
+      var end = Number(segment.dataset.end || start + 1);
+      var progress = 0;
+
+      if (t >= end) progress = 100;
+      else if (t > start) progress = ((t - start) / (end - start)) * 100;
+
+      segment.style.setProperty('--progress', Math.max(0, Math.min(100, progress)) + '%');
+      segment.classList.toggle('active', t >= start && t < end);
+    });
+
+    seek.setAttribute('aria-valuemax', String(Math.round(d)));
+    seek.setAttribute('aria-valuenow', String(Math.round(t)));
+    timeLabel.textContent = formatTime(t) + ' / ' + formatTime(d);
+
+    var currentChapter = chapterForTime(t);
+    chapterLabel.textContent = currentChapter ? currentChapter.dataset.title : '';
+
+    playButton.textContent = video.paused ? '▶' : '❚❚';
+    playButton.setAttribute('aria-label', video.paused ? 'Воспроизвести' : 'Пауза');
+    playButton.title = video.paused ? 'Воспроизвести' : 'Пауза';
+
+    volumeButton.textContent = video.muted ? '🔇' : '🔊';
+    volumeButton.setAttribute('aria-label', video.muted ? 'Включить звук' : 'Выключить звук');
+    volumeButton.title = video.muted ? 'Включить звук' : 'Выключить звук';
+  }
+
+  function seekFromClientX(clientX) {
+    var rect = seek.getBoundingClientRect();
+    var ratio = (clientX - rect.left) / rect.width;
+    ratio = Math.max(0, Math.min(1, ratio));
+    video.currentTime = ratio * duration();
+    updateUI();
+  }
+
+  function showTooltip(clientX) {
+    var rect = seek.getBoundingClientRect();
+    var ratio = (clientX - rect.left) / rect.width;
+    ratio = Math.max(0, Math.min(1, ratio));
+    var hoverTime = ratio * duration();
+    var chapter = chapterForTime(hoverTime);
+    var playerRect = player.getBoundingClientRect();
+    var localX = clientX - playerRect.left;
+    var minX = 85;
+    var maxX = Math.max(minX, playerRect.width - 85);
+
+    tooltip.textContent = formatTime(hoverTime) + ' — ' + (chapter ? chapter.dataset.title : '');
+    tooltip.style.left = Math.max(minX, Math.min(maxX, localX)) + 'px';
+    tooltip.classList.add('visible');
+    tooltip.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideTooltip() {
+    if (dragging) return;
+    tooltip.classList.remove('visible');
+    tooltip.setAttribute('aria-hidden', 'true');
+  }
+
+  seek.addEventListener('pointerdown', function (event) {
+    dragging = true;
+    seek.classList.add('dragging');
+    seek.setPointerCapture(event.pointerId);
+    seekFromClientX(event.clientX);
+    showTooltip(event.clientX);
+  });
+
+  seek.addEventListener('pointermove', function (event) {
+    showTooltip(event.clientX);
+    if (dragging) seekFromClientX(event.clientX);
+  });
+
+  seek.addEventListener('pointerup', function (event) {
+    dragging = false;
+    seek.classList.remove('dragging');
+    if (seek.hasPointerCapture(event.pointerId)) seek.releasePointerCapture(event.pointerId);
+    hideTooltip();
+  });
+
+  seek.addEventListener('pointercancel', function (event) {
+    dragging = false;
+    seek.classList.remove('dragging');
+    if (seek.hasPointerCapture(event.pointerId)) seek.releasePointerCapture(event.pointerId);
+    hideTooltip();
+  });
+
+  seek.addEventListener('pointerleave', hideTooltip);
+
+  seek.addEventListener('keydown', function (event) {
+    var step = 5;
+    if (event.key === 'ArrowRight') {
+      video.currentTime = Math.min(duration(), video.currentTime + step);
+      event.preventDefault();
+    } else if (event.key === 'ArrowLeft') {
+      video.currentTime = Math.max(0, video.currentTime - step);
+      event.preventDefault();
+    } else if (event.key === 'Home') {
+      video.currentTime = 0;
+      event.preventDefault();
+    } else if (event.key === 'End') {
+      video.currentTime = duration();
+      event.preventDefault();
+    }
+    updateUI();
+  });
+
+  function togglePlay() {
+    if (video.paused) video.play().catch(function () {});
+    else video.pause();
+  }
+
+  playButton.addEventListener('click', togglePlay);
+  video.addEventListener('click', togglePlay);
+
+  volumeButton.addEventListener('click', function () {
+    video.muted = !video.muted;
+    updateUI();
+  });
+
+  fullscreenButton.addEventListener('click', function () {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (player.requestFullscreen) {
+      player.requestFullscreen();
+    }
+  });
+
+  video.addEventListener('timeupdate', updateUI);
+  video.addEventListener('loadedmetadata', updateUI);
+  video.addEventListener('play', updateUI);
+  video.addEventListener('pause', updateUI);
+  video.addEventListener('volumechange', updateUI);
+  video.addEventListener('ended', updateUI);
+
+  updateUI();
 })();
 </script>
 </body>

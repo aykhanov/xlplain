@@ -193,6 +193,11 @@ section {
   margin: 0 0 32px;
 }
 
+#features .section-lead,
+#license .section-lead {
+  max-width: none;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

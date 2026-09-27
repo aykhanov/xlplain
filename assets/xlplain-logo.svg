@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" role="img" aria-label="XLPlain">
+  <defs>
+    <linearGradient id="o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF7300"/><stop offset="1" stop-color="#FFA31A"/></linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D6D9DE"/><stop offset="0.55" stop-color="#9CA3AF"/><stop offset="1" stop-color="#6F7782"/></linearGradient>
+  </defs>
+  <g transform="translate(6,6) scale(.42)" fill="none" stroke-linecap="round" stroke-width="50"><path d="M58 198 L198 58" stroke="url(#g)"/><path d="M58 58 L198 198" stroke="url(#o)"/></g>
+  <text x="123" y="80" font-family="Segoe UI,Arial,sans-serif" font-size="62" font-weight="800" letter-spacing="-2"><tspan fill="#FF8A00">X</tspan><tspan fill="#1F2937">LPlain</tspan></text>
+</svg>

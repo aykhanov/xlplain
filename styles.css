@@ -621,12 +621,17 @@ footer img[alt^="XLPlain"] {
 
 .footer-links {
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
-.footer-links a { color: var(--muted); font-size: 14px; }
+.footer-links a {
+  color: var(--muted);
+  font-size: 14px;
+}
 
 @keyframes xlplain-float-a {
   from { transform: translate3d(0, 0, 0) scale(1); }
@@ -656,7 +661,10 @@ footer img[alt^="XLPlain"] {
   .hero-grid, .grid, .footer-grid { grid-template-columns: 1fr; }
   .hero { padding-top: 58px; }
   .nav-links { display: none; }
-  .footer-links { justify-content: flex-start; }
+  .footer-links {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
   .footer-brand img,
   footer img[alt^="XLPlain"] { width: 260px !important; }
 }

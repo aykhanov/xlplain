@@ -17,10 +17,49 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow-x: hidden;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+body::before {
+  width: 420px;
+  height: 420px;
+  right: -120px;
+  top: 70px;
+  background: radial-gradient(circle at 45% 45%, rgba(255,138,0,.18), rgba(255,138,0,.05) 54%, transparent 72%);
+  animation: xlplain-float-a 13s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 360px;
+  height: 360px;
+  left: 34px;
+  top: 330px;
+  background: radial-gradient(circle at 55% 45%, rgba(108,117,128,.14), rgba(108,117,128,.04) 58%, transparent 74%);
+  animation: xlplain-float-b 16s ease-in-out infinite alternate;
+}
+
+header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
 }
 
 a { color: var(--accent-dark); }
@@ -88,36 +127,13 @@ header {
 .hero {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   padding: 86px 0 64px;
 }
 
 .hero::before,
 .hero::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  border-radius: 999px;
-  pointer-events: none;
-  filter: blur(2px);
-}
-
-.hero::before {
-  width: 420px;
-  height: 420px;
-  right: -130px;
-  top: -155px;
-  background: radial-gradient(circle at 45% 45%, rgba(255,138,0,.18), rgba(255,138,0,.05) 54%, transparent 72%);
-  animation: xlplain-float-a 13s ease-in-out infinite alternate;
-}
-
-.hero::after {
-  width: 360px;
-  height: 360px;
-  left: -170px;
-  bottom: -185px;
-  background: radial-gradient(circle at 55% 45%, rgba(108,117,128,.14), rgba(108,117,128,.04) 58%, transparent 74%);
-  animation: xlplain-float-b 16s ease-in-out infinite alternate;
+  display: none;
 }
 
 .hero > .container {
@@ -586,6 +602,20 @@ footer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+  align-items: center;
+}
+
+.footer-brand {
+  display: inline-block;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.footer-brand img {
+  display: block;
+  width: 300px;
+  max-width: min(72vw, 300px);
+  height: auto;
 }
 
 .footer-links {
@@ -626,6 +656,7 @@ footer {
   .hero { padding-top: 58px; }
   .nav-links { display: none; }
   .footer-links { justify-content: flex-start; }
+  .footer-brand img { width: 260px; }
 }
 
 @media (max-width: 520px) {
@@ -635,4 +666,6 @@ footer {
   .meta-row { flex-direction: column; gap: 2px; }
   .result-card { padding: 26px 22px; }
   .purchase-card { padding: 22px; }
+  body::before { right: -210px; }
+  body::after { left: -120px; top: 360px; }
 }

@@ -611,11 +611,12 @@ footer {
   margin-bottom: 10px;
 }
 
-.footer-brand img {
+.footer-brand img,
+footer img[alt^="XLPlain"] {
   display: block;
-  width: 300px;
-  max-width: min(72vw, 300px);
-  height: auto;
+  width: 300px !important;
+  max-width: min(72vw, 300px) !important;
+  height: auto !important;
 }
 
 .footer-links {
@@ -656,7 +657,8 @@ footer {
   .hero { padding-top: 58px; }
   .nav-links { display: none; }
   .footer-links { justify-content: flex-start; }
-  .footer-brand img { width: 260px; }
+  .footer-brand img,
+  footer img[alt^="XLPlain"] { width: 260px !important; }
 }
 
 @media (max-width: 520px) {

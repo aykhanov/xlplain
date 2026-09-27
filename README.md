@@ -1,3 +1,5 @@
+<p align="left"><img src="assets/xlplain-logo.svg" alt="XLPlain" width="260"></p>
+
 # XLPlain — GitHub Pages
 
 Сайт XLPlain опубликован по адресу:
@@ -12,7 +14,10 @@ https://aykhanov.github.io/xlplain/
 - `privacy.html` — политика обработки персональных данных;
 - `success.html` — страница успешной оплаты;
 - `fail.html` — страница неуспешной оплаты;
-- `styles.css` — стили сайта.
+- `styles.css` — стили сайта;
+- `assets/xlplain-mark.svg` — фирменный знак;
+- `assets/xlplain-logo.svg` — горизонтальный логотип;
+- `favicon.ico` — иконка сайта.
 
 ## Платёжная схема
 

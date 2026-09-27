@@ -1,13 +1,13 @@
 :root {
-  --bg: #fff8ee;
-  --surface: #ffffff;
+  --bg: #e9e7e2;
+  --surface: #f7f6f3;
   --text: #1f2937;
-  --muted: #667085;
-  --line: #e6e1da;
+  --muted: #5d6672;
+  --line: #d2cec7;
   --accent: #ff8a00;
   --accent-dark: #d96f00;
-  --soft: #fff1df;
-  --shadow: 0 18px 55px rgba(31, 41, 55, .08);
+  --soft: #f1e4d5;
+  --shadow: 0 18px 55px rgba(31, 41, 55, .10);
   --radius: 22px;
 }
 
@@ -34,8 +34,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid rgba(230,225,218,.92);
-  background: rgba(255,248,238,.94);
+  border-bottom: 1px solid rgba(210,206,199,.94);
+  background: rgba(233,231,226,.95);
   backdrop-filter: blur(14px);
 }
 
@@ -97,10 +97,10 @@ header {
   align-items: center;
   gap: 8px;
   padding: 7px 11px;
-  border: 1px solid #ffd29b;
+  border: 1px solid #dfc8ad;
   background: var(--soft);
   border-radius: 999px;
-  color: var(--accent-dark);
+  color: #75400b;
   font-size: 13px;
   font-weight: 700;
 }
@@ -268,7 +268,7 @@ section {
   padding: 18px 20px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: rgba(255,255,255,.68);
+  background: rgba(247,246,243,.72);
 }
 
 .purchase-benefit strong,
@@ -313,9 +313,9 @@ section {
   display: inline-flex;
   padding: 7px 10px;
   border-radius: 999px;
-  background: #fff1df;
-  border: 1px solid #ffd29b;
-  color: #995200;
+  background: #f5e7c9;
+  border: 1px solid #ddc58f;
+  color: #66521e;
   font-size: 13px;
   font-weight: 700;
 }
@@ -339,7 +339,7 @@ section {
   padding: 0 14px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fff;
+  background: #fdfcf9;
   color: var(--text);
   font: inherit;
 }
@@ -355,7 +355,7 @@ section {
   padding: 14px 15px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fffaf4;
+  background: #f2f1ee;
 }
 
 .check-row {
@@ -419,7 +419,7 @@ section {
   height: 36px;
   border-radius: 11px;
   background: var(--soft);
-  color: var(--accent-dark);
+  color: #75400b;
   display: grid;
   place-items: center;
   font-weight: 800;
@@ -429,7 +429,7 @@ section {
   padding: 22px 24px;
   border-radius: 18px;
   background: var(--soft);
-  border: 1px solid #ffd29b;
+  border: 1px solid #dfc8ad;
 }
 
 .result-page {

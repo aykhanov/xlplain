@@ -10,6 +10,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?v=3">
   <link rel="icon" type="image/svg+xml" href="./assets/xlplain-mark.svg?v=3">
   <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="seo-pages.css?v=1">
   <style>
     .hero::after {
       left: 28px;
@@ -197,7 +198,16 @@
   <div class="container nav">
     <a class="brand" href="./">XLPlain</a>
     <nav class="nav-links">
-      <a href="#features">Возможности</a>
+      <div class="nav-dropdown">
+        <a class="nav-dropdown-trigger" href="#features">Возможности</a>
+        <div class="nav-dropdown-menu">
+          <a href="sverka-dannyh-excel.html">Сверка данных</a>
+          <a href="sravnit-tablicy-excel.html">Сравнение двух таблиц</a>
+          <a href="obedinit-tablicy-excel.html">Объединение таблиц</a>
+          <a href="ochistit-dannye-excel.html">Очистка данных</a>
+          <a href="poisk-dublej-excel.html">Поиск дублей</a>
+        </div>
+      </div>
       <a href="#compatibility">Совместимость</a>
       <a href="#license">Лицензия</a>
       <a href="#buy">Покупка</a>
@@ -240,10 +250,10 @@
       <h2 class="section-title">Что умеет XLPlain</h2>
       <p class="section-lead">Инструменты собраны в одной надстройке, чтобы сократить количество ручных операций при работе с таблицами.</p>
       <div class="grid">
-        <article class="card"><h3>Сверка данных</h3><p>Сопоставление таблиц и выявление различий между наборами данных.</p></article>
-        <article class="card"><h3>Объединение таблиц</h3><p>Сбор данных из нескольких таблиц в единый рабочий массив.</p></article>
-        <article class="card"><h3>Очистка данных</h3><p>Подготовка таблиц к дальнейшей обработке и анализу.</p></article>
-        <article class="card"><h3>Поиск дублей</h3><p>Поиск повторяющихся записей в рабочих массивах.</p></article>
+        <a class="card feature-card-link" href="sverka-dannyh-excel.html"><h3>Сверка данных</h3><p>Сопоставление таблиц и выявление различий между наборами данных.</p></a>
+        <a class="card feature-card-link" href="obedinit-tablicy-excel.html"><h3>Объединение таблиц</h3><p>Сбор данных из нескольких таблиц в единый рабочий массив.</p></a>
+        <a class="card feature-card-link" href="ochistit-dannye-excel.html"><h3>Очистка данных</h3><p>Подготовка таблиц к дальнейшей обработке и анализу.</p></a>
+        <a class="card feature-card-link" href="poisk-dublej-excel.html"><h3>Поиск дублей</h3><p>Поиск повторяющихся записей в рабочих массивах.</p></a>
         <article class="card"><h3>Сводные таблицы и дашборды</h3><p>Инструменты для подготовки сводных таблиц, дашбордов и аналитики.</p></article>
         <article class="card"><h3>Безопасность данных</h3><p>XLPlain обрабатывает таблицы локально в Excel. Содержимое файлов не передаётся во внешние сервисы и не используется ИИ.</p></article>
       </div>

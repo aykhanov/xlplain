@@ -1,29 +1,39 @@
 (function () {
   'use strict';
 
-  var protectedWords = [
-    'и','а','но','да','или','либо','ни','не','бы','же','ли',
+  var protectedWords = new Set([
+    'и','а','но','да','или','либо','ни','не','бы','же','ли','то',
     'в','во','на','к','ко','с','со','у','о','об','обо','от','до','за','из','изо','по',
-    'под','над','при','про','для','без','через','между',
-    'чтобы','что','как','если','когда','хотя','пока','зато','ведь','даже','лишь','только','ещё','уже','также','тоже'
-  ];
+    'под','над','при','про','для','без','через','между','перед','после','около','вокруг',
+    'чтобы','что','как','если','когда','пока','хотя','чем','чего','где','куда','откуда',
+    'зато','ведь','даже','лишь','только','ещё','еще','уже','также','тоже'
+  ]);
 
-  var pattern = new RegExp(
-    '(^|[\\s(«„“\\"—–-])(' + protectedWords.join('|') + ')[ \\t]+(?=\\S)',
-    'giu'
-  );
+  function normalizeWord(token) {
+    return token
+      .toLowerCase()
+      .replace(/^[«„“\"'([{—–-]+/u, '')
+      .replace(/[»”\"'.,!?;:…%)\]}—–-]+$/u, '');
+  }
 
   function protectText(text) {
-    return text.replace(pattern, function (_, before, word) {
-      return before + word + '\u00A0';
-    });
+    var parts = text.split(/([ \t]+)/u);
+
+    for (var i = 0; i < parts.length - 2; i += 2) {
+      var word = normalizeWord(parts[i]);
+      if (!protectedWords.has(word)) continue;
+      if (!/^[ \t]+$/u.test(parts[i + 1])) continue;
+      if (!parts[i + 2] || !parts[i + 2].trim()) continue;
+      parts[i + 1] = '\u00A0\u2060';
+    }
+
+    return parts.join('');
   }
 
   function shouldSkip(node) {
     var parent = node.parentElement;
     if (!parent) return true;
-    if (parent.closest('script, style, noscript, textarea, input, select, option, code, pre, [contenteditable="true"], [data-no-typography]')) return true;
-    return false;
+    return !!parent.closest('script, style, noscript, textarea, input, select, option, code, pre, [contenteditable="true"], [data-no-typography]');
   }
 
   function applyTypography() {

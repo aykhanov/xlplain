@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сравнить две таблицы Excel и найти различия — XLPlain</title>
+  <meta name="description" content="Как сравнить две таблицы или два файла Excel, найти добавленные, удалённые и изменённые записи. XLPlain выполняет сверку локально на компьютере.">
+  <link rel="canonical" href="https://aykhanov.github.io/xlplain/sravnit-tablicy-excel.html">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico?v=3">
+  <link rel="icon" type="image/svg+xml" href="./assets/xlplain-mark.svg?v=3">
+  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="seo-pages.css?v=1">
+</head>
+<body>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081','ym');
+ym(113091081,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113091081" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<header>
+  <div class="container nav">
+    <a class="brand" href="./">XLPlain</a>
+    <nav class="nav-links">
+      <div class="nav-dropdown">
+        <a class="nav-dropdown-trigger" href="./#features">Возможности</a>
+        <div class="nav-dropdown-menu">
+          <a href="sverka-dannyh-excel.html">Сверка данных</a>
+          <a href="sravnit-tablicy-excel.html">Сравнение двух таблиц</a>
+          <a href="obedinit-tablicy-excel.html">Объединение таблиц</a>
+          <a href="ochistit-dannye-excel.html">Очистка данных</a>
+          <a href="poisk-dublej-excel.html">Поиск дублей</a>
+        </div>
+      </div>
+      <a href="./#compatibility">Совместимость</a>
+      <a href="./#license">Лицензия</a>
+      <a href="./#buy">Покупка</a>
+      <a href="./#refund">Возврат</a>
+      <a href="./#contacts">Контакты</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero seo-hero">
+    <div class="container">
+      <span class="kicker">Сравнение таблиц Excel</span>
+      <h1>Как сравнить две таблицы Excel и найти различия</h1>
+      <p class="lead">Если у вас есть две версии реестра, выгрузки, отчёта или справочника, XLPlain помогает сопоставить записи по ключевым полям и увидеть расхождения.</p>
+      <div class="actions">
+        <a class="button primary" href="./">Все возможности XLPlain</a>
+        <a class="button" href="#xlplain">Как работает сравнение</a>
+      </div>
+      <p class="small">Рабочие Excel-файлы обрабатываются локально на компьютере. Содержимое таблиц не передаётся во внешние сервисы и не используется ИИ.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container seo-content">
+      <h2 class="section-title">Когда возникает эта задача</h2>
+      <p class="section-lead">Сравнение двух таблиц нужно при проверке версии «до» и «после», сверке выгрузок из разных систем, обновлённых справочников, прайс-листов, реестров и отчётов. Если строк много, простое построчное сравнение быстро становится неудобным.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container seo-content">
+      <h2 class="section-title">Как можно сравнить таблицы в Excel</h2>
+      <p class="section-lead">Для небольших таблиц можно использовать формулы поиска, условное форматирование или Power Query. При регулярной сверке важнее сначала определить ключ записи, а затем сравнивать связанные с ним поля.</p>
+      <div class="steps">
+        <div class="step"><div><strong>Определите ключ</strong><br><span class="small">Выберите поле или комбинацию полей, по которым одна запись однозначно сопоставляется с другой.</span></div></div>
+        <div class="step"><div><strong>Сопоставьте сравниваемые поля</strong><br><span class="small">Если структура файлов отличается, определите, какие столбцы соответствуют друг другу.</span></div></div>
+        <div class="step"><div><strong>Разделите реальные расхождения</strong><br><span class="small">Отдельно проверьте новые, отсутствующие и изменённые записи.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="xlplain">
+    <div class="container seo-content">
+      <h2 class="section-title">Как это делает XLPlain</h2>
+      <p class="section-lead">Сценарий сверки собран в одном окне надстройки.</p>
+      <div class="seo-steps">
+        <div class="seo-step"><div><strong>Выберите два файла и нужные листы</strong><span>Укажите старую и новую таблицу, которые нужно сравнить.</span></div></div>
+        <div class="seo-step"><div><strong>Задайте ключевые поля и соответствия</strong><span>Выберите поля, по которым сопоставляются записи, и при необходимости свяжите колонки с разными названиями.</span></div></div>
+        <div class="seo-step"><div><strong>Запустите сверку</strong><span>XLPlain сформирует результат сравнения в Excel, чтобы расхождения можно было проверить и использовать дальше.</span></div></div>
+      </div>
+
+      <div class="seo-video">
+        <video controls preload="metadata" playsinline>
+          <source src="https://github.com/aykhanov/xlplain/releases/download/v1.0/XLPlain_demo.mp4#t=50,85" type="video/mp4">
+          Ваш браузер не поддерживает воспроизведение видео.
+        </video>
+      </div>
+      <p class="seo-video-caption">Фрагмент полной демонстрации XLPlain: сверка двух файлов Excel.</p>
+
+      <div class="notice seo-key-difference"><strong>Ключевое отличие:</strong> сравнение выполняется локально в Excel. Рабочие файлы не нужно загружать на сайт или передавать стороннему онлайн-сервису.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container seo-content">
+      <div class="seo-cta">
+        <h2>XLPlain — это не один инструмент</h2>
+        <p>В надстройке также есть объединение таблиц, очистка данных, поиск дублей, пакетная сверка, работа с папками и файлами, сводные таблицы и дашборды.</p>
+        <div class="actions"><a class="button primary" href="./">Все возможности XLPlain</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container seo-content">
+      <h2 class="section-title">Частые вопросы</h2>
+      <div class="faq-list">
+        <details><summary>Можно ли сравнить два разных файла Excel?</summary><p>Да. В XLPlain выбираются два файла и нужные листы, после чего задаются поля для сопоставления.</p></details>
+        <details><summary>Можно ли сравнивать по нескольким столбцам?</summary><p>Да. Комбинация нескольких полей может использоваться как составной ключ.</p></details>
+        <details><summary>Нужно ли загружать файлы на сайт?</summary><p>Нет. Обработка выполняется локально в Excel на компьютере пользователя.</p></details>
+        <details><summary>Зависит ли скорость от размера таблиц?</summary><p>Да. Фактическое время обработки зависит от объёма данных и производительности компьютера.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="container footer-grid">
+    <div><a class="footer-brand" href="./" aria-label="XLPlain — на главную"><img src="assets/xlplain-logo.svg" alt="XLPlain"></a><br><span class="small">© 2026 Ханов Алексей Юрьевич</span></div>
+    <div class="footer-links"><a href="offer.html">Публичная оферта</a><a href="privacy.html">Обработка персональных данных</a><a href="mailto:XLPlain@yandex.com">Поддержка</a></div>
+  </div>
+</footer>
+</body>
+</html>

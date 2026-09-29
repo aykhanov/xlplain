@@ -12,8 +12,8 @@
   function normalizeWord(token) {
     return token
       .toLowerCase()
-      .replace(/^[«„“\"'([{—–-]+/u, '')
-      .replace(/[»”\"'.,!?;:…%)\]}—–-]+$/u, '');
+      .replace(/^[^А-Яа-яЁёA-Za-z0-9]+/u, '')
+      .replace(/[^А-Яа-яЁёA-Za-z0-9]+$/u, '');
   }
 
   function shouldSkip(node) {
@@ -40,8 +40,6 @@
         continue;
       }
 
-      // Собираем цепочку из служебных слов и первого следующего значимого слова:
-      // «и перейдите», «не считая», «с файлами», «по одному», «и по ключу».
       var group = token;
       var j = i + 1;
       var hasFollowingWord = false;

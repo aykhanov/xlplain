@@ -16,24 +16,49 @@
       .replace(/[»”\"'.,!?;:…%)\]}—–-]+$/u, '');
   }
 
-  function protectText(text) {
-    var parts = text.split(/([ \t]+)/u);
-
-    for (var i = 0; i < parts.length - 2; i += 2) {
-      var word = normalizeWord(parts[i]);
-      if (!protectedWords.has(word)) continue;
-      if (!/^[ \t]+$/u.test(parts[i + 1])) continue;
-      if (!parts[i + 2] || !parts[i + 2].trim()) continue;
-      parts[i + 1] = '\u00A0\u2060';
-    }
-
-    return parts.join('');
-  }
-
   function shouldSkip(node) {
     var parent = node.parentElement;
     if (!parent) return true;
-    return !!parent.closest('script, style, noscript, textarea, input, select, option, code, pre, [contenteditable="true"], [data-no-typography]');
+    return !!parent.closest('script, style, noscript, textarea, input, select, option, code, pre, [contenteditable="true"], [data-no-typography], .xlplain-nobr');
+  }
+
+  function processTextNode(textNode) {
+    var text = textNode.nodeValue;
+    var re = /(^|\s)(\S+)(\s+)(\S+)/gu;
+    var match;
+    var lastIndex = 0;
+    var fragment = document.createDocumentFragment();
+    var changed = false;
+
+    while ((match = re.exec(text)) !== null) {
+      var before = match[1];
+      var first = match[2];
+      var gap = match[3];
+      var second = match[4];
+      var firstStart = match.index + before.length;
+      var wholeStart = match.index;
+
+      if (!protectedWords.has(normalizeWord(first))) continue;
+
+      if (wholeStart > lastIndex) {
+        fragment.appendChild(document.createTextNode(text.slice(lastIndex, wholeStart)));
+      }
+      if (before) fragment.appendChild(document.createTextNode(before));
+
+      var span = document.createElement('span');
+      span.className = 'xlplain-nobr';
+      span.style.whiteSpace = 'nowrap';
+      span.textContent = first + gap + second;
+      fragment.appendChild(span);
+
+      lastIndex = firstStart + first.length + gap.length + second.length;
+      re.lastIndex = lastIndex;
+      changed = true;
+    }
+
+    if (!changed) return;
+    if (lastIndex < text.length) fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+    textNode.parentNode.replaceChild(fragment, textNode);
   }
 
   function applyTypography() {
@@ -45,10 +70,7 @@
       if (!shouldSkip(node) && node.nodeValue && node.nodeValue.trim()) nodes.push(node);
     }
 
-    nodes.forEach(function (textNode) {
-      var next = protectText(textNode.nodeValue);
-      if (next !== textNode.nodeValue) textNode.nodeValue = next;
-    });
+    nodes.forEach(processTextNode);
   }
 
   if (document.readyState === 'loading') {

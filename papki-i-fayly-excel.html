@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Работа с папками и файлами Excel — XLPlain</title>
-  <meta name="description" content="XLPlain помогает работать с папками и Excel-файлами: создать реестр файлов, массово переименовать и переместить файлы, собрать книги и листы в одну книгу.">
+  <meta name="description" content="XLPlain помогает работать с Excel-файлами: создать реестр файлов выбранной папки, массово переименовать и переместить файлы, собрать таблицы из разных книг в одну.">
   <link rel="canonical" href="https://aykhanov.github.io/xlplain/papki-i-fayly-excel.html">
   <link rel="icon" type="image/x-icon" href="https://aykhanov.github.io/xlplain/favicon.ico?v=4">
   <link rel="shortcut icon" type="image/x-icon" href="https://aykhanov.github.io/xlplain/favicon.ico?v=4">
@@ -21,7 +21,6 @@
         <a class="nav-dropdown-trigger" href="./#features">Возможности</a>
         <div class="nav-dropdown-menu">
           <a href="sverka-dannyh-excel.html">Сверка данных</a>
-          <a href="sravnit-tablicy-excel.html">Сравнение двух таблиц</a>
           <a href="obedinit-tablicy-excel.html">Объединение таблиц</a>
           <a href="ochistit-dannye-excel.html">Очистка данных</a>
           <a href="poisk-dublej-excel.html">Поиск дублей</a>
@@ -55,11 +54,11 @@
     <div class="container seo-content">
       <h2 class="section-title">Какие задачи можно решить</h2>
       <div class="grid">
-        <article class="card"><h3>Список файлов</h3><p>Получить реестр файлов выбранной папки и при необходимости вложенных папок: имя, путь, расширение, размер и даты.</p></article>
+        <article class="card"><h3>Реестр файлов</h3><p>Получить список файлов из выбранной папки: имя, путь, расширение, размер и даты.</p></article>
         <article class="card"><h3>Массовое переименование</h3><p>Подготовить новые имена файлов по шаблону или таблице и сначала проверить изменения перед применением.</p></article>
         <article class="card"><h3>Перемещение файлов</h3><p>Перенести выбранные файлы в нужные папки по заданным правилам, сохраняя контроль над результатом.</p></article>
-        <article class="card"><h3>Сбор Excel-файлов</h3><p>Собрать несколько книг Excel в одну книгу для дальнейшей работы.</p></article>
-        <article class="card"><h3>Сбор листов</h3><p>Перенести листы из нескольких книг в один файл без ручного открытия каждой книги.</p></article>
+        <article class="card"><h3>Объединение таблиц из файлов</h3><p>Собрать таблицы из нескольких Excel-файлов в одну итоговую таблицу для дальнейшей работы.</p></article>
+        <article class="card"><h3>Сбор книг и листов</h3><p>Собрать содержимое нескольких Excel-книг и листов в один файл без ручного открытия каждой книги.</p></article>
       </div>
     </div>
   </section>
@@ -68,11 +67,13 @@
     <div class="container seo-content">
       <h2 class="section-title">Как это делает XLPlain</h2>
       <div class="seo-steps">
-        <div class="seo-step"><div><strong>Выберите сценарий</strong><span>Создание списка файлов, переименование, перемещение или сбор Excel-файлов и листов.</span></div></div>
-        <div class="seo-step"><div><strong>Укажите папку и параметры</strong><span>Выберите исходную папку, при необходимости включите подпапки и задайте правила обработки.</span></div></div>
-        <div class="seo-step"><div><strong>Проверьте результат и выполните действие</strong><span>Для операций с файлами XLPlain показывает структуру и параметры до применения, чтобы избежать лишних ручных действий.</span></div></div>
+        <div class="seo-step"><div><strong>Выберите сценарий</strong><span>Создание реестра, переименование, перемещение или объединение данных из Excel-файлов.</span></div></div>
+        <div class="seo-step"><div><strong>Укажите папку и параметры</strong><span>XLPlain работает с файлами выбранной папки и применяет параметры выбранного сценария.</span></div></div>
+        <div class="seo-step"><div><strong>Проверьте результат и выполните действие</strong><span>Для операций с файлами можно заранее проверить структуру и параметры, а затем выполнить действие.</span></div></div>
       </div>
-      <div class="notice seo-key-difference"><strong>Ключевое отличие:</strong> работа с файлами и папками встроена в ту же надстройку, что и сверка, очистка, объединение и аналитика. Не нужно переключаться между несколькими утилитами.</div>
+      <div class="seo-video"><video controls preload="metadata" playsinline><source src="https://github.com/aykhanov/xlplain/releases/download/v1.0/XLPlain_demo.mp4#t=309,440" type="video/mp4"></video></div>
+      <p class="seo-video-caption">Демонстрация работы с папками и файлами: 05:09–07:20.</p>
+      <div class="notice seo-key-difference"><strong>Ключевое отличие:</strong> в одном модуле собраны файловые операции и сценарий объединения таблиц из нескольких Excel-файлов. Это отдельная функция от умного объединения таблиц по ключу.</div>
     </div>
   </section>
 
@@ -80,9 +81,10 @@
     <div class="container seo-content">
       <h2 class="section-title">Частые вопросы</h2>
       <div class="faq-list">
-        <details><summary>Можно ли получить список файлов вместе с вложенными папками?</summary><p>Да. При создании реестра можно учитывать вложенные папки.</p></details>
+        <details><summary>Какие файлы попадают в реестр?</summary><p>Реестр формируется по файлам из выбранной папки.</p></details>
         <details><summary>XLPlain сразу переименовывает файлы?</summary><p>Перед применением массового переименования можно сначала подготовить и проверить новые имена.</p></details>
-        <details><summary>Можно ли собрать несколько Excel-файлов в одну книгу?</summary><p>Да. Для этого в модуле предусмотрен отдельный сценарий работы с книгами и листами.</p></details>
+        <details><summary>Можно ли объединить таблицы из нескольких Excel-файлов в одну?</summary><p>Да. В модуле «Папки и файлы» предусмотрен отдельный сценарий, который собирает таблицы из разных Excel-файлов в одну итоговую таблицу.</p></details>
+        <details><summary>Чем это отличается от «Объединения таблиц»?</summary><p>Модуль «Папки и файлы» собирает данные из нескольких файлов. «Объединение таблиц» — это умное объединение 2–6 таблиц по ключевым полям, аналогичное JOIN.</p></details>
       </div>
     </div>
   </section>

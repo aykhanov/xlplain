@@ -10,190 +10,34 @@
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?v=3">
   <link rel="icon" type="image/svg+xml" href="./assets/xlplain-mark.svg?v=3">
   <link rel="stylesheet" href="styles.css?v=7">
-  <link rel="stylesheet" href="seo-pages.css?v=1">
+  <link rel="stylesheet" href="seo-pages.css?v=2">
   <style>
-    .hero::after {
-      left: 28px;
-      bottom: -150px;
-    }
-
-    .demo-player {
-      position: relative;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: #111;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      user-select: none;
-    }
-
-    .demo-player video {
-      display: block;
-      width: 100%;
-      aspect-ratio: 2554 / 1394;
-      object-fit: contain;
-      background: #111;
-      cursor: pointer;
-    }
-
-    .demo-controls {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 5;
-      padding: 44px 16px 11px;
-      color: #fff;
-      background: linear-gradient(to top, rgba(0,0,0,.86), rgba(0,0,0,.58) 52%, transparent);
-    }
-
-    .demo-seek {
-      display: flex;
-      gap: 3px;
-      width: 100%;
-      height: 9px;
-      cursor: pointer;
-      touch-action: none;
-      align-items: center;
-    }
-
-    .demo-segment {
-      position: relative;
-      flex: var(--chapter-size) 1 0;
-      height: 6px;
-      min-width: 4px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255,255,255,.40);
-      transition: height .12s ease, background .12s ease;
-    }
-
-    .demo-segment::after {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: var(--progress, 0%);
-      background: #20c67a;
-      border-radius: inherit;
-    }
-
-    .demo-seek:hover .demo-segment,
-    .demo-seek.dragging .demo-segment {
-      height: 9px;
-    }
-
-    .demo-segment.active {
-      background: rgba(255,255,255,.58);
-    }
-
-    .demo-controls-row {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      min-height: 34px;
-      padding-top: 7px;
-    }
-
-    .demo-control-button {
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      border: 0;
-      border-radius: 7px;
-      background: transparent;
-      color: #fff;
-      font: inherit;
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .demo-control-button:hover,
-    .demo-control-button:focus-visible {
-      background: rgba(255,255,255,.14);
-      outline: none;
-    }
-
-    .demo-time {
-      flex: 0 0 auto;
-      font-size: 13px;
-      font-variant-numeric: tabular-nums;
-      color: rgba(255,255,255,.94);
-    }
-
-    .demo-current-chapter {
-      min-width: 0;
-      flex: 1 1 auto;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 13px;
-      color: rgba(255,255,255,.88);
-    }
-
-    .demo-tooltip {
-      position: absolute;
-      bottom: 61px;
-      z-index: 7;
-      max-width: min(520px, calc(100% - 32px));
-      padding: 7px 10px;
-      border-radius: 8px;
-      background: rgba(12,16,18,.94);
-      color: #fff;
-      font-size: 12px;
-      line-height: 1.3;
-      box-shadow: 0 5px 18px rgba(0,0,0,.32);
-      opacity: 0;
-      transform: translate(-50%, 4px);
-      transition: opacity .12s ease, transform .12s ease;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    .demo-tooltip.visible {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    @media (max-width: 700px) {
-      .demo-controls {
-        padding: 36px 10px 7px;
-      }
-
-      .demo-seek {
-        gap: 2px;
-      }
-
-      .demo-controls-row {
-        gap: 6px;
-      }
-
-      .demo-current-chapter {
-        display: none;
-      }
-
-      .demo-tooltip {
-        bottom: 54px;
-        max-width: calc(100% - 20px);
-        white-space: normal;
-      }
-    }
+    .hero::after { left: 28px; bottom: -150px; }
+    .demo-player { position: relative; border: 1px solid var(--line); border-radius: 22px; background: #111; box-shadow: var(--shadow); overflow: hidden; user-select: none; }
+    .demo-player video { display: block; width: 100%; aspect-ratio: 2554 / 1394; object-fit: contain; background: #111; cursor: pointer; }
+    .demo-controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; padding: 44px 16px 11px; color: #fff; background: linear-gradient(to top, rgba(0,0,0,.86), rgba(0,0,0,.58) 52%, transparent); }
+    .demo-seek { display: flex; gap: 3px; width: 100%; height: 9px; cursor: pointer; touch-action: none; align-items: center; }
+    .demo-segment { position: relative; flex: var(--chapter-size) 1 0; height: 6px; min-width: 4px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.40); transition: height .12s ease, background .12s ease; }
+    .demo-segment::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--progress, 0%); background: #20c67a; border-radius: inherit; }
+    .demo-seek:hover .demo-segment, .demo-seek.dragging .demo-segment { height: 9px; }
+    .demo-segment.active { background: rgba(255,255,255,.58); }
+    .demo-controls-row { display: flex; align-items: center; gap: 11px; min-height: 34px; padding-top: 7px; }
+    .demo-control-button { width: 32px; height: 32px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: #fff; font: inherit; font-size: 20px; line-height: 1; cursor: pointer; }
+    .demo-control-button:hover, .demo-control-button:focus-visible { background: rgba(255,255,255,.14); outline: none; }
+    .demo-time { flex: 0 0 auto; font-size: 13px; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.94); }
+    .demo-current-chapter { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: rgba(255,255,255,.88); }
+    .demo-tooltip { position: absolute; bottom: 61px; z-index: 7; max-width: min(520px, calc(100% - 32px)); padding: 7px 10px; border-radius: 8px; background: rgba(12,16,18,.94); color: #fff; font-size: 12px; line-height: 1.3; box-shadow: 0 5px 18px rgba(0,0,0,.32); opacity: 0; transform: translate(-50%, 4px); transition: opacity .12s ease, transform .12s ease; pointer-events: none; white-space: nowrap; }
+    .demo-tooltip.visible { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 700px) { .demo-controls { padding: 36px 10px 7px; } .demo-seek { gap: 2px; } .demo-controls-row { gap: 6px; } .demo-current-chapter { display: none; } .demo-tooltip { bottom: 54px; max-width: calc(100% - 20px); white-space: normal; } }
   </style>
 </head>
 <body>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081', 'ym');
-
-    ym(113091081, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081','ym');
+    ym(113091081,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/113091081" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 <header>
   <div class="container nav">
     <a class="brand" href="./">XLPlain</a>
@@ -206,426 +50,40 @@
           <a href="obedinit-tablicy-excel.html">Объединение таблиц</a>
           <a href="ochistit-dannye-excel.html">Очистка данных</a>
           <a href="poisk-dublej-excel.html">Поиск дублей</a>
+          <a href="svodnye-tablicy-dashbordy-excel.html">Сводные и дашборды</a>
         </div>
       </div>
-      <a href="#compatibility">Совместимость</a>
-      <a href="#license">Лицензия</a>
-      <a href="#buy">Покупка</a>
-      <a href="#refund">Возврат</a>
-      <a href="#contacts">Контакты</a>
+      <a href="#compatibility">Совместимость</a><a href="#license">Лицензия</a><a href="#buy">Покупка</a><a href="#refund">Возврат</a><a href="#contacts">Контакты</a>
     </nav>
   </div>
 </header>
-
 <main>
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <span class="kicker">Надстройка для Microsoft Excel</span>
-        <h1>XLPlain</h1>
-        <p class="lead">Набор инструментов для регулярной работы с данными в Excel:<br>Сверка, объединение, очистка, поиск дублей и подготовка аналитики.</p>
-        <div class="actions">
-          <a class="button primary" href="#buy">Купить XLPlain — 3 990 ₽</a>
-          <a class="button" href="#features">Посмотреть возможности</a>
-        </div>
-        <p class="small">Электронный продукт. Лицензия на 1 год для одного пользователя, до двух компьютеров.</p>
-      </div>
+  <section class="hero"><div class="container hero-grid"><div><span class="kicker">Надстройка для Microsoft Excel</span><h1>XLPlain</h1><p class="lead">Набор инструментов для регулярной работы с данными в Excel:<br>Сверка, объединение, очистка, поиск дублей и подготовка аналитики.</p><div class="actions"><a class="button primary" href="#buy">Купить XLPlain — 3 990 ₽</a><a class="button" href="#features">Посмотреть возможности</a></div><p class="small">Электронный продукт. Лицензия на 1 год для одного пользователя, до двух компьютеров.</p></div><aside class="hero-card"><div class="small">Стоимость лицензии XLPlain на 1 год</div><div class="price">3 990 ₽</div><div class="meta"><div class="meta-row"><span>Тип</span><strong>Годовая</strong></div><div class="meta-row"><span>Срок действия</span><strong>1 год</strong></div><div class="meta-row"><span>Пользователь</span><strong>1</strong></div><div class="meta-row"><span>Компьютеры</span><strong>до 2</strong></div><div class="meta-row"><span>Платформа</span><strong>Microsoft Excel / Windows</strong></div></div></aside></div></section>
 
-      <aside class="hero-card">
-        <div class="small">Стоимость лицензии XLPlain на 1 год</div>
-        <div class="price">3 990 ₽</div>
-        <div class="meta">
-          <div class="meta-row"><span>Тип</span><strong>Годовая</strong></div>
-          <div class="meta-row"><span>Срок действия</span><strong>1 год</strong></div>
-          <div class="meta-row"><span>Пользователь</span><strong>1</strong></div>
-          <div class="meta-row"><span>Компьютеры</span><strong>до 2</strong></div>
-          <div class="meta-row"><span>Платформа</span><strong>Microsoft Excel / Windows</strong></div>
-        </div>
-      </aside>
-    </div>
-  </section>
+  <section id="features"><div class="container"><h2 class="section-title">Что умеет XLPlain</h2><p class="section-lead">Инструменты собраны в одной надстройке, чтобы сократить количество ручных операций при работе с таблицами.</p><div class="grid">
+    <a class="card feature-card-link" href="sverka-dannyh-excel.html"><h3>Сверка данных</h3><p>Сопоставление таблиц и выявление различий между наборами данных.</p></a>
+    <a class="card feature-card-link" href="obedinit-tablicy-excel.html"><h3>Объединение таблиц</h3><p>Сбор данных из нескольких таблиц в единый рабочий массив.</p></a>
+    <a class="card feature-card-link" href="ochistit-dannye-excel.html"><h3>Очистка данных</h3><p>Подготовка таблиц к дальнейшей обработке и анализу.</p></a>
+    <a class="card feature-card-link" href="poisk-dublej-excel.html"><h3>Поиск дублей</h3><p>Поиск повторяющихся записей в рабочих массивах.</p></a>
+    <a class="card feature-card-link" href="svodnye-tablicy-dashbordy-excel.html"><h3>Сводные таблицы и дашборды</h3><p>Инструменты для подготовки сводных таблиц, дашбордов и аналитики.</p></a>
+    <article class="card"><h3>Безопасность данных</h3><p>XLPlain обрабатывает таблицы локально в Excel. Содержимое файлов не передаётся во внешние сервисы и не используется ИИ.</p></article>
+  </div></div></section>
 
-  <section id="features">
-    <div class="container">
-      <h2 class="section-title">Что умеет XLPlain</h2>
-      <p class="section-lead">Инструменты собраны в одной надстройке, чтобы сократить количество ручных операций при работе с таблицами.</p>
-      <div class="grid">
-        <a class="card feature-card-link" href="sverka-dannyh-excel.html"><h3>Сверка данных</h3><p>Сопоставление таблиц и выявление различий между наборами данных.</p></a>
-        <a class="card feature-card-link" href="obedinit-tablicy-excel.html"><h3>Объединение таблиц</h3><p>Сбор данных из нескольких таблиц в единый рабочий массив.</p></a>
-        <a class="card feature-card-link" href="ochistit-dannye-excel.html"><h3>Очистка данных</h3><p>Подготовка таблиц к дальнейшей обработке и анализу.</p></a>
-        <a class="card feature-card-link" href="poisk-dublej-excel.html"><h3>Поиск дублей</h3><p>Поиск повторяющихся записей в рабочих массивах.</p></a>
-        <article class="card"><h3>Сводные таблицы и дашборды</h3><p>Инструменты для подготовки сводных таблиц, дашбордов и аналитики.</p></article>
-        <article class="card"><h3>Безопасность данных</h3><p>XLPlain обрабатывает таблицы локально в Excel. Содержимое файлов не передаётся во внешние сервисы и не используется ИИ.</p></article>
-      </div>
-    </div>
-  </section>
+  <section id="compatibility" style="padding-top:24px"><div class="container"><h2 class="section-title">Совместимость</h2><p class="section-lead">Перед покупкой проверьте, подходит ли XLPlain для вашей системы.</p><div class="grid"><article class="card"><h3>Подойдёт</h3><p>Настольный Microsoft Excel на Windows. Для установки и работы должен быть разрешён запуск VBA-макросов.</p></article><article class="card"><h3>Не поддерживается</h3><p>Excel Online и Microsoft Excel для macOS. Текущая версия XLPlain предназначена только для Windows.</p></article><article class="card"><h3>Подключение к интернету</h3><p>Нужно для первой активации и примерно один раз в 30 дней для проверки лицензии. Работа с таблицами выполняется локально.</p></article></div><div class="notice" style="margin-top:20px">Не уверены, подходит ли ваша версия Excel? Напишите на <a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a> до покупки.</div></div></section>
 
-  <section id="compatibility" style="padding-top:24px">
-    <div class="container">
-      <h2 class="section-title">Совместимость</h2>
-      <p class="section-lead">Перед покупкой проверьте, подходит ли XLPlain для вашей системы.</p>
-      <div class="grid">
-        <article class="card">
-          <h3>Подойдёт</h3>
-          <p>Настольный Microsoft Excel на Windows. Для установки и работы должен быть разрешён запуск VBA-макросов.</p>
-        </article>
-        <article class="card">
-          <h3>Не поддерживается</h3>
-          <p>Excel Online и Microsoft Excel для macOS. Текущая версия XLPlain предназначена только для Windows.</p>
-        </article>
-        <article class="card">
-          <h3>Подключение к интернету</h3>
-          <p>Нужно для первой активации и примерно один раз в 30 дней для проверки лицензии. Работа с таблицами выполняется локально.</p>
-        </article>
-      </div>
-      <div class="notice" style="margin-top:20px">
-        Не уверены, подходит ли ваша версия Excel? Напишите на <a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a> до покупки.
-      </div>
-    </div>
-  </section>
+  <section id="demo" style="padding-top:24px"><div class="container"><h2 class="section-title">XLPlain в работе</h2><p class="section-lead">Полная демонстрация работы надстройки в обычном темпе.</p><div class="demo-player" id="demo-player"><video id="xlplain-demo-video" preload="metadata" playsinline><source src="https://github.com/aykhanov/xlplain/releases/download/v1.0/XLPlain_demo.mp4" type="video/mp4">Ваш браузер не поддерживает воспроизведение видео.</video><div id="demo-tooltip" class="demo-tooltip" aria-hidden="true"></div><div class="demo-controls"><div id="demo-seek" class="demo-seek" role="slider" tabindex="0" aria-label="Позиция видео" aria-valuemin="0" aria-valuemax="471" aria-valuenow="0"><span class="demo-segment" style="--chapter-size:50" data-start="0" data-end="50" data-title="Объединение таблиц"></span><span class="demo-segment" style="--chapter-size:35" data-start="50" data-end="85" data-title="Сверка данных (2 файла)"></span><span class="demo-segment" style="--chapter-size:33" data-start="85" data-end="118" data-title="Сверка данных (папка с файлами)"></span><span class="demo-segment" style="--chapter-size:37" data-start="118" data-end="155" data-title="Очистка данных"></span><span class="demo-segment" style="--chapter-size:32" data-start="155" data-end="187" data-title="Поиск дубликатов (по 1 или нескольким полям)"></span><span class="demo-segment" style="--chapter-size:122" data-start="187" data-end="309" data-title="Сводная таблица и дашборд"></span><span class="demo-segment" style="--chapter-size:44" data-start="309" data-end="353" data-title="Работа с папками и файлами"></span><span class="demo-segment" style="--chapter-size:102" data-start="353" data-end="455" data-title="Объединение таблиц в одну"></span><span class="demo-segment" style="--chapter-size:16" data-start="455" data-end="471" data-title="О программе"></span></div><div class="demo-controls-row"><button id="demo-play" class="demo-control-button" type="button" aria-label="Воспроизвести" title="Воспроизвести">▶</button><div id="demo-time" class="demo-time">0:00 / 7:51</div><div id="demo-current-chapter" class="demo-current-chapter">Объединение таблиц</div><button id="demo-volume" class="demo-control-button" type="button" aria-label="Выключить звук" title="Выключить звук">🔊</button><button id="demo-fullscreen" class="demo-control-button" type="button" aria-label="На весь экран" title="На весь экран">⛶</button></div></div></div></div></section>
 
-  <section id="demo" style="padding-top:24px">
-    <div class="container">
-      <h2 class="section-title">XLPlain в работе</h2>
-      <p class="section-lead">Полная демонстрация работы надстройки в обычном темпе.</p>
-      <div class="demo-player" id="demo-player">
-        <video id="xlplain-demo-video" preload="metadata" playsinline>
-          <source src="https://github.com/aykhanov/xlplain/releases/download/v1.0/XLPlain_demo.mp4" type="video/mp4">
-          Ваш браузер не поддерживает воспроизведение видео.
-        </video>
+  <section id="license"><div class="container"><h2 class="section-title">Как работает лицензия</h2><p class="section-lead">Лицензия предоставляется на 1 год одному пользователю и может быть активирована максимум на двух компьютерах.</p><div class="steps"><div class="step"><div><strong>Покупка</strong><br><span class="small">После оплаты покупатель получает лицензионный код и инструкции.</span></div></div><div class="step"><div><strong>Первая активация</strong><br><span class="small">Для активации требуется подключение к интернету. Один ключ можно активировать максимум на двух компьютерах.</span></div></div><div class="step"><div><strong>7-дневный период возврата</strong><br><span class="small">В течение установленного законом периода лицензия работает в предварительном режиме.</span></div></div><div class="step"><div><strong>Срок действия</strong><br><span class="small">Лицензия действует 1 год с даты покупки.</span></div></div><div class="step"><div><strong>Продление</strong><br><span class="small">Срок действия лицензии можно продлить ещё на 1 год без замены лицензионного ключа.</span></div></div></div></div></section>
 
-        <div id="demo-tooltip" class="demo-tooltip" aria-hidden="true"></div>
+  <section id="buy" class="buy-section"><div class="container purchase-shell"><div class="purchase-copy"><span class="kicker">Покупка лицензии</span><h2 class="section-title">XLPlain — 3 990 ₽</h2><p class="section-lead">После подтверждения оплаты лицензионный ключ автоматически отправляется на указанный email. Лицензия действует 1 год с даты покупки.</p><div class="purchase-benefits"><div class="purchase-benefit"><strong>Один пользователь</strong><span>До 2 одновременно активных компьютеров.</span></div><div class="purchase-benefit"><strong>Лицензия на 1 год</strong><span>Срок действия начинается с даты покупки.</span></div><div class="purchase-benefit"><strong>Электронная поставка</strong><span>Ключ и инструкция приходят на указанный email.</span></div></div></div><div class="purchase-card"><div class="status-badge">Онлайн-оплата доступна</div><h3>Оформить покупку</h3><p class="purchase-intro">Укажите email для получения лицензионного ключа и перейдите к безопасной оплате через Robokassa.</p><form class="purchase-form" action="https://functions.yandexcloud.net/d4eqf3vcn7fdkg0f5td4" method="post"><input type="hidden" name="action" value="create_payment"><label class="field" for="purchase-email"><span>Email для получения лицензии</span><input id="purchase-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label><div class="agreement-box"><label class="check-row"><input type="checkbox" required><span>Я принимаю условия <a href="offer.html">публичной оферты</a>.</span></label><label class="check-row"><input type="checkbox" required><span>Я ознакомился с <a href="privacy.html">политикой обработки персональных данных</a>.</span></label></div><button class="button primary purchase-submit" type="submit">Оплатить 3 990 ₽</button></form><div class="purchase-fallback"><span>Вопрос по покупке или оплате?</span><a href="mailto:XLPlain@yandex.com?subject=%D0%9F%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0%20XLPlain">XLPlain@yandex.com</a></div></div></div></section>
 
-        <div class="demo-controls">
-          <div id="demo-seek" class="demo-seek" role="slider" tabindex="0" aria-label="Позиция видео" aria-valuemin="0" aria-valuemax="471" aria-valuenow="0">
-            <span class="demo-segment" style="--chapter-size:50" data-start="0" data-end="50" data-title="Объединение таблиц"></span>
-            <span class="demo-segment" style="--chapter-size:35" data-start="50" data-end="85" data-title="Сверка данных (2 файла)"></span>
-            <span class="demo-segment" style="--chapter-size:33" data-start="85" data-end="118" data-title="Сверка данных (папка с файлами)"></span>
-            <span class="demo-segment" style="--chapter-size:37" data-start="118" data-end="155" data-title="Очистка данных"></span>
-            <span class="demo-segment" style="--chapter-size:32" data-start="155" data-end="187" data-title="Поиск дубликатов (по 1 или нескольким полям)"></span>
-            <span class="demo-segment" style="--chapter-size:122" data-start="187" data-end="309" data-title="Сводная таблица и дашборд"></span>
-            <span class="demo-segment" style="--chapter-size:44" data-start="309" data-end="353" data-title="Работа с папками и файлами"></span>
-            <span class="demo-segment" style="--chapter-size:102" data-start="353" data-end="455" data-title="Объединение таблиц в одну"></span>
-            <span class="demo-segment" style="--chapter-size:16" data-start="455" data-end="471" data-title="О программе"></span>
-          </div>
+  <section id="refund"><div class="container"><h2 class="section-title">Получение и возврат</h2><div class="grid"><article class="card"><h3>Получение</h3><p>XLPlain является цифровым продуктом. Лицензионный код и инструкция направляются в электронном виде после подтверждения оплаты.</p></article><article class="card"><h3>Возврат</h3><p>Потребитель вправе отказаться от цифрового продукта надлежащего качества и потребовать возврат уплаченной суммы в течение 7 дней, не считая дня покупки.</p></article><article class="card"><h3>Как обратиться</h3><p>Для возврата или вопроса по покупке напишите на <a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a>. При возврате лицензия прекращает действие.</p></article></div><div class="notice" style="margin-top:20px">Подробные условия использования, оплаты, возврата и предоставления права использования XLPlain приведены в <a href="offer.html">публичной оферте</a>.</div></div></section>
 
-          <div class="demo-controls-row">
-            <button id="demo-play" class="demo-control-button" type="button" aria-label="Воспроизвести" title="Воспроизвести">▶</button>
-            <div id="demo-time" class="demo-time">0:00 / 7:51</div>
-            <div id="demo-current-chapter" class="demo-current-chapter">Объединение таблиц</div>
-            <button id="demo-volume" class="demo-control-button" type="button" aria-label="Выключить звук" title="Выключить звук">🔊</button>
-            <button id="demo-fullscreen" class="demo-control-button" type="button" aria-label="На весь экран" title="На весь экран">⛶</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="license">
-    <div class="container">
-      <h2 class="section-title">Как работает лицензия</h2>
-      <p class="section-lead">Лицензия предоставляется на 1 год одному пользователю и может быть активирована максимум на двух компьютерах.</p>
-      <div class="steps">
-        <div class="step"><div><strong>Покупка</strong><br><span class="small">После оплаты покупатель получает лицензионный код и инструкции.</span></div></div>
-        <div class="step"><div><strong>Первая активация</strong><br><span class="small">Для активации требуется подключение к интернету. Один ключ можно активировать максимум на двух компьютерах.</span></div></div>
-        <div class="step"><div><strong>7-дневный период возврата</strong><br><span class="small">В течение установленного законом периода лицензия работает в предварительном режиме.</span></div></div>
-        <div class="step"><div><strong>Срок действия</strong><br><span class="small">Лицензия действует 1 год с даты покупки.</span></div></div>
-        <div class="step"><div><strong>Продление</strong><br><span class="small">Срок действия лицензии можно продлить ещё на 1 год без замены лицензионного ключа.</span></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="buy" class="buy-section">
-    <div class="container purchase-shell">
-      <div class="purchase-copy">
-        <span class="kicker">Покупка лицензии</span>
-        <h2 class="section-title">XLPlain — 3 990 ₽</h2>
-        <p class="section-lead">После подтверждения оплаты лицензионный ключ автоматически отправляется на указанный email. Лицензия действует 1 год с даты покупки.</p>
-
-        <div class="purchase-benefits">
-          <div class="purchase-benefit">
-            <strong>Один пользователь</strong>
-            <span>До 2 одновременно активных компьютеров.</span>
-          </div>
-          <div class="purchase-benefit">
-            <strong>Лицензия на 1 год</strong>
-            <span>Срок действия начинается с даты покупки.</span>
-          </div>
-          <div class="purchase-benefit">
-            <strong>Электронная поставка</strong>
-            <span>Ключ и инструкция приходят на указанный email.</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="purchase-card">
-        <div class="status-badge">Онлайн-оплата доступна</div>
-        <h3>Оформить покупку</h3>
-        <p class="purchase-intro">Укажите email для получения лицензионного ключа и перейдите к безопасной оплате через Robokassa.</p>
-
-        <form class="purchase-form" action="https://functions.yandexcloud.net/d4eqf3vcn7fdkg0f5td4" method="post">
-          <input type="hidden" name="action" value="create_payment">
-
-          <label class="field" for="purchase-email">
-            <span>Email для получения лицензии</span>
-            <input id="purchase-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required>
-          </label>
-
-          <div class="agreement-box">
-            <label class="check-row">
-              <input type="checkbox" required>
-              <span>Я принимаю условия <a href="offer.html">публичной оферты</a>.</span>
-            </label>
-
-            <label class="check-row">
-              <input type="checkbox" required>
-              <span>Я ознакомился с <a href="privacy.html">политикой обработки персональных данных</a>.</span>
-            </label>
-          </div>
-
-          <button class="button primary purchase-submit" type="submit">Оплатить 3 990 ₽</button>
-        </form>
-
-        <div class="purchase-fallback">
-          <span>Вопрос по покупке или оплате?</span>
-          <a href="mailto:XLPlain@yandex.com?subject=%D0%9F%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0%20XLPlain">XLPlain@yandex.com</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="refund">
-    <div class="container">
-      <h2 class="section-title">Получение и возврат</h2>
-      <div class="grid">
-        <article class="card">
-          <h3>Получение</h3>
-          <p>XLPlain является цифровым продуктом. Лицензионный код и инструкция направляются в электронном виде после подтверждения оплаты.</p>
-        </article>
-        <article class="card">
-          <h3>Возврат</h3>
-          <p>Потребитель вправе отказаться от цифрового продукта надлежащего качества и потребовать возврат уплаченной суммы в течение 7 дней, не считая дня покупки.</p>
-        </article>
-        <article class="card">
-          <h3>Как обратиться</h3>
-          <p>Для возврата или вопроса по покупке напишите на <a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a>. При возврате лицензия прекращает действие.</p>
-        </article>
-      </div>
-      <div class="notice" style="margin-top:20px">
-        Подробные условия использования, оплаты, возврата и предоставления права использования XLPlain приведены в <a href="offer.html">публичной оферте</a>.
-      </div>
-    </div>
-  </section>
-
-  <section id="contacts">
-    <div class="container">
-      <h2 class="section-title">Контакты и реквизиты продавца</h2>
-      <p class="section-lead">Связаться по вопросам приобретения, лицензирования, возврата и работы XLPlain.</p>
-      <div class="hero-card">
-        <div class="meta">
-          <div class="meta-row"><span>Продавец</span><strong>Ханов Алексей Юрьевич</strong></div>
-          <div class="meta-row"><span>Статус</span><strong>Налогоплательщик налога на профессиональный доход (самозанятый)</strong></div>
-          <div class="meta-row"><span>ИНН</span><strong>525633830780</strong></div>
-          <div class="meta-row"><span>Город</span><strong>Нижний Новгород</strong></div>
-          <div class="meta-row"><span>Email</span><strong><a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a></strong></div>
-          <div class="meta-row"><span>Телефон</span><strong><a href="tel:+79082399215">+7 (908) 239-92-15</a></strong></div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="contacts"><div class="container"><h2 class="section-title">Контакты и реквизиты продавца</h2><p class="section-lead">Связаться по вопросам приобретения, лицензирования, возврата и работы XLPlain.</p><div class="hero-card"><div class="meta"><div class="meta-row"><span>Продавец</span><strong>Ханов Алексей Юрьевич</strong></div><div class="meta-row"><span>Статус</span><strong>Налогоплательщик налога на профессиональный доход (самозанятый)</strong></div><div class="meta-row"><span>ИНН</span><strong>525633830780</strong></div><div class="meta-row"><span>Город</span><strong>Нижний Новгород</strong></div><div class="meta-row"><span>Email</span><strong><a href="mailto:XLPlain@yandex.com">XLPlain@yandex.com</a></strong></div><div class="meta-row"><span>Телефон</span><strong><a href="tel:+79082399215">+7 (908) 239-92-15</a></strong></div></div></div></div></section>
 </main>
-
-<footer>
-  <div class="container footer-grid">
-    <div>
-      <a href="./" aria-label="XLPlain — на главную" style="display:inline-block;text-decoration:none;margin-bottom:8px">
-        <img src="assets/xlplain-logo.svg" alt="XLPlain" style="display:block;width:156px;max-width:100%;height:auto">
-      </a><br>
-      <span class="small">© 2026 Ханов Алексей Юрьевич</span>
-    </div>
-    <div class="footer-links">
-      <a href="offer.html">Публичная оферта</a>
-      <a href="privacy.html">Обработка персональных данных</a>
-      <a href="mailto:XLPlain@yandex.com">Поддержка</a>
-    </div>
-  </div>
-</footer>
-
+<footer><div class="container footer-grid"><div><a href="./" aria-label="XLPlain — на главную" style="display:inline-block;text-decoration:none;margin-bottom:8px"><img src="assets/xlplain-logo.svg" alt="XLPlain" style="display:block;width:156px;max-width:100%;height:auto"></a><br><span class="small">© 2026 Ханов Алексей Юрьевич</span></div><div class="footer-links"><a href="offer.html">Публичная оферта</a><a href="privacy.html">Обработка персональных данных</a><a href="mailto:XLPlain@yandex.com">Поддержка</a></div></div></footer>
 <script>
-(function () {
-  var player = document.getElementById('demo-player');
-  var video = document.getElementById('xlplain-demo-video');
-  var seek = document.getElementById('demo-seek');
-  var segments = Array.prototype.slice.call(document.querySelectorAll('.demo-segment'));
-  var tooltip = document.getElementById('demo-tooltip');
-  var playButton = document.getElementById('demo-play');
-  var volumeButton = document.getElementById('demo-volume');
-  var fullscreenButton = document.getElementById('demo-fullscreen');
-  var timeLabel = document.getElementById('demo-time');
-  var chapterLabel = document.getElementById('demo-current-chapter');
-  var fallbackDuration = 471;
-  var dragging = false;
-
-  if (!player || !video || !seek || !segments.length) return;
-
-  function duration() {
-    return Number.isFinite(video.duration) && video.duration > 0 ? video.duration : fallbackDuration;
-  }
-
-  function formatTime(value) {
-    value = Math.max(0, Math.floor(value || 0));
-    var minutes = Math.floor(value / 60);
-    var seconds = String(value % 60).padStart(2, '0');
-    return minutes + ':' + seconds;
-  }
-
-  function chapterForTime(value) {
-    for (var i = segments.length - 1; i >= 0; i--) {
-      if (value >= Number(segments[i].dataset.start || 0)) return segments[i];
-    }
-    return segments[0];
-  }
-
-  function updateUI() {
-    var t = video.currentTime || 0;
-    var d = duration();
-
-    segments.forEach(function (segment) {
-      var start = Number(segment.dataset.start || 0);
-      var end = Number(segment.dataset.end || start + 1);
-      var progress = 0;
-
-      if (t >= end) progress = 100;
-      else if (t > start) progress = ((t - start) / (end - start)) * 100;
-
-      segment.style.setProperty('--progress', Math.max(0, Math.min(100, progress)) + '%');
-      segment.classList.toggle('active', t >= start && t < end);
-    });
-
-    seek.setAttribute('aria-valuemax', String(Math.round(d)));
-    seek.setAttribute('aria-valuenow', String(Math.round(t)));
-    timeLabel.textContent = formatTime(t) + ' / ' + formatTime(d);
-
-    var currentChapter = chapterForTime(t);
-    chapterLabel.textContent = currentChapter ? currentChapter.dataset.title : '';
-
-    playButton.textContent = video.paused ? '▶' : '❚❚';
-    playButton.setAttribute('aria-label', video.paused ? 'Воспроизвести' : 'Пауза');
-    playButton.title = video.paused ? 'Воспроизвести' : 'Пауза';
-
-    volumeButton.textContent = video.muted ? '🔇' : '🔊';
-    volumeButton.setAttribute('aria-label', video.muted ? 'Включить звук' : 'Выключить звук');
-    volumeButton.title = video.muted ? 'Включить звук' : 'Выключить звук';
-  }
-
-  function seekFromClientX(clientX) {
-    var rect = seek.getBoundingClientRect();
-    var ratio = (clientX - rect.left) / rect.width;
-    ratio = Math.max(0, Math.min(1, ratio));
-    video.currentTime = ratio * duration();
-    updateUI();
-  }
-
-  function showTooltip(clientX) {
-    var rect = seek.getBoundingClientRect();
-    var ratio = (clientX - rect.left) / rect.width;
-    ratio = Math.max(0, Math.min(1, ratio));
-    var hoverTime = ratio * duration();
-    var chapter = chapterForTime(hoverTime);
-    var playerRect = player.getBoundingClientRect();
-    var localX = clientX - playerRect.left;
-    var minX = 85;
-    var maxX = Math.max(minX, playerRect.width - 85);
-
-    tooltip.textContent = formatTime(hoverTime) + ' — ' + (chapter ? chapter.dataset.title : '');
-    tooltip.style.left = Math.max(minX, Math.min(maxX, localX)) + 'px';
-    tooltip.classList.add('visible');
-    tooltip.setAttribute('aria-hidden', 'false');
-  }
-
-  function hideTooltip() {
-    if (dragging) return;
-    tooltip.classList.remove('visible');
-    tooltip.setAttribute('aria-hidden', 'true');
-  }
-
-  seek.addEventListener('pointerdown', function (event) {
-    dragging = true;
-    seek.classList.add('dragging');
-    seek.setPointerCapture(event.pointerId);
-    seekFromClientX(event.clientX);
-    showTooltip(event.clientX);
-  });
-
-  seek.addEventListener('pointermove', function (event) {
-    showTooltip(event.clientX);
-    if (dragging) seekFromClientX(event.clientX);
-  });
-
-  seek.addEventListener('pointerup', function (event) {
-    dragging = false;
-    seek.classList.remove('dragging');
-    if (seek.hasPointerCapture(event.pointerId)) seek.releasePointerCapture(event.pointerId);
-    hideTooltip();
-  });
-
-  seek.addEventListener('pointercancel', function (event) {
-    dragging = false;
-    seek.classList.remove('dragging');
-    if (seek.hasPointerCapture(event.pointerId)) seek.releasePointerCapture(event.pointerId);
-    hideTooltip();
-  });
-
-  seek.addEventListener('pointerleave', hideTooltip);
-
-  seek.addEventListener('keydown', function (event) {
-    var step = 5;
-    if (event.key === 'ArrowRight') {
-      video.currentTime = Math.min(duration(), video.currentTime + step);
-      event.preventDefault();
-    } else if (event.key === 'ArrowLeft') {
-      video.currentTime = Math.max(0, video.currentTime - step);
-      event.preventDefault();
-    } else if (event.key === 'Home') {
-      video.currentTime = 0;
-      event.preventDefault();
-    } else if (event.key === 'End') {
-      video.currentTime = duration();
-      event.preventDefault();
-    }
-    updateUI();
-  });
-
-  function togglePlay() {
-    if (video.paused) video.play().catch(function () {});
-    else video.pause();
-  }
-
-  playButton.addEventListener('click', togglePlay);
-  video.addEventListener('click', togglePlay);
-
-  volumeButton.addEventListener('click', function () {
-    video.muted = !video.muted;
-    updateUI();
-  });
-
-  fullscreenButton.addEventListener('click', function () {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else if (player.requestFullscreen) {
-      player.requestFullscreen();
-    }
-  });
-
-  video.addEventListener('timeupdate', updateUI);
-  video.addEventListener('loadedmetadata', updateUI);
-  video.addEventListener('play', updateUI);
-  video.addEventListener('pause', updateUI);
-  video.addEventListener('volumechange', updateUI);
-  video.addEventListener('ended', updateUI);
-
-  updateUI();
-})();
+(function(){var player=document.getElementById('demo-player'),video=document.getElementById('xlplain-demo-video'),seek=document.getElementById('demo-seek'),segments=Array.prototype.slice.call(document.querySelectorAll('.demo-segment')),tooltip=document.getElementById('demo-tooltip'),playButton=document.getElementById('demo-play'),volumeButton=document.getElementById('demo-volume'),fullscreenButton=document.getElementById('demo-fullscreen'),timeLabel=document.getElementById('demo-time'),chapterLabel=document.getElementById('demo-current-chapter'),fallbackDuration=471,dragging=false;if(!player||!video||!seek||!segments.length)return;function duration(){return Number.isFinite(video.duration)&&video.duration>0?video.duration:fallbackDuration}function formatTime(value){value=Math.max(0,Math.floor(value||0));var minutes=Math.floor(value/60),seconds=String(value%60).padStart(2,'0');return minutes+':'+seconds}function chapterForTime(value){for(var i=segments.length-1;i>=0;i--){if(value>=Number(segments[i].dataset.start||0))return segments[i]}return segments[0]}function updateUI(){var t=video.currentTime||0,d=duration();segments.forEach(function(segment){var start=Number(segment.dataset.start||0),end=Number(segment.dataset.end||start+1),progress=0;if(t>=end)progress=100;else if(t>start)progress=((t-start)/(end-start))*100;segment.style.setProperty('--progress',Math.max(0,Math.min(100,progress))+'%');segment.classList.toggle('active',t>=start&&t<end)});seek.setAttribute('aria-valuemax',String(Math.round(d)));seek.setAttribute('aria-valuenow',String(Math.round(t)));timeLabel.textContent=formatTime(t)+' / '+formatTime(d);var currentChapter=chapterForTime(t);chapterLabel.textContent=currentChapter?currentChapter.dataset.title:'';playButton.textContent=video.paused?'▶':'❚❚';playButton.setAttribute('aria-label',video.paused?'Воспроизвести':'Пауза');playButton.title=video.paused?'Воспроизвести':'Пауза';volumeButton.textContent=video.muted?'🔇':'🔊';volumeButton.setAttribute('aria-label',video.muted?'Включить звук':'Выключить звук');volumeButton.title=video.muted?'Включить звук':'Выключить звук'}function seekFromClientX(clientX){var rect=seek.getBoundingClientRect(),ratio=(clientX-rect.left)/rect.width;ratio=Math.max(0,Math.min(1,ratio));video.currentTime=ratio*duration();updateUI()}function showTooltip(clientX){var rect=seek.getBoundingClientRect(),ratio=(clientX-rect.left)/rect.width;ratio=Math.max(0,Math.min(1,ratio));var hoverTime=ratio*duration(),chapter=chapterForTime(hoverTime),playerRect=player.getBoundingClientRect(),localX=clientX-playerRect.left,minX=85,maxX=Math.max(minX,playerRect.width-85);tooltip.textContent=formatTime(hoverTime)+' — '+(chapter?chapter.dataset.title:'');tooltip.style.left=Math.max(minX,Math.min(maxX,localX))+'px';tooltip.classList.add('visible');tooltip.setAttribute('aria-hidden','false')}function hideTooltip(){if(dragging)return;tooltip.classList.remove('visible');tooltip.setAttribute('aria-hidden','true')}seek.addEventListener('pointerdown',function(event){dragging=true;seek.classList.add('dragging');seek.setPointerCapture(event.pointerId);seekFromClientX(event.clientX);showTooltip(event.clientX)});seek.addEventListener('pointermove',function(event){showTooltip(event.clientX);if(dragging)seekFromClientX(event.clientX)});seek.addEventListener('pointerup',function(event){dragging=false;seek.classList.remove('dragging');if(seek.hasPointerCapture(event.pointerId))seek.releasePointerCapture(event.pointerId);hideTooltip()});seek.addEventListener('pointercancel',function(event){dragging=false;seek.classList.remove('dragging');if(seek.hasPointerCapture(event.pointerId))seek.releasePointerCapture(event.pointerId);hideTooltip()});seek.addEventListener('pointerleave',hideTooltip);seek.addEventListener('keydown',function(event){var step=5;if(event.key==='ArrowRight'){video.currentTime=Math.min(duration(),video.currentTime+step);event.preventDefault()}else if(event.key==='ArrowLeft'){video.currentTime=Math.max(0,video.currentTime-step);event.preventDefault()}else if(event.key==='Home'){video.currentTime=0;event.preventDefault()}else if(event.key==='End'){video.currentTime=duration();event.preventDefault()}updateUI()});function togglePlay(){if(video.paused)video.play().catch(function(){});else video.pause()}playButton.addEventListener('click',togglePlay);video.addEventListener('click',togglePlay);volumeButton.addEventListener('click',function(){video.muted=!video.muted;updateUI()});fullscreenButton.addEventListener('click',function(){if(document.fullscreenElement){document.exitFullscreen()}else if(player.requestFullscreen){player.requestFullscreen()}});video.addEventListener('timeupdate',updateUI);video.addEventListener('loadedmetadata',updateUI);video.addEventListener('play',updateUI);video.addEventListener('pause',updateUI);video.addEventListener('volumechange',updateUI);video.addEventListener('ended',updateUI);updateUI()})();
 </script>
 </body>
 </html>

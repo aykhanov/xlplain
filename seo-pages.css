@@ -69,10 +69,36 @@
 }
 
 a.card.feature-card-link {
-  display: block;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   color: inherit;
   text-decoration: none;
+  padding-bottom: 58px;
+  cursor: pointer;
+}
+
+a.card.feature-card-link::after {
+  content: "Подробнее →";
+  position: absolute;
+  left: 24px;
+  bottom: 22px;
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 750;
+  transition: transform .18s ease, color .18s ease;
+}
+
+a.card.feature-card-link:hover::after,
+a.card.feature-card-link:focus-visible::after {
+  transform: translateX(4px);
+  color: var(--accent);
+}
+
+a.card.feature-card-link:focus-visible {
+  outline: 2px solid rgba(255,138,0,.45);
+  outline-offset: 3px;
 }
 
 .seo-hero {

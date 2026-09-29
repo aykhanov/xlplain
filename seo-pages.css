@@ -68,6 +68,23 @@
   outline: none;
 }
 
+html {
+  scroll-padding-top: 92px;
+}
+
+section[id] {
+  scroll-margin-top: 92px;
+}
+
+#features .notice strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.purchase-card {
+  margin-top: 12px;
+}
+
 a.card.feature-card-link {
   position: relative;
   display: flex;
@@ -236,4 +253,5 @@ a.card.feature-card-link:focus-visible {
   .nav-dropdown-menu { display: none; }
   .seo-step { grid-template-columns: 40px minmax(0, 1fr); padding: 18px; }
   .seo-step::before { width: 36px; height: 36px; }
+  .purchase-card { margin-top: 0; }
 }

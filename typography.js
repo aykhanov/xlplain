@@ -24,41 +24,51 @@
 
   function processTextNode(textNode) {
     var text = textNode.nodeValue;
-    var re = /(^|\s)(\S+)(\s+)(\S+)/gu;
-    var match;
-    var lastIndex = 0;
+    var tokens = text.match(/\s+|\S+/gu);
+    if (!tokens || tokens.length < 3) return;
+
     var fragment = document.createDocumentFragment();
     var changed = false;
+    var i = 0;
 
-    while ((match = re.exec(text)) !== null) {
-      var before = match[1];
-      var first = match[2];
-      var gap = match[3];
-      var second = match[4];
-      var firstStart = match.index + before.length;
-      var wholeStart = match.index;
+    while (i < tokens.length) {
+      var token = tokens[i];
 
-      if (!protectedWords.has(normalizeWord(first))) continue;
-
-      if (wholeStart > lastIndex) {
-        fragment.appendChild(document.createTextNode(text.slice(lastIndex, wholeStart)));
+      if (/^\s+$/u.test(token) || !protectedWords.has(normalizeWord(token))) {
+        fragment.appendChild(document.createTextNode(token));
+        i += 1;
+        continue;
       }
-      if (before) fragment.appendChild(document.createTextNode(before));
 
-      var span = document.createElement('span');
-      span.className = 'xlplain-nobr';
-      span.style.whiteSpace = 'nowrap';
-      span.textContent = first + gap + second;
-      fragment.appendChild(span);
+      // Собираем цепочку из служебных слов и первого следующего значимого слова:
+      // «и перейдите», «не считая», «с файлами», «по одному», «и по ключу».
+      var group = token;
+      var j = i + 1;
+      var hasFollowingWord = false;
 
-      lastIndex = firstStart + first.length + gap.length + second.length;
-      re.lastIndex = lastIndex;
-      changed = true;
+      while (j + 1 < tokens.length && /^\s+$/u.test(tokens[j]) && !/^\s+$/u.test(tokens[j + 1])) {
+        group += tokens[j] + tokens[j + 1];
+        hasFollowingWord = true;
+        j += 2;
+
+        if (!protectedWords.has(normalizeWord(tokens[j - 1]))) break;
+      }
+
+      if (hasFollowingWord) {
+        var span = document.createElement('span');
+        span.className = 'xlplain-nobr';
+        span.style.whiteSpace = 'nowrap';
+        span.textContent = group;
+        fragment.appendChild(span);
+        i = j;
+        changed = true;
+      } else {
+        fragment.appendChild(document.createTextNode(token));
+        i += 1;
+      }
     }
 
-    if (!changed) return;
-    if (lastIndex < text.length) fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
-    textNode.parentNode.replaceChild(fragment, textNode);
+    if (changed) textNode.parentNode.replaceChild(fragment, textNode);
   }
 
   function applyTypography() {

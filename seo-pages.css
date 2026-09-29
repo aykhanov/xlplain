@@ -72,10 +72,6 @@ html {
   scroll-padding-top: 92px;
 }
 
-section[id] {
-  scroll-margin-top: 92px;
-}
-
 #features .notice strong {
   display: block;
   margin-bottom: 4px;

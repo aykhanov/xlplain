@@ -43,9 +43,17 @@
     });
   }
 
+  function trackPageGoal() {
+    var path = window.location.pathname.toLowerCase();
+    if (path.endsWith('/success.html')) reachGoal('purchase_success');
+    else if (path.endsWith('/fail.html')) reachGoal('purchase_fail');
+    else if (path.endsWith('/download.html')) reachGoal('download_page');
+  }
+
   function init() {
     applyBranding();
     bindMetrikaGoals();
+    window.setTimeout(trackPageGoal, 250);
   }
 
   if (document.readyState === 'loading') {

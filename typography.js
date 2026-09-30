@@ -2,6 +2,13 @@
   'use strict';
 
   var COUNTER_ID = 113091081;
+  var protectedWords = new Set([
+    'и','а','но','да','или','либо','ни','не','бы','же','ли','то',
+    'в','во','на','к','ко','с','со','у','о','об','обо','от','до','за','из','изо','по',
+    'под','над','при','про','для','без','через','между','перед','после','около','вокруг',
+    'чтобы','что','как','если','когда','пока','хотя','чем','чего','где','куда','откуда',
+    'зато','ведь','даже','лишь','только','ещё','еще','уже','также','тоже'
+  ]);
 
   function reachGoal(name) {
     if (typeof window.ym === 'function') {
@@ -24,6 +31,49 @@
       style.textContent = '.brand::before{display:none!important}.brand img{display:block;width:138px;max-width:34vw;height:auto}';
       document.head.appendChild(style);
     }
+  }
+
+  function normalizeWord(token) {
+    return token
+      .toLowerCase()
+      .replace(/^[^А-Яа-яЁёA-Za-z0-9]+/u, '')
+      .replace(/[^А-Яа-яЁёA-Za-z0-9]+$/u, '');
+  }
+
+  function shouldSkip(node) {
+    var parent = node.parentElement;
+    if (!parent) return true;
+    return !!parent.closest('script, style, noscript, textarea, input, select, option, code, pre, [contenteditable="true"], [data-no-typography]');
+  }
+
+  function processTextNode(node) {
+    var tokens = node.nodeValue.match(/\s+|\S+/gu);
+    if (!tokens || tokens.length < 3) return;
+
+    var changed = false;
+    for (var i = 0; i < tokens.length - 2; i++) {
+      if (/^\s+$/u.test(tokens[i])) continue;
+      if (!protectedWords.has(normalizeWord(tokens[i]))) continue;
+      if (!/^\s+$/u.test(tokens[i + 1])) continue;
+      if (/^\s+$/u.test(tokens[i + 2])) continue;
+
+      tokens[i + 1] = '\u00A0';
+      changed = true;
+    }
+
+    if (changed) node.nodeValue = tokens.join('');
+  }
+
+  function applyTypography() {
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    var nodes = [];
+    var node;
+
+    while ((node = walker.nextNode())) {
+      if (!shouldSkip(node) && node.nodeValue && node.nodeValue.trim()) nodes.push(node);
+    }
+
+    nodes.forEach(processTextNode);
   }
 
   function bindMetrikaGoals() {
@@ -52,6 +102,7 @@
 
   function init() {
     applyBranding();
+    applyTypography();
     bindMetrikaGoals();
     window.setTimeout(trackPageGoal, 250);
   }

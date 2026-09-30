@@ -76,6 +76,45 @@
     nodes.forEach(processTextNode);
   }
 
+  function addStructuredData() {
+    var path = window.location.pathname.replace(/\/+$/, '');
+    if (path !== '/xlplain' && path !== '') return;
+    if (document.getElementById('xlplain-software-schema')) return;
+
+    var data = {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'XLPlain',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Windows',
+      description: 'Надстройка для Microsoft Excel: сверка данных, объединение таблиц, очистка, поиск дублей, работа с папками и файлами, сводные таблицы и дашборды.',
+      url: 'https://aykhanov.github.io/xlplain/',
+      softwareRequirements: 'Настольный Microsoft Excel для Windows с разрешённым запуском VBA-макросов',
+      offers: {
+        '@type': 'Offer',
+        price: '3990',
+        priceCurrency: 'RUB',
+        availability: 'https://schema.org/InStock',
+        url: 'https://aykhanov.github.io/xlplain/#buy'
+      },
+      featureList: [
+        'Сверка данных по ключевым полям',
+        'Пакетная сверка двух папок с файлами',
+        'Объединение 2–6 таблиц по одному или составному ключу',
+        'Очистка и нормализация данных',
+        'Поиск дублей по одному или нескольким полям',
+        'Сводные таблицы и дашборды',
+        'Работа с папками и Excel-файлами'
+      ]
+    };
+
+    var script = document.createElement('script');
+    script.id = 'xlplain-software-schema';
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(data);
+    document.head.appendChild(script);
+  }
+
   function bindMetrikaGoals() {
     document.querySelectorAll('form.purchase-form').forEach(function (form) {
       form.addEventListener('submit', function () {
@@ -103,6 +142,7 @@
   function init() {
     applyBranding();
     applyTypography();
+    addStructuredData();
     bindMetrikaGoals();
     window.setTimeout(trackPageGoal, 250);
   }

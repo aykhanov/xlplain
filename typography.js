@@ -10,9 +10,12 @@
     'зато','ведь','даже','лишь','только','ещё','еще','уже','также','тоже'
   ]);
 
-  function reachGoal(name) {
+  function reachGoal(name, params) {
     if (typeof window.ym === 'function') {
-      try { window.ym(COUNTER_ID, 'reachGoal', name); } catch (e) {}
+      try {
+        if (params) window.ym(COUNTER_ID, 'reachGoal', name, params);
+        else window.ym(COUNTER_ID, 'reachGoal', name);
+      } catch (e) {}
     }
   }
 
@@ -116,6 +119,10 @@
   }
 
   function bindMetrikaGoals() {
+    document.querySelectorAll('a[href="#buy"]').forEach(function (link) {
+      link.addEventListener('click', function () { reachGoal('buy_cta_click'); });
+    });
+
     document.querySelectorAll('form.purchase-form').forEach(function (form) {
       form.addEventListener('submit', function () {
         var action = form.querySelector('input[name="action"]');
@@ -127,9 +134,29 @@
       link.addEventListener('click', function () { reachGoal('support_email_click'); });
     });
 
-    document.querySelectorAll('a[href*="XLPlain_v1.0.zip"], a[href*="releases/latest/download/"]').forEach(function (link) {
+    document.querySelectorAll('a[href*="releases/latest/download/"]').forEach(function (link) {
       link.addEventListener('click', function () { reachGoal('download_click'); });
     });
+  }
+
+  function trackBuySectionView() {
+    var buy = document.getElementById('buy');
+    if (!buy) return;
+
+    if (!('IntersectionObserver' in window)) return;
+
+    var sent = false;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!sent && entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+          sent = true;
+          reachGoal('buy_section_view');
+          observer.disconnect();
+        }
+      });
+    }, { threshold: [0.35] });
+
+    observer.observe(buy);
   }
 
   function trackPageGoal() {
@@ -144,6 +171,7 @@
     applyTypography();
     addStructuredData();
     bindMetrikaGoals();
+    trackBuySectionView();
     window.setTimeout(trackPageGoal, 250);
   }
 

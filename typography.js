@@ -91,14 +91,14 @@
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Windows',
       description: 'Надстройка для Microsoft Excel: сверка данных, объединение таблиц, очистка, поиск дублей, работа с папками и файлами, сводные таблицы и дашборды.',
-      url: 'https://aykhanov.github.io/xlplain/',
+      url: 'https://xlplain.ru/',
       softwareRequirements: 'Настольный Microsoft Excel для Windows с разрешённым запуском VBA-макросов',
       offers: {
         '@type': 'Offer',
         price: '3990',
         priceCurrency: 'RUB',
         availability: 'https://schema.org/InStock',
-        url: 'https://aykhanov.github.io/xlplain/#buy'
+        url: 'https://xlplain.ru/#buy'
       },
       featureList: [
         'Сверка данных по ключевым полям',

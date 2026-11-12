@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aykhanov.github.io/xlplain/sitemap.xml
+Sitemap: https://xlplain.ru/sitemap.xml

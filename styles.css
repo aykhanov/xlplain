@@ -681,3 +681,8 @@ footer img[alt^="XLPlain"] {
 .footer-social { display: flex; gap: 16px; margin-top: 10px; }
 .footer-social a { color: var(--muted); font-size: 14px; }
 .footer-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; max-width: 420px; }
+
+.nav-cta { min-height: 40px; padding: 0 16px; font-size: 14px; flex: 0 0 auto; }
+@media (max-width: 820px) { .nav { gap: 12px; } }
+
+.seo-content code, .seo-step code, .card code { overflow-wrap: anywhere; word-break: break-word; }

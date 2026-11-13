@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тренажёр Excel онлайн бесплатно — задачи на формулы с проверкой | XLPlain</title>
+<meta name="description" content="Бесплатный тренажёр формул Excel в браузере: 16 задач от СУММ до ВПР, СЧЁТЕСЛИ и ЕСЛИОШИБКА. Живая таблица, русский синтаксис, мгновенная проверка и подсказки. Без регистрации.">
+<link rel="canonical" href="https://xlplain.ru/trenazher/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Тренажёр формул Excel — бесплатно, в браузере">
+<meta property="og:description" content="16 задач на формулы Excel с мгновенной проверкой: СУММ, ЕСЛИ, ВПР, СЧЁТЕСЛИ и другие. Без регистрации и установки.">
+<meta property="og:url" content="https://xlplain.ru/trenazher/">
+<meta property="og:image" content="https://xlplain.ru/assets/xlplain-social-preview-20260930.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/xlplain-mark.svg?v=5">
+<meta name="theme-color" content="#1d6b45">
+<script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebApplication","name":"Тренажёр формул Excel","url":"https://xlplain.ru/trenazher/","applicationCategory":"EducationalApplication","operatingSystem":"Any","inLanguage":"ru","description":"Бесплатный онлайн-тренажёр формул Excel: задачи с мгновенной проверкой в живой таблице.","offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"},"publisher":{"@type":"Organization","name":"XLPlain","url":"https://xlplain.ru/"}},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Тренажёр бесплатный?","acceptedAnswer":{"@type":"Answer","text":"Да. Все задачи открыты, регистрация не нужна. Прогресс сохраняется в вашем браузере."}},{"@type":"Question","name":"Нужен ли установленный Excel?","acceptedAnswer":{"@type":"Answer","text":"Нет. Тренажёр работает прямо в браузере, в том числе на телефоне. Таблица и формулы ведут себя как в Excel."}},{"@type":"Question","name":"Как проверяется ответ?","acceptedAnswer":{"@type":"Answer","text":"Формула считается на данных задачи, а потом ещё на 12 вариантах той же таблицы с другими числами. Если вписать готовое число или формула сработает только в частном случае, тренажёр это заметит и подскажет, что поправить."}},{"@type":"Question","name":"Формулы писать по-русски или по-английски?","acceptedAnswer":{"@type":"Answer","text":"Как в русском Excel: СУММ, ЕСЛИ, ВПР, аргументы через точку с запятой, дробная часть через запятую. Английские названия (SUM, IF, VLOOKUP) тоже принимаются, а адреса ячеек можно набирать и в русской раскладке."}},{"@type":"Question","name":"Какие функции Excel есть в тренажёре?","acceptedAnswer":{"@type":"Answer","text":"СУММ, СРЗНАЧ, МИН, МАКС, ЕСЛИ, И, ИЛИ, СЧЁТЕСЛИ, СУММЕСЛИ, ВПР, ЕСЛИОШИБКА, ОКРУГЛ, СЦЕПИТЬ и знак &, ЛЕВСИМВ, ПРАВСИМВ, ПСТР, ДЛСТР, СЖПРОБЕЛЫ и другие. Шпаргалка по синтаксису открывается под таблицей."}},{"@type":"Question","name":"Кому подойдёт тренажёр?","acceptedAnswer":{"@type":"Answer","text":"Тем, кто готовится к собеседованию или тесту по Excel, начинает работать с таблицами или хочет наконец разобраться с ВПР и СЧЁТЕСЛИ. Задачи короткие, одна занимает пару минут."}}]}]</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ee; --paper:#fffdf8; --ink:#17231c; --mute:#66706a; --line:#dcdad0; --grid:#e6e4da;
+  --g:#1d6b45; --g2:#14532f; --gl:#e3f0e7; --gm:#bfdcc8;
+  --bad:#b4372a; --badl:#fbebe7; --gold:#c98a0c;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+code{font-family:var(--mono);font-size:.92em}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:20px;padding:14px 28px;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:5}
+.brand{color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--g);color:#fff;display:grid;place-items:center;font:600 14px var(--mono);letter-spacing:-.05em}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--mute);letter-spacing:0;margin-top:-2px}
+.prog{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px}
+.rank{font-weight:700;color:var(--g2);background:var(--gl);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.meter{width:160px;height:8px;border-radius:99px;background:var(--grid);overflow:hidden}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--g),#3aa06a);border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+#xp{font:600 13px var(--mono);color:var(--ink);min-width:58px}
+#count{color:var(--mute);white-space:nowrap}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);max-width:1240px;margin:0 auto;gap:28px;padding:24px 28px 60px}
+aside{position:sticky;top:84px;align-self:start;max-height:calc(100vh - 100px);overflow:auto;padding-right:4px}
+.lvl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:18px 0 6px 10px}
+.lvl:first-child{margin-top:0}
+.item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:10px;color:var(--ink)}
+.item:hover{background:#ebe9e0}
+.item.on{background:var(--paper);box-shadow:0 0 0 1px var(--line),0 2px 6px rgba(0,0,0,.04)}
+.dot{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:600 11px var(--mono);background:#e8e6dc;color:var(--mute)}
+.item.on .dot{background:var(--ink);color:#fff}
+.item.done .dot{background:var(--g);color:#fff;font-size:12px}
+.tt{font-weight:600;font-size:14px;line-height:1.25}
+.tt small{display:block;font:500 11px var(--mono);color:var(--mute);margin-top:1px}
+
+main{min-width:0}
+/* card */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 30px 26px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 10px 30px -18px rgba(30,40,30,.25)}
+.crumbs{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.chip{font:600 12px var(--mono);text-transform:none;letter-spacing:0;color:var(--g2);background:var(--gl);border:1px solid var(--gm);padding:2px 8px;border-radius:6px}
+.h{font-size:28px;line-height:1.15;letter-spacing:-.025em;margin:8px 0 6px;font-weight:800}
+#story{margin:0;color:#3d4842;max-width:62ch}
+.goal{margin:16px 0 18px;padding:12px 14px;border-radius:12px;background:#f7f5ec;border:1px dashed #d4d0bf;font-weight:600}
+.tcell{font:600 13px var(--mono);color:var(--g2);white-space:nowrap}
+
+/* formula bar */
+.fbar{display:flex;align-items:stretch;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff}
+.fbar:focus-within{box-shadow:0 0 0 4px rgba(29,107,69,.15);border-color:var(--g)}
+#namebox{font:600 14px var(--mono);padding:0 14px;display:grid;place-items:center;border-right:1px solid var(--line);background:#f6f5f0;min-width:58px}
+.fx{font:italic 600 15px Georgia,serif;color:var(--mute);display:grid;place-items:center;padding:0 10px;border-right:1px solid var(--line)}
+#f{flex:1;min-width:0;border:0;outline:0;font:500 16px var(--mono);padding:13px 12px;color:var(--ink);background:transparent}
+#f::placeholder{color:#a9ada6}
+#check{border:0;background:var(--g);color:#fff;font-weight:700;padding:0 22px;white-space:nowrap}
+#check:hover{background:var(--g2)}
+.shake{animation:sh .35s}
+@keyframes sh{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.keys{display:flex;gap:6px;margin:8px 0 0;flex-wrap:wrap}
+.keys button{font:600 13px var(--mono);border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 10px;color:var(--ink)}
+.keys button:hover{border-color:var(--g);color:var(--g2)}
+.keys span{font-size:12px;color:var(--mute);align-self:center;margin-left:4px}
+
+/* sheet */
+.sheetbox{margin-top:16px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table{border-collapse:separate;border-spacing:0;font-size:14px;user-select:none;width:max-content;min-width:100%}
+th{background:#f3f2ec;color:var(--mute);font:500 12px var(--mono);border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:5px 8px;text-align:center;position:sticky;top:0}
+tbody th{position:sticky;left:0;width:38px;z-index:1}
+th.corner{width:38px;left:0;z-index:2}
+th.ax{background:#dfeee4;color:var(--g2);font-weight:700}
+td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 10px;min-width:96px;height:32px;white-space:nowrap;cursor:cell;position:relative}
+td:first-of-type{min-width:150px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+td.hd{font-weight:700;background:#fafaf6}
+td.hl{background:color-mix(in srgb,var(--hc) 12%,#fff);box-shadow:inset 0 0 0 1.5px var(--hc)}
+td.tg{box-shadow:inset 0 0 0 2.5px var(--g);background:#f3faf5;font-weight:700;font-family:var(--mono);font-size:13.5px}
+td.tg.empty{color:var(--g);text-align:center;font-size:15px}
+td.tg.err{color:var(--bad);background:var(--badl);box-shadow:inset 0 0 0 2.5px var(--bad)}
+td.tg.ok{background:var(--g);color:#fff;box-shadow:none}
+td.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.85)}100%{transform:scale(1)}}
+.tip{font-size:12.5px;color:var(--mute);margin:8px 2px 0}
+
+/* feedback */
+.fb{margin-top:16px;border-radius:12px;padding:0 16px;max-height:0;overflow:hidden;transition:all .2s}
+.fb.bad,.fb.good{padding:12px 16px;max-height:480px}
+.fb.bad{background:var(--badl);color:#7d2219;border:1px solid #f0c9c0}
+.fb.good{background:var(--gl);color:var(--g2);border:1px solid var(--gm)}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;color:var(--ink)}
+.btn:hover{border-color:#b9b6a8}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.main{background:var(--ink);color:#fff;border-color:var(--ink);margin-left:auto}
+.btn.main:hover{background:#000}
+.note{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fdf6e3;border:1px solid #f0dfaf;font-size:14px;color:#5b4508}
+.note code{background:#fff;padding:2px 6px;border-radius:5px;border:1px solid #f0dfaf}
+
+/* done banner */
+.finish{margin-bottom:18px;padding:22px 24px;border-radius:18px;background:var(--ink);color:#fff;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.finish b{font-size:20px;display:block;letter-spacing:-.02em}
+.finish p{margin:2px 0 0;color:#c9d2cc;font-size:14px}
+.finish a{margin-left:auto;background:#fff;color:var(--ink);text-decoration:none;font-weight:700;padding:10px 16px;border-radius:10px;white-space:nowrap}
+
+/* reference */
+details{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+summary{padding:14px 18px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+summary::after{content:'+';font-weight:500;color:var(--mute)}
+details[open] summary::after{content:'–'}
+#ref{padding:0 18px 14px;display:grid;gap:2px}
+.fn{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid var(--grid);font-size:13.5px;align-items:baseline}
+.fn code{color:var(--g2);font-weight:600}
+.fn em{font:normal 12.5px var(--mono);color:var(--mute)}
+.foot{display:flex;justify-content:space-between;gap:12px;margin-top:18px;font-size:12.5px;color:var(--mute);flex-wrap:wrap}
+#reset{border:0;background:none;color:var(--mute);text-decoration:underline;padding:0;font-size:12.5px}
+
+
+/* hero + seo */
+.hero{margin:0 0 16px}
+.hero h1{font-size:26px;letter-spacing:-.025em;margin:0;line-height:1.2;font-weight:800}
+.hero p{margin:4px 0 0;color:var(--mute)}
+.xltip{display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding-top:10px;border-top:1px solid var(--gm);color:var(--ink)}
+.xltip p{margin:0;font-size:14px}
+.xltip a{color:var(--g2);font-weight:700;white-space:nowrap}
+.xlb{flex:none;font:700 11px var(--mono);letter-spacing:.02em;background:var(--ink);color:#fff;padding:3px 7px;border-radius:6px;margin-top:2px;display:inline-block}
+.seo{margin-top:44px;max-width:780px}
+.seo h2{font-size:22px;letter-spacing:-.02em;margin:34px 0 10px}
+.seo p{color:#3d4842}
+.tlist{padding-left:22px;columns:2;column-gap:30px;margin:12px 0 0}
+.tlist li{break-inside:avoid;margin:0 0 8px}
+.tlist a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gm)}
+.tlist a:hover{color:var(--g2)}
+.tlist span{display:block;font:500 12px var(--mono);color:var(--mute)}
+.faq{border-top:1px solid var(--line);margin:0;border-radius:0;background:none;border-left:0;border-right:0;border-bottom:0}
+.faq:last-of-type{border-bottom:1px solid var(--line)}
+.faq summary{padding:14px 2px}
+.faq p{margin:0 2px 14px}
+.xlcard{margin-top:40px;padding:26px;border-radius:18px;background:var(--paper);border:1px solid var(--line);display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap}
+.xlcard>div{flex:1 1 380px}
+.xlcard h2{margin:10px 0 8px}
+.xlcard p{margin:0}
+.cta{background:var(--g);color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px;white-space:nowrap}
+.cta:hover{background:var(--g2)}
+@media (max-width:900px){.tlist{columns:1}}
+@media (max-width:900px){
+  .top{padding:12px 16px;gap:10px;flex-wrap:wrap}
+  .prog{margin-left:0;width:100%;gap:10px}
+  .meter{flex:1;width:auto}
+  #count{display:none}
+  .wrap{grid-template-columns:minmax(0,1fr);padding:14px 12px 40px;gap:14px}
+  aside{position:static;max-height:none;display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+  .lvl{display:none}
+  .item{width:auto;flex:none;background:var(--paper);box-shadow:0 0 0 1px var(--line)}
+  .tt small{display:none}
+  .tt{font-size:13px;white-space:nowrap}
+  .card{padding:20px 16px;border-radius:14px}
+  .h{font-size:23px}
+  .hero h1{font-size:22px}
+  .fn{grid-template-columns:1fr}
+  #check{padding:0 14px}
+  td:first-of-type{min-width:120px}
+}
+</style>
+</head>
+<body>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081','ym');
+    ym(113091081,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113091081" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+<header class="top">
+  <a class="brand" href="/?utm_source=trenazher&utm_medium=header"><div class="logo">fx</div><div>Тренажёр формул Excel<small>от XLPlain — надстройки для Excel</small></div></a>
+  <div class="prog">
+    <span class="rank" id="rank">Новичок</span>
+    <div class="meter"><i id="bar" style="width:0"></i></div>
+    <span id="xp">0 XP</span>
+    <span id="count"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside id="list"></aside>
+  <main>
+    <div class="hero"><h1>Тренажёр формул Excel онлайн</h1><p>Бесплатно, без регистрации и установки. Решайте задачи в живой таблице — ответ проверяется сразу.</p></div>
+    <div class="finish" id="done" hidden>
+      <div><b>Все задачи решены 🎉</b><p>Формулы вы освоили. Сверку файлов, объединение таблиц, чистку данных и сводные можно вообще не писать руками — для этого есть XLPlain.</p></div>
+      <a href="/?utm_source=trenazher&utm_medium=finish&utm_campaign=formulas">Посмотреть XLPlain →</a>
+    </div>
+
+    <section class="card">
+      <div class="crumbs"><span id="crumb"></span><span class="chip" id="fnchip"></span></div>
+      <h2 id="title" class="h"></h2>
+      <p id="story"></p>
+      <div class="goal" id="goal"></div>
+
+      <div class="fbar">
+        <div id="namebox">B7</div>
+        <div class="fx">fx</div>
+        <input id="f" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="= формула" aria-label="Формула">
+        <button id="check">Проверить</button>
+      </div>
+      <div class="keys">
+        <button data-k="=">=</button><button data-k="(">(</button><button data-k=")">)</button><button data-k=";">;</button><button data-k=":">:</button><button data-k='""'>" "</button><button data-k="&amp;">&amp;</button><button data-k="*">*</button><button data-k="/">/</button><button data-k="&gt;=">&gt;=</button>
+      </div>
+
+      <div class="sheetbox"><table id="sheet"></table></div>
+      <p class="tip">Пока набираете формулу, кликайте по ячейкам или протягивайте мышкой — адреса подставятся сами. Enter — проверить.</p>
+
+      <div class="fb" id="fb"></div>
+
+      <div class="actions">
+        <button class="btn" id="prev">← Назад</button>
+        <button class="btn" id="hintb">Подсказка</button>
+        <button class="btn" id="solb">Показать решение</button>
+        <button class="btn main" id="next" hidden>Следующая задача →</button>
+      </div>
+      <div class="note" id="hint" hidden></div>
+      <div class="note" id="sol" hidden></div>
+    </section>
+
+    <details>
+      <summary>Справочник функций</summary>
+      <div id="ref"></div>
+    </details>
+    <div class="foot">
+      <span>Синтаксис как в русском Excel: функции по-русски, аргументы через «;», дробь через запятую. Английские названия тоже работают.</span>
+      <button id="reset">Сбросить прогресс</button>
+    </div>
+
+    <section class="seo">
+      <h2>Что внутри тренажёра</h2>
+      <p>16 задач на сюжетах из работы и жизни: бюджет, заказы интернет-магазина, прайс-лист, премии сотрудникам, выгрузка из CRM. Задачи идут от простого к сложному, каждая учит одной функции или приёму.</p>
+      <ol class="tlist"><li><a href="#sum">Итог за месяц</a><span>СУММ</span></li><li><a href="#mult">Сумма заказа</a><span>×</span></li><li><a href="#avg">Средний чек</a><span>СРЗНАЧ</span></li><li><a href="#discount">Цена со скидкой</a><span>%</span></li><li><a href="#minmax">Разброс трат</a><span>МАКС · МИН</span></li><li><a href="#if">План выполнен?</a><span>ЕСЛИ</span></li><li><a href="#countif">Заказы из Москвы</a><span>СЧЁТЕСЛИ</span></li><li><a href="#sumif">Выручка по городу</a><span>СУММЕСЛИ</span></li><li><a href="#vlookup">Найти цену</a><span>ВПР</span></li><li><a href="#concat">Имя целиком</a><span>&amp;</span></li><li><a href="#round">Красивая оценка</a><span>ОКРУГЛ</span></li><li><a href="#left">Код склада</a><span>ЛЕВСИМВ</span></li><li><a href="#ifand">Кому бонус</a><span>ЕСЛИ + И</span></li><li><a href="#iferror">Нет в наличии</a><span>ЕСЛИОШИБКА</span></li><li><a href="#trim">Лишние пробелы</a><span>СЖПРОБЕЛЫ</span></li><li><a href="#dupes">Найти дубли</a><span>СЧЁТЕСЛИ + ЕСЛИ</span></li></ol>
+
+      <h2>Частые вопросы</h2>
+      <details class="faq"><summary>Тренажёр бесплатный?</summary><p>Да. Все задачи открыты, регистрация не нужна. Прогресс сохраняется в вашем браузере.</p></details>
+      <details class="faq"><summary>Нужен ли установленный Excel?</summary><p>Нет. Тренажёр работает прямо в браузере, в том числе на телефоне. Таблица и формулы ведут себя как в Excel.</p></details>
+      <details class="faq"><summary>Как проверяется ответ?</summary><p>Формула считается на данных задачи, а потом ещё на 12 вариантах той же таблицы с другими числами. Если вписать готовое число или формула сработает только в частном случае, тренажёр это заметит и подскажет, что поправить.</p></details>
+      <details class="faq"><summary>Формулы писать по-русски или по-английски?</summary><p>Как в русском Excel: СУММ, ЕСЛИ, ВПР, аргументы через точку с запятой, дробная часть через запятую. Английские названия (SUM, IF, VLOOKUP) тоже принимаются, а адреса ячеек можно набирать и в русской раскладке.</p></details>
+      <details class="faq"><summary>Какие функции Excel есть в тренажёре?</summary><p>СУММ, СРЗНАЧ, МИН, МАКС, ЕСЛИ, И, ИЛИ, СЧЁТЕСЛИ, СУММЕСЛИ, ВПР, ЕСЛИОШИБКА, ОКРУГЛ, СЦЕПИТЬ и знак &amp;, ЛЕВСИМВ, ПРАВСИМВ, ПСТР, ДЛСТР, СЖПРОБЕЛЫ и другие. Шпаргалка по синтаксису открывается под таблицей.</p></details>
+      <details class="faq"><summary>Кому подойдёт тренажёр?</summary><p>Тем, кто готовится к собеседованию или тесту по Excel, начинает работать с таблицами или хочет наконец разобраться с ВПР и СЧЁТЕСЛИ. Задачи короткие, одна занимает пару минут.</p></details>
+
+      <div class="xlcard">
+        <div>
+          <span class="xlb">XLPlain</span>
+          <h2>Тренажёр сделан командой XLPlain</h2>
+          <p>XLPlain — надстройка для Excel, которая берёт на себя регулярную работу с таблицами: сверку двух файлов или папок по ключевым полям, объединение от 2 до 6 таблиц, очистку данных (пробелы, ФИО, даты, телефоны, email), поиск дубликатов, сводные таблицы и дашборды с KPI, сборку нескольких файлов в одну книгу. Работает в Excel для Windows.</p>
+        </div>
+        <a class="cta" href="/?utm_source=trenazher&utm_medium=footer&utm_campaign=formulas">Узнать про XLPlain →</a>
+      </div>
+    </section>
+  </main>
+</div>
+<footer style="max-width:1240px;margin:0 auto;padding:22px 28px 40px;border-top:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--mute)"><a href="/" style="color:inherit;font-weight:700">XLPlain — надстройка для Excel</a><a href="/stati.html" style="color:inherit">Статьи по Excel</a><a href="/#buy" style="color:inherit">Купить XLPlain</a><a href="https://www.instagram.com/xlplain/" target="_blank" rel="noopener" style="color:inherit">Instagram*</a><a href="https://www.threads.com/@xlplain" target="_blank" rel="noopener" style="color:inherit">Threads*</a><span style="flex-basis:100%;font-size:12px">* Instagram и Threads принадлежат компании Meta, признанной экстремистской и запрещённой на территории РФ.</span></footer>
+<script>
+// ===== Formula engine: Russian Excel syntax (; separators, Russian function names) =====
+const XL = (() => {
+  class XErr { constructor(code) { this.code = code; } }
+  class ParseErr { constructor(msg) { this.msg = msg; } }
+  const CYR = { 'А':'A','В':'B','С':'C','Е':'E','Н':'H','К':'K','М':'M','О':'O','Р':'P','Т':'T','Х':'X' };
+  const L = 'A-Za-zА-Яа-яЁё';
+
+  function colIdx(s) { let n = 0; for (const ch of s) n = n * 26 + (ch.charCodeAt(0) - 64); return n - 1; }
+  function colName(i) { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+  function addr(c, r) { return colName(c) + (r + 1); }
+
+  function tokenize(s) {
+    const t = []; let i = 0; let m;
+    const reNum = /^\d+(?:[.,]\d+)?/;
+    const reRef = new RegExp('^\\$?([' + L + ']{1,3})\\$?(\\d+)(?![' + L + '(\\d])');
+    const reName = new RegExp('^[' + L + '_][' + L + '_.\\d]*');
+    while (i < s.length) {
+      const c = s[i], rest = s.slice(i);
+      if (/\s/.test(c)) { i++; continue; }
+      if ((m = rest.match(reNum))) { t.push({ type: 'num', v: parseFloat(m[0].replace(',', '.')), pos: i, len: m[0].length }); i += m[0].length; continue; }
+      if (c === '"') {
+        let j = i + 1, str = '';
+        for (;;) {
+          if (j >= s.length) throw new ParseErr('Не закрыта кавычка — текст в формуле пишется "в кавычках"');
+          if (s[j] === '"') { if (s[j + 1] === '"') { str += '"'; j += 2; continue; } break; }
+          str += s[j++];
+        }
+        t.push({ type: 'str', v: str, pos: i, len: j + 1 - i }); i = j + 1; continue;
+      }
+      if ((m = rest.match(reRef))) {
+        let lat = '', ok = true;
+        for (const ch of m[1].toUpperCase()) { if (/[A-Z]/.test(ch)) lat += ch; else if (CYR[ch]) lat += CYR[ch]; else { ok = false; break; } }
+        if (ok) { t.push({ type: 'ref', col: colIdx(lat), row: +m[2] - 1, pos: i, len: m[0].length }); i += m[0].length; continue; }
+      }
+      if ((m = rest.match(reName))) { t.push({ type: 'name', v: m[0].toUpperCase().replace(/Ё/g, 'Е'), raw: m[0], pos: i, len: m[0].length }); i += m[0].length; continue; }
+      if ((m = rest.match(/^(<=|>=|<>)/))) { t.push({ type: 'op', v: m[0], pos: i, len: 2 }); i += 2; continue; }
+      if ('+-*/^&=<>%'.includes(c)) { t.push({ type: 'op', v: c, pos: i, len: 1 }); i++; continue; }
+      if (c === '(' || c === ')' || c === ':') { t.push({ type: c, pos: i, len: 1 }); i++; continue; }
+      if (c === ';' || c === ',') { t.push({ type: 'sep', pos: i, len: 1 }); i++; continue; }
+      throw new ParseErr('Непонятный символ «' + c + '»');
+    }
+    return t;
+  }
+
+  const BOOLS = { 'ИСТИНА': true, 'TRUE': true, 'ЛОЖЬ': false, 'FALSE': false };
+
+  function parse(src) {
+    const toks = tokenize(src); let p = 0;
+    const peek = () => toks[p];
+    const isOp = (...ops) => peek() && peek().type === 'op' && ops.includes(peek().v);
+    const expect = (type, msg) => { if (!peek() || peek().type !== type) throw new ParseErr(msg); return toks[p++]; };
+    function expr() { return compare(); }
+    function compare() { let a = concat(); while (isOp('=', '<>', '<', '>', '<=', '>=')) { const op = toks[p++].v; a = { k: 'bin', op, a, b: concat() }; } return a; }
+    function concat() { let a = add(); while (isOp('&')) { p++; a = { k: 'bin', op: '&', a, b: add() }; } return a; }
+    function add() { let a = mul(); while (isOp('+', '-')) { const op = toks[p++].v; a = { k: 'bin', op, a, b: mul() }; } return a; }
+    function mul() { let a = pow(); while (isOp('*', '/')) { const op = toks[p++].v; a = { k: 'bin', op, a, b: pow() }; } return a; }
+    function pow() { let a = unary(); while (isOp('^')) { p++; a = { k: 'bin', op: '^', a, b: unary() }; } return a; }
+    function unary() { if (isOp('-')) { p++; return { k: 'neg', a: unary() }; } if (isOp('+')) { p++; return unary(); } return postfix(); }
+    function postfix() { let a = primary(); while (isOp('%')) { p++; a = { k: 'pct', a }; } return a; }
+    function primary() {
+      const t = peek();
+      if (!t) throw new ParseErr('Формула оборвалась — чего-то не хватает в конце');
+      if (t.type === 'num') { p++; return { k: 'num', v: t.v }; }
+      if (t.type === 'str') { p++; return { k: 'str', v: t.v }; }
+      if (t.type === 'ref') {
+        p++;
+        if (peek() && peek().type === ':') {
+          p++; const t2 = expect('ref', 'После двоеточия нужен адрес ячейки, например B2:B6');
+          return { k: 'range', c1: Math.min(t.col, t2.col), r1: Math.min(t.row, t2.row), c2: Math.max(t.col, t2.col), r2: Math.max(t.row, t2.row) };
+        }
+        return { k: 'ref', c: t.col, r: t.row };
+      }
+      if (t.type === 'name') {
+        p++;
+        if (peek() && peek().type === '(') {
+          p++; const args = [];
+          if (peek() && peek().type === ')') { p++; return { k: 'call', name: t.v, raw: t.raw, args }; }
+          for (;;) {
+            if (peek() && (peek().type === 'sep' || peek().type === ')')) args.push({ k: 'empty' });
+            else args.push(expr());
+            if (peek() && peek().type === 'sep') { p++; continue; }
+            expect(')', 'Не хватает закрывающей скобки «)»');
+            break;
+          }
+          if (!FN[t.v]) throw new ParseErr('Функция «' + t.raw + '» не найдена. Проверьте написание (например, СУММ, ЕСЛИ, ВПР)');
+          return { k: 'call', name: t.v, raw: t.raw, args };
+        }
+        if (t.v in BOOLS) return { k: 'bool', v: BOOLS[t.v] };
+        throw new ParseErr('Непонятное слово «' + t.raw + '». Если это текст — возьмите его в кавычки');
+      }
+      if (t.type === '(') { p++; const e = expr(); expect(')', 'Не хватает закрывающей скобки «)»'); return e; }
+      if (t.type === ')') throw new ParseErr('Лишняя закрывающая скобка');
+      throw new ParseErr('Формула составлена неправильно — проверьте знаки и скобки');
+    }
+    if (!toks.length) throw new ParseErr('Пустая формула');
+    const ast = expr();
+    if (p < toks.length) {
+      const t = toks[p];
+      if (t.type === ')') throw new ParseErr('Лишняя закрывающая скобка');
+      throw new ParseErr('Формула составлена неправильно — похоже, пропущен знак или точка с запятой');
+    }
+    return ast;
+  }
+
+  // ---- values ----
+  const isRange = v => v && v.range === true;
+  function toNum(v) {
+    if (v === null || v === undefined || v === '') return 0;
+    if (typeof v === 'number') return v;
+    if (typeof v === 'boolean') return v ? 1 : 0;
+    if (typeof v === 'string') { const s = v.trim().replace(',', '.'); if (s !== '' && !isNaN(+s)) return +s; throw new XErr('#ЗНАЧ!'); }
+    throw new XErr('#ЗНАЧ!');
+  }
+  function fmtNum(n) { if (Number.isInteger(n)) return String(n); return String(+n.toPrecision(15)).replace('.', ','); }
+  function toStr(v) {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'number') return fmtNum(v);
+    if (typeof v === 'boolean') return v ? 'ИСТИНА' : 'ЛОЖЬ';
+    return String(v);
+  }
+  function toBool(v) {
+    if (v === null || v === undefined) return false;
+    if (typeof v === 'boolean') return v;
+    if (typeof v === 'number') return v !== 0;
+    const s = String(v).toUpperCase();
+    if (s in BOOLS) return BOOLS[s];
+    throw new XErr('#ЗНАЧ!');
+  }
+  const rank = v => typeof v === 'number' ? 0 : typeof v === 'string' ? 1 : 2;
+  function cmp(a, b) {
+    if (a === null || a === undefined) a = (typeof b === 'string') ? '' : (typeof b === 'boolean' ? false : 0);
+    if (b === null || b === undefined) b = (typeof a === 'string') ? '' : (typeof a === 'boolean' ? false : 0);
+    const ra = rank(a), rb = rank(b);
+    if (ra !== rb) return ra - rb;
+    if (ra === 1) { const x = a.toLowerCase(), y = b.toLowerCase(); return x < y ? -1 : x > y ? 1 : 0; }
+    const x = +a, y = +b; return x < y ? -1 : x > y ? 1 : 0;
+  }
+
+  function makeCtx(getCell) {
+    function ev(n) {
+      switch (n.k) {
+        case 'num': case 'str': case 'bool': return n.v;
+        case 'empty': return null;
+        case 'ref': return getCell(n.c, n.r);
+        case 'range': return { range: true, ...n };
+        case 'neg': return -toNum(scalar(n.a));
+        case 'pct': return toNum(scalar(n.a)) / 100;
+        case 'bin': {
+          const a = scalar(n.a), b = scalar(n.b);
+          switch (n.op) {
+            case '+': return toNum(a) + toNum(b);
+            case '-': return toNum(a) - toNum(b);
+            case '*': return toNum(a) * toNum(b);
+            case '/': { const d = toNum(b); if (d === 0) throw new XErr('#ДЕЛ/0!'); return toNum(a) / d; }
+            case '^': return Math.pow(toNum(a), toNum(b));
+            case '&': return toStr(a) + toStr(b);
+            case '=': return cmp(a, b) === 0;
+            case '<>': return cmp(a, b) !== 0;
+            case '<': return cmp(a, b) < 0;
+            case '>': return cmp(a, b) > 0;
+            case '<=': return cmp(a, b) <= 0;
+            case '>=': return cmp(a, b) >= 0;
+          }
+        }
+        case 'call': return FN[n.name](n.args, ctx);
+      }
+      throw new XErr('#ЗНАЧ!');
+    }
+    function scalar(n) { const v = ev(n); if (isRange(v)) { if (v.c1 === v.c2 && v.r1 === v.r2) return getCell(v.c1, v.r1); throw new XErr('#ЗНАЧ!'); } return v; }
+    function cells(v) { const out = []; for (let r = v.r1; r <= v.r2; r++) for (let c = v.c1; c <= v.c2; c++) out.push(getCell(c, r)); return out; }
+    function flat(args) { const out = []; for (const a of args) { const v = ev(a); if (isRange(v)) out.push(...cells(v).map(x => ({ x, fromRange: true }))); else out.push({ x: v, fromRange: false }); } return out; }
+    function rng(n) { if (n.k === 'ref') return { range: true, c1: n.c, r1: n.r, c2: n.c, r2: n.r }; const v = ev(n); if (!isRange(v)) throw new XErr('#ЗНАЧ!'); return v; }
+    const ctx = { ev, scalar, cells, flat, getCell, rng };
+    return ctx;
+  }
+
+  function nums(args, ctx) {
+    const out = [];
+    for (const { x, fromRange } of ctx.flat(args)) {
+      if (fromRange) { if (typeof x === 'number') out.push(x); }
+      else if (x !== null) out.push(toNum(x));
+    }
+    return out;
+  }
+  function need(args, min, max) { if (args.length < min || args.length > max) throw new XErr('#ЗНАЧ!'); }
+  function wildcardRe(s) { return new RegExp('^' + s.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$', 'i'); }
+  function matcher(crit) {
+    if (typeof crit === 'number') return x => typeof x === 'number' ? x === crit : (typeof x === 'string' && x.trim() !== '' && +x.replace(',', '.') === crit);
+    if (typeof crit === 'boolean') return x => x === crit;
+    let s = toStr(crit), op = '=';
+    const m = s.match(/^(<=|>=|<>|<|>|=)/); if (m) { op = m[1]; s = s.slice(m[1].length); }
+    const sn = s.trim().replace(',', '.'); const isN = sn !== '' && !isNaN(+sn);
+    if (isN) {
+      const n = +sn;
+      return x => {
+        if (typeof x !== 'number') return op === '<>';
+        switch (op) { case '=': return x === n; case '<>': return x !== n; case '<': return x < n; case '>': return x > n; case '<=': return x <= n; case '>=': return x >= n; }
+      };
+    }
+    if (op === '=' || op === '<>') {
+      const re = wildcardRe(s);
+      const hit = x => (s === '' ? (x === null || x === '') : (x !== null && re.test(toStr(x))));
+      return op === '=' ? hit : x => !hit(x);
+    }
+    return x => { if (typeof x !== 'string') return false; const c = cmp(x, s); return op === '<' ? c < 0 : op === '>' ? c > 0 : op === '<=' ? c <= 0 : c >= 0; };
+  }
+  function round(x, d) { const f = Math.pow(10, d); const v = Math.abs(x) * f; return Math.sign(x) * Math.round(+v.toPrecision(15)) / f; }
+
+  const FN = {};
+  const def = (names, fn, help) => { for (const n of names) FN[n] = fn; if (help) HELP.push(help); };
+  const HELP = [];
+
+  def(['СУММ', 'SUM'], (a, c) => nums(a, c).reduce((s, x) => s + x, 0), ['СУММ(диапазон)', 'Складывает числа', '=СУММ(B2:B6)']);
+  def(['СРЗНАЧ', 'AVERAGE'], (a, c) => { const n = nums(a, c); if (!n.length) throw new XErr('#ДЕЛ/0!'); return n.reduce((s, x) => s + x, 0) / n.length; }, ['СРЗНАЧ(диапазон)', 'Среднее арифметическое', '=СРЗНАЧ(B2:B8)']);
+  def(['МИН', 'MIN'], (a, c) => { const n = nums(a, c); return n.length ? Math.min(...n) : 0; }, ['МИН(диапазон)', 'Наименьшее число', '=МИН(B2:B8)']);
+  def(['МАКС', 'MAX'], (a, c) => { const n = nums(a, c); return n.length ? Math.max(...n) : 0; }, ['МАКС(диапазон)', 'Наибольшее число', '=МАКС(B2:B8)']);
+  def(['СЧЕТ', 'COUNT'], (a, c) => c.flat(a).filter(({ x }) => typeof x === 'number').length, ['СЧЁТ(диапазон)', 'Сколько ячеек с числами', '=СЧЁТ(C2:C9)']);
+  def(['СЧЕТЗ', 'COUNTA'], (a, c) => c.flat(a).filter(({ x }) => x !== null && x !== '').length, ['СЧЁТЗ(диапазон)', 'Сколько непустых ячеек', '=СЧЁТЗ(A2:A9)']);
+  def(['ЕСЛИ', 'IF'], (a, c) => { need(a, 2, 3); const cond = toBool(c.scalar(a[0])); if (cond) return c.scalar(a[1]); return a.length > 2 ? c.scalar(a[2]) : false; }, ['ЕСЛИ(условие; если да; если нет)', 'Выбирает значение по условию', '=ЕСЛИ(C2>=B2;"Да";"Нет")']);
+  def(['И', 'AND'], (a, c) => { let r = true; for (const { x } of c.flat(a)) r = r && toBool(x); return r; }, ['И(усл1; усл2; …)', 'ИСТИНА, если выполнены все условия', '=И(B2>0;C2>0)']);
+  def(['ИЛИ', 'OR'], (a, c) => { let r = false; for (const { x } of c.flat(a)) r = r || toBool(x); return r; }, ['ИЛИ(усл1; усл2; …)', 'ИСТИНА, если выполнено хотя бы одно', '=ИЛИ(B2>0;C2>0)']);
+  def(['НЕ', 'NOT'], (a, c) => { need(a, 1, 1); return !toBool(c.scalar(a[0])); });
+  def(['СЧЕТЕСЛИ', 'COUNTIF'], (a, c) => { need(a, 2, 2); const r = c.rng(a[0]); const m = matcher(c.scalar(a[1])); return c.cells(r).filter(m).length; }, ['СЧЁТЕСЛИ(диапазон; критерий)', 'Считает ячейки по условию', '=СЧЁТЕСЛИ(B2:B9;"Москва")']);
+  def(['СУММЕСЛИ', 'SUMIF'], (a, c) => {
+    need(a, 2, 3); const r = c.rng(a[0]);
+    const m = matcher(c.scalar(a[1]));
+    const src = c.cells(r); let sum = src;
+    if (a.length > 2) { const s = c.rng(a[2]); sum = c.cells({ c1: s.c1, r1: s.r1, c2: s.c1 + (r.c2 - r.c1), r2: s.r1 + (r.r2 - r.r1) }); }
+    let t = 0; src.forEach((x, i) => { if (m(x) && typeof sum[i] === 'number') t += sum[i]; }); return t;
+  }, ['СУММЕСЛИ(диапазон; критерий; диапазон_суммы)', 'Складывает числа по условию', '=СУММЕСЛИ(B2:B9;"Казань";C2:C9)']);
+  def(['ВПР', 'VLOOKUP'], (a, c) => {
+    need(a, 3, 4);
+    const key = c.scalar(a[0]); const r = c.rng(a[1]);
+    const col = Math.trunc(toNum(c.scalar(a[2]))); if (col < 1) throw new XErr('#ЗНАЧ!'); if (col > r.c2 - r.c1 + 1) throw new XErr('#ССЫЛКА!');
+    const approx = a.length > 3 && a[3].k !== 'empty' ? toBool(c.scalar(a[3])) : true;
+    if (!approx) {
+      const m = typeof key === 'string' ? (x => x !== null && wildcardRe(key).test(toStr(x))) : (x => x !== null && cmp(x, key) === 0);
+      for (let row = r.r1; row <= r.r2; row++) if (m(c.getCell(r.c1, row))) return c.getCell(r.c1 + col - 1, row);
+      throw new XErr('#Н/Д');
+    }
+    let found = -1;
+    for (let row = r.r1; row <= r.r2; row++) { const x = c.getCell(r.c1, row); if (x === null) continue; if (rank(x) === rank(key) && cmp(x, key) <= 0) found = row; else if (rank(x) === rank(key)) break; }
+    if (found < 0) throw new XErr('#Н/Д');
+    return c.getCell(r.c1 + col - 1, found);
+  }, ['ВПР(что ищем; таблица; номер столбца; 0)', 'Находит значение в таблице. 0 — точное совпадение', '=ВПР(E2;A2:B7;2;0)']);
+  def(['ОКРУГЛ', 'ROUND'], (a, c) => { need(a, 2, 2); return round(toNum(c.scalar(a[0])), Math.trunc(toNum(c.scalar(a[1])))); }, ['ОКРУГЛ(число; знаков)', 'Округляет до нужного числа знаков', '=ОКРУГЛ(B7;0)']);
+  def(['ЦЕЛОЕ', 'INT'], (a, c) => { need(a, 1, 1); return Math.floor(toNum(c.scalar(a[0]))); });
+  def(['ABS'], (a, c) => { need(a, 1, 1); return Math.abs(toNum(c.scalar(a[0]))); });
+  def(['СЦЕПИТЬ', 'CONCATENATE', 'СЦЕП', 'CONCAT'], (a, c) => c.flat(a).map(({ x }) => toStr(x)).join(''), ['СЦЕПИТЬ(текст1; текст2; …)', 'Склеивает текст. То же делает знак &', '=СЦЕПИТЬ(A2;" ";B2)']);
+  def(['ЛЕВСИМВ', 'LEFT'], (a, c) => { need(a, 1, 2); const n = a.length > 1 ? toNum(c.scalar(a[1])) : 1; if (n < 0) throw new XErr('#ЗНАЧ!'); return toStr(c.scalar(a[0])).slice(0, n); }, ['ЛЕВСИМВ(текст; сколько)', 'Первые символы текста', '=ЛЕВСИМВ(A2;3)']);
+  def(['ПРАВСИМВ', 'RIGHT'], (a, c) => { need(a, 1, 2); const n = a.length > 1 ? toNum(c.scalar(a[1])) : 1; if (n < 0) throw new XErr('#ЗНАЧ!'); const s = toStr(c.scalar(a[0])); return n === 0 ? '' : s.slice(-n); }, ['ПРАВСИМВ(текст; сколько)', 'Последние символы текста', '=ПРАВСИМВ(A2;5)']);
+  def(['ПСТР', 'MID'], (a, c) => { need(a, 3, 3); const s = toStr(c.scalar(a[0])); const st = toNum(c.scalar(a[1])); const n = toNum(c.scalar(a[2])); if (st < 1 || n < 0) throw new XErr('#ЗНАЧ!'); return s.substr(st - 1, n); });
+  def(['ДЛСТР', 'LEN'], (a, c) => { need(a, 1, 1); return toStr(c.scalar(a[0])).length; }, ['ДЛСТР(текст)', 'Длина текста', '=ДЛСТР(A2)']);
+  def(['ПРОПИСН', 'UPPER'], (a, c) => { need(a, 1, 1); return toStr(c.scalar(a[0])).toUpperCase(); });
+  def(['СТРОЧН', 'LOWER'], (a, c) => { need(a, 1, 1); return toStr(c.scalar(a[0])).toLowerCase(); });
+  def(['СЖПРОБЕЛЫ', 'TRIM'], (a, c) => { need(a, 1, 1); return toStr(c.scalar(a[0])).trim().replace(/ +/g, ' '); });
+  def(['ЕСЛИОШИБКА', 'IFERROR'], (a, c) => { need(a, 2, 2); try { const v = c.scalar(a[0]); return v; } catch (e) { if (e instanceof XErr) return c.scalar(a[1]); throw e; } }, ['ЕСЛИОШИБКА(формула; если ошибка)', 'Заменяет ошибку на ваше значение', '=ЕСЛИОШИБКА(ВПР(…);"Нет")']);
+
+  function evaluate(ast, getCell) {
+    const ctx = makeCtx(getCell);
+    try {
+      const v = ctx.scalar(ast);
+      if (typeof v === 'number' && !isFinite(v)) return { err: '#ЧИСЛО!' };
+      return { v: v === null ? 0 : v };
+    } catch (e) { if (e instanceof XErr) return { err: e.code }; throw e; }
+  }
+
+  function refsOf(ast) {
+    const out = [];
+    (function walk(n) {
+      if (!n) return;
+      if (n.k === 'ref') out.push({ c1: n.c, r1: n.r, c2: n.c, r2: n.r });
+      else if (n.k === 'range') out.push({ c1: n.c1, r1: n.r1, c2: n.c2, r2: n.r2 });
+      for (const key of ['a', 'b']) if (n[key]) walk(n[key]);
+      if (n.args) n.args.forEach(walk);
+    })(ast);
+    return out;
+  }
+
+  function same(res, exp) {
+    if (res.err || exp.err) return res.err === exp.err;
+    const a = res.v, b = exp.v;
+    if (typeof b === 'number') { const x = typeof a === 'number' ? a : (typeof a === 'string' && a.trim() !== '' && !isNaN(+a.replace(',', '.')) ? +a.replace(',', '.') : NaN); return Math.abs(x - b) <= 1e-6 * Math.max(1, Math.abs(b)); }
+    if (typeof b === 'boolean') return a === b;
+    return toStr(a).trim().toLowerCase() === toStr(b).trim().toLowerCase();
+  }
+
+  return { parse, evaluate, refsOf, same, tokenize, toStr, fmtNum, colName, colIdx, addr, ParseErr, HELP };
+})();
+
+
+// ===== Tasks =====
+// grid: rows of values (null = empty). target: [col,row] zero-based. ref: reference formula.
+// vary(cells, pick): optional extra randomisation (cells is a mutable 2D array). fixed: list of "B2" etc. kept unchanged.
+const LEVELS = [
+  { id: 1, name: 'Новичок', xp: 10 },
+  { id: 2, name: 'Уверенный', xp: 20 },
+  { id: 3, name: 'Профи', xp: 30 },
+];
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const TASKS = [
+  {
+    id: 'sum', xl: 'Когда строк сотни, а итоги нужны по месяцам и категориям, в XLPlain сводная таблица и дашборд с KPI и графиками собираются мастером за пару кликов.', level: 1, title: 'Итог за месяц', fn: 'СУММ',
+    story: 'Вы записали расходы за месяц. Сколько ушло всего?',
+    goal: 'Посчитайте сумму всех расходов',
+    grid: [
+      ['Статья', 'Сумма, ₽'],
+      ['Аренда', 35000],
+      ['Продукты', 18400],
+      ['Транспорт', 4200],
+      ['Связь', 1100],
+      ['Развлечения', 6500],
+      ['Итого', null],
+    ],
+    target: [1, 6], ref: '=СУММ(B2:B6)',
+    hint: 'Функция СУММ складывает диапазон. Диапазон — это «от и до» через двоеточие: B2:B6. Можно не печатать адреса, а протянуть мышкой по ячейкам.',
+  },
+  {
+    id: 'mult', level: 1, title: 'Сумма заказа', fn: '×',
+    story: 'Покупатель берёт 3 пачки кофе. Сколько он заплатит?',
+    goal: 'Умножьте цену на количество',
+    grid: [
+      ['Товар', 'Цена, ₽', 'Кол-во', 'Сумма, ₽'],
+      ['Кофе в зёрнах', 890, 3, null],
+    ],
+    target: [3, 1], ref: '=B2*C2',
+    hint: 'Формула всегда начинается со знака «=». Умножение — звёздочка *. Пишите адреса ячеек, а не числа: тогда формула пересчитается сама, если цена изменится.',
+  },
+  {
+    id: 'avg', xl: 'Средние, итоги и графики по большой таблице XLPlain соберёт в готовый дашборд со срезами и временной шкалой.', level: 1, title: 'Средний чек', fn: 'СРЗНАЧ',
+    story: 'Кофейня записала выручку по дням. Какой средний чек за неделю?',
+    goal: 'Найдите среднее значение',
+    grid: [
+      ['День', 'Чек, ₽'],
+      ['Пн', 420], ['Вт', 380], ['Ср', 510], ['Чт', 460], ['Пт', 690], ['Сб', 820], ['Вс', 740],
+      ['Среднее', null],
+    ],
+    target: [1, 8], ref: '=СРЗНАЧ(B2:B8)',
+    hint: 'СРЗНАЧ работает как СУММ, только делит сумму на количество: =СРЗНАЧ(B2:B8).',
+  },
+  {
+    id: 'discount', level: 1, title: 'Цена со скидкой', fn: '%',
+    story: 'Куртка стоит 12 900 ₽, на неё скидка. Сколько она стоит теперь?',
+    goal: 'Посчитайте цену с учётом скидки',
+    grid: [
+      ['Цена, ₽', 12900],
+      ['Скидка, %', 15],
+      ['Цена со скидкой', null],
+    ],
+    target: [1, 2], ref: '=B1*(1-B2/100)',
+    hint: 'Скидка 15% — это 15/100 от цены. Цена со скидкой = цена − цена × скидка / 100. Или короче: =B1*(1-B2/100).',
+  },
+  {
+    id: 'minmax', level: 2, title: 'Разброс трат', fn: 'МАКС · МИН',
+    story: 'Насколько самая большая дневная трата больше самой маленькой?',
+    goal: 'Найдите разницу между максимумом и минимумом',
+    grid: [
+      ['День', 'Траты, ₽'],
+      ['Пн', 1240], ['Вт', 860], ['Ср', 2310], ['Чт', 640], ['Пт', 3150], ['Сб', 4780], ['Вс', 1920],
+      ['Разница', null],
+    ],
+    target: [1, 8], ref: '=МАКС(B2:B8)-МИН(B2:B8)',
+    hint: 'В одной формуле можно использовать несколько функций: =МАКС(…)-МИН(…).',
+  },
+  {
+    id: 'if', level: 2, title: 'План выполнен?', fn: 'ЕСЛИ',
+    story: 'Руководитель хочет сразу видеть, выполнил ли менеджер план.',
+    goal: 'Выведите «Да», если факт не меньше плана, иначе «Нет»',
+    grid: [
+      ['Менеджер', 'План', 'Факт', 'Выполнил?'],
+      ['Ольга', 500000, 540000, null],
+    ],
+    target: [3, 1], ref: '=ЕСЛИ(C2>=B2;"Да";"Нет")',
+    hint: 'ЕСЛИ(условие; что вывести, если да; что вывести, если нет). Текст пишется в кавычках, части разделяются точкой с запятой: =ЕСЛИ(C2>=B2;"Да";"Нет").',
+  },
+  {
+    id: 'countif', xl: 'Посчитать заказы по всем городам сразу удобнее сводной таблицей. В XLPlain она строится мастером, без ручной настройки полей.', level: 2, title: 'Заказы из Москвы', fn: 'СЧЁТЕСЛИ',
+    story: 'Интернет-магазину нужно понять, откуда больше заказов.',
+    goal: 'Посчитайте, сколько заказов из Москвы',
+    grid: [
+      ['Заказ', 'Город', 'Сумма, ₽', null, 'Город', 'Заказов'],
+      [1041, 'Москва', 3200, null, 'Москва', null],
+      [1042, 'Казань', 1850],
+      [1043, 'Москва', 5400],
+      [1044, 'Пермь', 990],
+      [1045, 'Казань', 2700],
+      [1046, 'Москва', 1600],
+      [1047, 'Пермь', 4100],
+      [1048, 'Казань', 3300],
+    ],
+    target: [5, 1], ref: '=СЧЁТЕСЛИ(B2:B9;E2)', fixed: ['A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
+    vary(g) { for (let r = 1; r <= 8; r++) g[r][1] = pick(['Москва', 'Казань', 'Пермь']); },
+    hint: 'СЧЁТЕСЛИ(где ищем; что ищем). Критерий можно написать текстом в кавычках или взять из ячейки E2: =СЧЁТЕСЛИ(B2:B9;E2).',
+  },
+  {
+    id: 'sumif', xl: 'Если таких разрезов десяток (город, менеджер, месяц), XLPlain соберёт сводную и дашборд по всем сразу.', level: 2, title: 'Выручка по городу', fn: 'СУММЕСЛИ',
+    story: 'Те же заказы. Сколько денег принесла Казань?',
+    goal: 'Сложите суммы только казанских заказов',
+    grid: [
+      ['Заказ', 'Город', 'Сумма, ₽', null, 'Город', 'Выручка, ₽'],
+      [1041, 'Москва', 3200, null, 'Казань', null],
+      [1042, 'Казань', 1850],
+      [1043, 'Москва', 5400],
+      [1044, 'Пермь', 990],
+      [1045, 'Казань', 2700],
+      [1046, 'Москва', 1600],
+      [1047, 'Пермь', 4100],
+      [1048, 'Казань', 3300],
+    ],
+    target: [5, 1], ref: '=СУММЕСЛИ(B2:B9;E2;C2:C9)', fixed: ['A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
+    vary(g) { for (let r = 1; r <= 8; r++) g[r][1] = pick(['Москва', 'Казань', 'Пермь']); },
+    hint: 'СУММЕСЛИ(где проверяем условие; условие; что складываем): =СУММЕСЛИ(B2:B9;E2;C2:C9).',
+  },
+  {
+    id: 'vlookup', xl: 'ВПР хорош для одной таблицы. Когда надо сверить два файла или целые папки по ключевым полям, в XLPlain это делается одной командой.', level: 2, title: 'Найти цену', fn: 'ВПР',
+    story: 'В прайсе десятки позиций. Нужно, чтобы цена подтягивалась сама, когда вводишь название.',
+    goal: 'Найдите цену товара из ячейки E2',
+    grid: [
+      ['Товар', 'Цена, ₽', null, null, 'Ищем', 'Цена, ₽'],
+      ['Чай чёрный', 320, null, null, 'Чай зелёный', null],
+      ['Чай зелёный', 410],
+      ['Кофе молотый', 690],
+      ['Кофе в зёрнах', 890],
+      ['Какао', 450],
+      ['Цикорий', 270],
+    ],
+    target: [5, 1], ref: '=ВПР(E2;A2:B7;2;0)',
+    vary(g) { g[1][4] = pick(['Чай чёрный', 'Чай зелёный', 'Кофе молотый', 'Кофе в зёрнах', 'Какао', 'Цикорий']); },
+    hint: 'ВПР(что ищем; где ищем; из какого столбца взять; 0). Ноль в конце — «искать точное совпадение». Цена во 2-м столбце таблицы: =ВПР(E2;A2:B7;2;0).',
+  },
+  {
+    id: 'concat', xl: 'Имена с лишними пробелами, разным регистром и перепутанным порядком XLPlain приводит в порядок кнопкой «очистка данных»: ФИО, даты, телефоны, email.', level: 3, title: 'Имя целиком', fn: '&',
+    story: 'Имя и фамилия лежат в разных столбцах, а для рассылки нужны вместе.',
+    goal: 'Соберите «Имя Фамилия» через пробел',
+    grid: [
+      ['Имя', 'Фамилия', 'Полное имя'],
+      ['Анна', 'Петрова', null],
+    ],
+    target: [2, 1], ref: '=A2&" "&B2',
+    vary(g) { g[1][0] = pick(['Анна', 'Игорь', 'Мария', 'Олег', 'Дина']); g[1][1] = pick(['Петрова', 'Смирнов', 'Ким', 'Орлова', 'Гусев']); },
+    hint: 'Знак & склеивает текст. Пробел — это тоже текст, его пишут в кавычках: =A2&" "&B2. Или функцией: =СЦЕПИТЬ(A2;" ";B2).',
+  },
+  {
+    id: 'round', level: 3, title: 'Красивая оценка', fn: 'ОКРУГЛ',
+    story: 'Средняя оценка курса выходит с длинным хвостом после запятой. Нужно до одного знака.',
+    goal: 'Найдите среднее и округлите до 1 знака после запятой',
+    grid: [
+      ['Ученик', 'Балл'],
+      ['Лена', 4.6], ['Артём', 3.9], ['Вика', 4.8], ['Денис', 4.1], ['Саша', 4.4], ['Юля', 3.7],
+      ['Среднее', null],
+    ],
+    target: [1, 7], ref: '=ОКРУГЛ(СРЗНАЧ(B2:B7);1)',
+    hint: 'Функции можно вкладывать друг в друга: сначала СРЗНАЧ, а результат — в ОКРУГЛ. =ОКРУГЛ(СРЗНАЧ(B2:B7);1).',
+  },
+  {
+    id: 'left', xl: 'Разбирать и чистить коды, даты и телефоны в тысячах строк проще в XLPlain: очистка данных работает сразу по всему диапазону.', level: 3, title: 'Код склада', fn: 'ЛЕВСИМВ',
+    story: 'Первые три буквы артикула — код склада. Нужно вытащить их в отдельный столбец.',
+    goal: 'Достаньте первые 3 символа артикула',
+    grid: [
+      ['Артикул', 'Склад'],
+      ['MSK-10234', null],
+    ],
+    target: [1, 1], ref: '=ЛЕВСИМВ(A2;3)',
+    vary(g) { g[1][0] = pick(['MSK', 'SPB', 'KZN', 'EKB', 'NSK']) + '-' + (10000 + Math.floor(Math.random() * 89999)); },
+    hint: 'ЛЕВСИМВ(текст; сколько символов): =ЛЕВСИМВ(A2;3).',
+  },
+  {
+    id: 'ifand', level: 3, title: 'Кому бонус', fn: 'ЕСЛИ + И',
+    story: 'Бонус 5 000 ₽ получает тот, кто продал минимум на 100 000 ₽ и работает в компании от 1 года.',
+    goal: 'Выведите 5000, если оба условия выполнены, иначе 0',
+    grid: [
+      ['Сотрудник', 'Продажи, ₽', 'Стаж, лет', 'Бонус, ₽'],
+      ['Марат', 128000, 2, null],
+    ],
+    target: [3, 1], ref: '=ЕСЛИ(И(B2>=100000;C2>=1);5000;0)',
+    vary(g) { g[1][1] = pick([60000, 99000, 100000, 145000, 210000]); g[1][2] = pick([0, 1, 3]); },
+    hint: 'Функция И проверяет несколько условий сразу и возвращает ИСТИНА, только если выполнены все. Вставьте её внутрь ЕСЛИ: =ЕСЛИ(И(B2>=100000;C2>=1);5000;0).',
+  },
+  {
+    id: 'iferror', xl: '«Что есть в одном списке и нет в другом» — главный вопрос сверки. XLPlain сверяет два файла по ключу и объединяет от 2 до 6 таблиц без единой формулы.', level: 3, title: 'Нет в наличии', fn: 'ЕСЛИОШИБКА',
+    story: 'Если товара нет в прайсе, ВПР показывает некрасивую ошибку #Н/Д. Покупатель должен видеть понятный текст.',
+    goal: 'Найдите цену, а если товара нет — выведите «Нет в наличии»',
+    grid: [
+      ['Товар', 'Цена, ₽', null, null, 'Ищем', 'Цена, ₽'],
+      ['Чай чёрный', 320, null, null, 'Матча', null],
+      ['Чай зелёный', 410],
+      ['Кофе молотый', 690],
+      ['Кофе в зёрнах', 890],
+      ['Какао', 450],
+      ['Цикорий', 270],
+    ],
+    target: [5, 1], ref: '=ЕСЛИОШИБКА(ВПР(E2;A2:B7;2;0);"Нет в наличии")',
+    vary(g) { g[1][4] = pick(['Матча', 'Какао', 'Цикорий', 'Ройбуш', 'Чай чёрный']); },
+    hint: 'Оберните ВПР в ЕСЛИОШИБКА(формула; что показать вместо ошибки): =ЕСЛИОШИБКА(ВПР(E2;A2:B7;2;0);"Нет в наличии").',
+  },
+  {
+    id: 'trim', level: 3, title: 'Лишние пробелы', fn: 'СЖПРОБЕЛЫ', xl: 'Пробелы, даты текстом, телефоны в десяти форматах — всё это XLPlain чистит одной кнопкой по всей таблице сразу.',
+    story: 'Данные выгрузили из CRM, и в названиях клиентов полно лишних пробелов. Из-за них ВПР ничего не находит.',
+    goal: 'Уберите лишние пробелы из названия',
+    grid: [
+      ['Из выгрузки', 'Чисто'],
+      ['  ООО   Ромашка ', null],
+    ],
+    target: [1, 1], ref: '=СЖПРОБЕЛЫ(A2)',
+    vary(g) { g[1][0] = pick(['  ИП  Соколов', 'Кофе   Хауз  ', ' Альфа  Строй ', 'ООО  Вектор']); },
+    hint: 'СЖПРОБЕЛЫ убирает пробелы в начале и в конце, а двойные пробелы внутри превращает в одинарные: =СЖПРОБЕЛЫ(A2).',
+  },
+  {
+    id: 'dupes', level: 3, title: 'Найти дубли', fn: 'СЧЁТЕСЛИ + ЕСЛИ', xl: 'В XLPlain поиск дубликатов — отдельный инструмент: он найдёт повторы даже по нескольким полям и в большой таблице, без формул в каждой строке.',
+    story: 'В списке клиентов кто-то записан дважды. Нужно пометить повторы.',
+    goal: 'Выведите «Дубль», если email из B2 встречается в списке больше одного раза, иначе пустую строку ""',
+    grid: [
+      ['Клиент', 'Email', 'Проверка'],
+      ['Анна', 'anna@mail.ru', null],
+      ['Игорь', 'igor@ya.ru'],
+      ['Анна П.', 'anna@mail.ru'],
+      ['Мария', 'maria@gmail.com'],
+      ['Олег', 'oleg@mail.ru'],
+      ['Игорь С.', 'igor@ya.ru'],
+    ],
+    target: [2, 1], ref: '=ЕСЛИ(СЧЁТЕСЛИ(B2:B7;B2)>1;"Дубль";"")',
+    vary(g) { const pool = ['anna@mail.ru', 'igor@ya.ru', 'maria@gmail.com', 'oleg@mail.ru', 'dina@bk.ru']; for (let r = 1; r <= 6; r++) g[r][1] = pick(pool); },
+    hint: 'СЧЁТЕСЛИ посчитает, сколько раз email встречается в столбце. Если больше одного — это дубль: =ЕСЛИ(СЧЁТЕСЛИ(B2:B7;B2)>1;"Дубль";"").',
+  },
+];
+
+
+// ===== Answer checker =====
+const Checker = (() => {
+  const getter = (grid, target) => (c, r) => {
+    if (target && c === target[0] && r === target[1]) return null;
+    const row = grid[r]; if (!row) return null; const v = row[c]; return v === undefined ? null : v;
+  };
+  const decimals = n => { const s = String(n); const i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1; };
+  function perturb(task) {
+    const g = task.grid.map(r => r.slice());
+    const fixed = new Set(task.fixed || []);
+    g.forEach((row, r) => row.forEach((v, c) => {
+      if (typeof v !== 'number' || fixed.has(XL.addr(c, r))) return;
+      const f = 0.55 + Math.random() * 1.05; const d = decimals(v); const k = Math.pow(10, d);
+      row[c] = Math.round(v * f * k) / k;
+    }));
+    if (task.vary) task.vary(g);
+    return g;
+  }
+  function check(task, input) {
+    const s = (input || '').trim();
+    if (!s) return { ok: false, kind: 'empty' };
+    if (s[0] !== '=') return { ok: false, kind: 'noeq' };
+    let ast;
+    try { ast = XL.parse(s.slice(1)); } catch (e) { if (e instanceof XL.ParseErr) return { ok: false, kind: 'parse', msg: e.msg }; throw e; }
+    const refs = XL.refsOf(ast);
+    if (!refs.length) return { ok: false, kind: 'hardcode' };
+    const [tc, tr] = task.target;
+    if (refs.some(x => tc >= x.c1 && tc <= x.c2 && tr >= x.r1 && tr <= x.r2)) return { ok: false, kind: 'circular' };
+    const refAst = XL.parse(task.ref.slice(1));
+    const got = XL.evaluate(ast, getter(task.grid, task.target));
+    const want = XL.evaluate(refAst, getter(task.grid, task.target));
+    if (!XL.same(got, want)) return { ok: false, kind: 'wrong', got, want };
+    for (let i = 0; i < 12; i++) {
+      const g = perturb(task);
+      const a = XL.evaluate(ast, getter(g, task.target));
+      const b = XL.evaluate(refAst, getter(g, task.target));
+      if (!XL.same(a, b)) return { ok: false, kind: 'fragile' };
+    }
+    return { ok: true, got };
+  }
+  function preview(task, input) {
+    const s = (input || '').trim();
+    if (!s || s[0] !== '=') return null;
+    try { const ast = XL.parse(s.slice(1)); return XL.evaluate(ast, getter(task.grid, task.target)); } catch (e) { return null; }
+  }
+  return { check, preview, getter };
+})();
+
+
+// ===== App =====
+(() => {
+  const $ = s => document.querySelector(s);
+  const STORE = 'xlplain-trainer.v1';
+  const XLURL = '/?utm_source=trenazher&utm_medium=tip&utm_campaign=formulas';
+  let S = { cur: 0, solved: {}, revealed: {}, drafts: {}, xp: 0 };
+  try { const raw = localStorage.getItem(STORE); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(S)); } catch (e) {} };
+  if (location.hash) { const i = TASKS.findIndex(t => '#' + t.id === location.hash); if (i >= 0) S.cur = i; }
+
+  const RANKS = [[0, 'Новичок'], [50, 'Уверенный'], [140, 'Знаток формул'], [240, 'Мастер Excel']];
+  const MAXXP = TASKS.reduce((s, t) => s + LEVELS.find(l => l.id === t.level).xp, 0);
+  const COLORS = ['#2f6fdf', '#d9480f', '#7b3fe4', '#0b8a6c', '#c2255c', '#a07a00'];
+  const ERRS = {
+    '#Н/Д': 'ВПР не нашла значение. Проверьте, что искомое лежит в первом столбце выбранной таблицы, и что в конце стоит 0 (точное совпадение).',
+    '#ЗНАЧ!': 'В вычисление попал текст или у функции неверные аргументы.',
+    '#ДЕЛ/0!': 'Где-то деление на ноль или на пустую ячейку.',
+    '#ССЫЛКА!': 'Номер столбца больше, чем столбцов в выбранной таблице.',
+    '#ЧИСЛО!': 'Получилось слишком большое или невозможное число.',
+  };
+
+  const f = $('#f');
+  let task, lastIns = null, drag = null;
+
+  const fmt = v => {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'number') return v.toLocaleString('ru-RU', { maximumFractionDigits: 4 });
+    if (typeof v === 'boolean') return v ? 'ИСТИНА' : 'ЛОЖЬ';
+    return String(v);
+  };
+  const fmtRes = r => r.err ? r.err : fmt(r.v);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // ---------- sidebar ----------
+  function renderList() {
+    const box = $('#list'); box.innerHTML = '';
+    LEVELS.forEach(L => {
+      const h = document.createElement('div'); h.className = 'lvl'; h.textContent = L.name + ' · ' + L.xp + ' XP'; box.appendChild(h);
+      TASKS.forEach((t, i) => {
+        if (t.level !== L.id) return;
+        const b = document.createElement('button');
+        b.className = 'item' + (i === S.cur ? ' on' : '') + (S.solved[t.id] ? ' done' : '');
+        b.innerHTML = '<span class="dot">' + (S.solved[t.id] ? '✓' : i + 1) + '</span><span class="tt">' + esc(t.title) + '<small>' + esc(t.fn) + '</small></span>';
+        b.onclick = () => go(i);
+        box.appendChild(b);
+      });
+    });
+  }
+  function renderTop() {
+    const n = Object.keys(S.solved).length;
+    let rank = RANKS[0][1]; RANKS.forEach(([x, name]) => { if (S.xp >= x) rank = name; });
+    $('#rank').textContent = rank;
+    $('#xp').textContent = S.xp + ' XP';
+    $('#bar').style.width = Math.round(100 * S.xp / MAXXP) + '%';
+    $('#count').textContent = 'Решено ' + n + ' из ' + TASKS.length;
+  }
+
+  // ---------- task ----------
+  function go(i) {
+    S.cur = i; save(); lastIns = null;
+    try { history.replaceState(null, '', '#' + TASKS[i].id); } catch (e) {}
+    render();
+    if (window.matchMedia('(min-width: 900px)').matches) setTimeout(() => f.focus(), 0);
+  }
+  function render() {
+    task = TASKS[S.cur];
+    const L = LEVELS.find(l => l.id === task.level);
+    const tgt = XL.addr(task.target[0], task.target[1]);
+    $('#crumb').textContent = L.name + ' · задача ' + (S.cur + 1) + ' из ' + TASKS.length;
+    $('#fnchip').textContent = task.fn;
+    $('#title').textContent = task.title;
+    $('#story').textContent = task.story;
+    $('#goal').innerHTML = esc(task.goal) + ' <span class="tcell">→ ячейка ' + tgt + '</span>';
+    $('#namebox').textContent = tgt;
+    f.value = S.drafts[task.id] || (S.solved[task.id] && S.solved[task.id].f) || '';
+    $('#hint').hidden = true; $('#hint').textContent = task.hint;
+    $('#sol').hidden = !S.revealed[task.id]; $('#sol').innerHTML = 'Решение: <code>' + esc(task.ref) + '</code>';
+    $('#fb').className = 'fb'; $('#fb').innerHTML = '';
+    if (S.solved[task.id]) showOk(true);
+    $('#next').hidden = !S.solved[task.id] || S.cur === TASKS.length - 1;
+    $('#prev').disabled = S.cur === 0;
+    renderSheet(); renderList(); renderTop(); renderDone();
+  }
+
+  // ---------- sheet ----------
+  function renderSheet() {
+    const g = task.grid;
+    const cols = Math.max(5, ...g.map(r => r.length), task.target[0] + 1) + 1;
+    const rows = Math.max(g.length + 2, 6);
+    const header = g[0].every(v => v === null || typeof v === 'string');
+    let h = '<thead><tr><th class="corner"></th>';
+    for (let c = 0; c < cols; c++) h += '<th data-col="' + c + '">' + XL.colName(c) + '</th>';
+    h += '</tr></thead><tbody>';
+    for (let r = 0; r < rows; r++) {
+      h += '<tr><th data-row="' + r + '">' + (r + 1) + '</th>';
+      for (let c = 0; c < cols; c++) {
+        const v = g[r] ? g[r][c] : null;
+        const isT = c === task.target[0] && r === task.target[1];
+        let cls = typeof v === 'number' ? 'n' : '';
+        if (header && r === 0 && v !== null) cls += ' hd';
+        if (isT) cls += ' tg';
+        h += '<td data-c="' + c + '" data-r="' + r + '" class="' + cls + '">' + (isT ? '' : esc(fmt(v))) + '</td>';
+      }
+      h += '</tr>';
+    }
+    $('#sheet').innerHTML = h + '</tbody>';
+    paint();
+  }
+  function cell(c, r) { return $('#sheet td[data-c="' + c + '"][data-r="' + r + '"]'); }
+
+  function paint() {
+    document.querySelectorAll('#sheet td.hl').forEach(td => { td.classList.remove('hl'); td.style.removeProperty('--hc'); });
+    document.querySelectorAll('#sheet th.ax').forEach(th => th.classList.remove('ax'));
+    const text = f.value.trim();
+    // reference highlights
+    if (text.startsWith('=')) {
+      let toks = []; try { toks = XL.tokenize(text.slice(1)); } catch (e) {}
+      let k = 0;
+      for (let i = 0; i < toks.length; i++) {
+        const t = toks[i]; if (t.type !== 'ref') continue;
+        let c1 = t.col, r1 = t.row, c2 = t.col, r2 = t.row;
+        if (toks[i + 1] && toks[i + 1].type === ':' && toks[i + 2] && toks[i + 2].type === 'ref') { const u = toks[i + 2]; c1 = Math.min(t.col, u.col); c2 = Math.max(t.col, u.col); r1 = Math.min(t.row, u.row); r2 = Math.max(t.row, u.row); i += 2; }
+        const col = COLORS[k++ % COLORS.length];
+        for (let r = r1; r <= Math.min(r2, 60); r++) for (let c = c1; c <= Math.min(c2, 30); c++) { const td = cell(c, r); if (td) { td.classList.add('hl'); td.style.setProperty('--hc', col); } }
+      }
+    }
+    // target preview
+    const td = cell(task.target[0], task.target[1]);
+    td.classList.remove('err', 'ok', 'empty');
+    if (S.solved[task.id] && !text) { td.textContent = ''; }
+    const pv = Checker.preview(task, text);
+    if (!text) { td.textContent = '?'; td.classList.add('empty'); }
+    else if (!pv) { td.textContent = text.startsWith('=') ? '…' : text; }
+    else { td.textContent = fmtRes(pv); if (pv.err) td.classList.add('err'); else if (typeof pv.v === 'number') td.classList.add('n'); }
+    if (S.solved[task.id]) td.classList.add('ok');
+    document.querySelector('#sheet th[data-col="' + task.target[0] + '"]').classList.add('ax');
+    document.querySelector('#sheet th[data-row="' + task.target[1] + '"]').classList.add('ax');
+  }
+
+  // click / drag to insert references
+  let blurAt = 0; f.addEventListener('blur', () => { blurAt = Date.now(); });
+  const editing = () => f.value.trim().startsWith('=') && (document.activeElement === f || Date.now() - blurAt < 700);
+  function insertRef(text) {
+    const v = f.value; let s = f.selectionStart, e = f.selectionEnd;
+    if (lastIns && s === e && s === lastIns.start + lastIns.text.length && v.substr(lastIns.start, lastIns.text.length) === lastIns.text) s = lastIns.start;
+    f.value = v.slice(0, s) + text + v.slice(e);
+    const p = s + text.length; f.setSelectionRange(p, p);
+    lastIns = { start: s, text };
+    onInput();
+  }
+  $('#sheet').addEventListener('mousedown', e => {
+    const td = e.target.closest('td'); if (!td) return;
+    const c = +td.dataset.c, r = +td.dataset.r;
+    const isT = c === task.target[0] && r === task.target[1];
+    if (editing() && !isT) {
+      e.preventDefault();
+      drag = { c, r };
+      if (document.activeElement !== f) { f.focus(); if (lastIns) f.setSelectionRange(lastIns.start + lastIns.text.length, lastIns.start + lastIns.text.length); else { const p = f.value.length; f.setSelectionRange(p, p); } }
+      insertRef(XL.addr(c, r));
+    } else if (isT || !editing()) {
+      e.preventDefault();
+      if (!f.value) f.value = '=';
+      f.focus(); const p = f.value.length; f.setSelectionRange(p, p); onInput();
+    }
+  });
+  $('#sheet').addEventListener('mouseover', e => {
+    if (!drag) return; const td = e.target.closest('td'); if (!td) return;
+    const c = +td.dataset.c, r = +td.dataset.r;
+    if (c === task.target[0] && r === task.target[1]) return;
+    const a = XL.addr(Math.min(drag.c, c), Math.min(drag.r, r)), b = XL.addr(Math.max(drag.c, c), Math.max(drag.r, r));
+    const text = a === b ? a : a + ':' + b;
+    if (lastIns) { const v = f.value; f.value = v.slice(0, lastIns.start) + text + v.slice(lastIns.start + lastIns.text.length); const p = lastIns.start + text.length; f.setSelectionRange(p, p); lastIns.text = text; onInput(); }
+  });
+  window.addEventListener('mouseup', () => { drag = null; });
+
+  // symbol keys (handy on phones)
+  document.querySelectorAll('.keys button').forEach(b => b.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const k = b.dataset.k; if (document.activeElement !== f) { f.focus(); const p = f.value.length; f.setSelectionRange(p, p); }
+    const s = f.selectionStart, en = f.selectionEnd; f.value = f.value.slice(0, s) + k + f.value.slice(en);
+    const p = s + k.length - (k === '""' ? 1 : 0); f.setSelectionRange(p, p); lastIns = null; onInput();
+  }));
+
+  function onInput() { S.drafts[task.id] = f.value; save(); paint(); if ($('#fb').classList.contains('bad')) { $('#fb').className = 'fb'; $('#fb').innerHTML = ''; } }
+  f.addEventListener('input', () => { lastIns = null; onInput(); });
+  f.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+
+  // ---------- check ----------
+  function check() {
+    const r = Checker.check(task, f.value);
+    const fb = $('#fb');
+    const tgt = XL.addr(task.target[0], task.target[1]);
+    if (r.ok) {
+      if (!S.solved[task.id]) {
+        const base = LEVELS.find(l => l.id === task.level).xp;
+        const gain = S.revealed[task.id] ? Math.round(base / 2) : base;
+        S.xp += gain; S.solved[task.id] = { f: f.value.trim(), gain }; try { ym(113091081, 'reachGoal', 'trainer_solved', { task: task.id }); } catch (e) {}
+        delete S.drafts[task.id]; save();
+        showOk(false, gain);
+        const td = cell(task.target[0], task.target[1]); td.classList.add('ok', 'pop');
+      } else { S.solved[task.id].f = f.value.trim(); save(); showOk(false, 0); }
+      $('#next').hidden = S.cur === TASKS.length - 1;
+      renderList(); renderTop(); renderDone(); paint();
+      return;
+    }
+    let msg = '';
+    switch (r.kind) {
+      case 'empty': msg = 'Введите формулу в строку над таблицей — или кликните по ячейке ' + tgt + '.'; break;
+      case 'noeq': msg = 'Формула начинается со знака «=». Без него Excel считает введённое обычным текстом.'; break;
+      case 'parse': msg = r.msg + '.'; break;
+      case 'hardcode': msg = 'Здесь только числа, без адресов ячеек. Такая формула не пересчитается, когда данные изменятся, — используйте ссылки на ячейки.'; break;
+      case 'circular': msg = 'Формула ссылается на ' + tgt + ' — ту самую ячейку, где стоит. Excel назовёт это циклической ссылкой.'; break;
+      case 'wrong':
+        msg = 'Получилось <b>' + esc(fmtRes(r.got)) + '</b>, а нужно <b>' + esc(fmtRes(r.want)) + '</b>.';
+        if (r.got.err && ERRS[r.got.err]) msg += ' ' + ERRS[r.got.err];
+        break;
+      case 'fragile': msg = 'На этих данных ответ сошёлся, но мы подставили в таблицу другие числа — и формула ошиблась. Скорее всего, где-то вписано готовое число вместо ссылки на ячейку, или условие сработает не во всех случаях.'; break;
+    }
+    fb.className = 'fb bad'; fb.innerHTML = msg;
+    f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+  }
+  function showOk(again, gain) {
+    const fb = $('#fb');
+    const tip = task.xl ? '<div class="xltip"><span class="xlb">XLPlain</span><p>' + esc(task.xl) + ' <a href="' + XLURL + '&utm_content=' + task.id + '">Подробнее →</a></p></div>' : '';
+    if (again) { fb.className = 'fb good'; fb.innerHTML = '✓ Задача решена' + (S.solved[task.id].gain ? ' · +' + S.solved[task.id].gain + ' XP' : '') + '. Можно потренировать другой вариант формулы.' + tip; return; }
+    fb.className = 'fb good';
+    fb.innerHTML = '<b>Верно!</b> ' + (gain ? '+' + gain + ' XP' + (S.revealed[task.id] ? ' (половина — решение было подсмотрено)' : '') + '. ' : '') + 'Формула пересчитается при любых данных — мы проверили на 12 вариантах таблицы.' + tip;
+  }
+  function renderDone() {
+    const all = Object.keys(S.solved).length === TASKS.length;
+    $('#done').hidden = !all;
+  }
+
+  $('#check').onclick = check;
+  $('#hintb').onclick = () => { $('#hint').hidden = !$('#hint').hidden; };
+  $('#solb').onclick = () => { S.revealed[task.id] = true; save(); $('#sol').hidden = false; };
+  $('#next').onclick = () => go(Math.min(S.cur + 1, TASKS.length - 1));
+  $('#prev').onclick = () => go(Math.max(S.cur - 1, 0));
+  let resetArm = false;
+  $('#reset').onclick = () => {
+    if (!resetArm) { resetArm = true; $('#reset').textContent = 'Точно сбросить? Нажмите ещё раз'; setTimeout(() => { resetArm = false; $('#reset').textContent = 'Сбросить прогресс'; }, 3000); return; }
+    S = { cur: 0, solved: {}, revealed: {}, drafts: {}, xp: 0 }; save(); resetArm = false; $('#reset').textContent = 'Сбросить прогресс'; go(0);
+  };
+  window.addEventListener('hashchange', () => { const i = TASKS.findIndex(t => '#' + t.id === location.hash); if (i >= 0 && i !== S.cur) { go(i); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+
+  // reference
+  $('#ref').innerHTML = XL.HELP.map(([sig, d, ex]) => '<div class="fn"><code>' + esc(sig) + '</code><span>' + esc(d) + '</span><em>' + esc(ex) + '</em></div>').join('');
+
+  render();
+})();
+
+</script>
+</body>
+</html>

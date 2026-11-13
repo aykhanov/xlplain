@@ -62,9 +62,9 @@
       </div>
 
       <div class="purchase-card">
-        <div id="renew-status" class="status-badge">Онлайн-оплата подключается</div>
+        <div id="renew-status" class="status-badge">Онлайн-оплата доступна</div>
         <h3>Продлить лицензию</h3>
-        <p id="renew-intro" class="purchase-intro">Форма продления подготовлена. Онлайн-оплата будет открыта после активации рабочего режима Robokassa.</p>
+        <p id="renew-intro" class="purchase-intro">Укажите лицензионный ключ и email и перейдите к безопасной оплате через Robokassa.</p>
 
         <form class="purchase-form" action="https://functions.yandexcloud.net/d4eqf3vcn7fdkg0f5td4" method="post">
           <input id="renew-action" type="hidden" name="action" value="create_renewal_payment">
@@ -91,11 +91,11 @@
             </label>
           </div>
 
-          <button id="renew-submit" class="button primary purchase-submit" type="submit" disabled>Продлить на 1 год — 3 990 ₽</button>
+          <button id="renew-submit" class="button primary purchase-submit" type="submit">Продлить на 1 год — 3 990 ₽</button>
         </form>
 
         <div id="renew-fallback" class="purchase-fallback">
-          <span>Пока онлайн-оплата закрыта, по вопросу продления можно написать в поддержку и указать лицензионный ключ:</span>
+          <span>Вопрос по продлению? Напишите в поддержку и укажите лицензионный ключ:</span>
           <a href="mailto:XLPlain@yandex.com?subject=%D0%9F%D1%80%D0%BE%D0%B4%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%20XLPlain">XLPlain@yandex.com</a>
         </div>
       </div>
@@ -150,6 +150,9 @@
     intro.textContent = 'Тестовая форма проверяет полный путь продления без реального списания денег. Разрешён только технический ключ XLP-ANNUALTEST-…';
     fallback.style.display = 'none';
   }
+
+  var form = field.form;
+  if (form) form.addEventListener('submit', function () { try { ym(113091081, 'reachGoal', 'renew_click'); } catch (e) {} });
 
   field.addEventListener('input', function () {
     var start = field.selectionStart;

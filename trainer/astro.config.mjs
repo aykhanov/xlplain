@@ -7,6 +7,6 @@ export default defineConfig({
   base: beta ? '/trenazher-beta/' : '/trenazher/',
   outDir: beta ? '../trenazher-beta' : '../trenazher',
   trailingSlash: 'always',
-  build: { format: 'directory', assets: '_a' },
+  build: { format: 'directory', assets: 'static' },
   vite: { define: { __BETA__: JSON.stringify(beta) } },
 });

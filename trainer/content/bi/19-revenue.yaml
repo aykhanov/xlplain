@@ -1,8 +1,8 @@
 id: revenue-oct
 slug: vyruchka-za-mesyac-dax
 module: bi
-track: 1
-order: 1
+track: 6
+order: 19
 title: Выручка за октябрь
 seo_title: "Power BI: мера выручки за месяц — кейс с ответом"
 check: number

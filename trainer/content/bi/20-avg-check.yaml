@@ -1,8 +1,8 @@
 id: avg-check
 slug: srednij-chek-divide-distinctcount
 module: bi
-track: 1
-order: 2
+track: 6
+order: 20
 title: Средний чек
 seo_title: "Power BI: средний чек через DIVIDE и DISTINCTCOUNT — кейс с ответом"
 check: number

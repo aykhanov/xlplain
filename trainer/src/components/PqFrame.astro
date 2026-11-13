@@ -1,0 +1,35 @@
+---
+// Оболочка «Редактор Power Query»: лента, строка формул, сетка, «Примененные шаги».
+---
+<div class="pbi pq" id="pbi">
+  <div class="pbi-title">
+    <span class="pbi-logo" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span><b id="pq-file">Запрос</b> — Редактор Power Query</span>
+    <span class="pbi-tag">тренажёр XLPlain</span>
+    <button class="pbi-full" id="full" title="Развернуть на весь экран" aria-label="Развернуть на весь экран">⤢</button>
+  </div>
+  <div class="pbi-tabs" id="pq-tabs" role="tablist"><span>Файл</span><span class="on" data-tab="home">Главная</span><span data-tab="tr">Преобразование</span><span data-tab="add">Добавить столбец</span><span data-tab="view">Просмотр</span></div>
+  <div class="pbi-ribbon" id="pq-ribbon"></div>
+  <div class="pbi-fx pq-fx">
+    <button class="fxb x" disabled>✕</button><button class="fxb ok" disabled>✓</button>
+    <span class="fxl">fx</span>
+    <div class="pq-formula" id="pq-formula"></div>
+  </div>
+  <div class="pq-body">
+    <div class="pq-queries"><div class="pq-ph">Запросы [1]</div><div class="pq-q on" id="pq-qname">Запрос</div></div>
+    <div class="pq-main">
+      <div class="pq-grid" id="pq-grid" tabindex="0"></div>
+      <div class="pq-errpane" id="pq-errpane" hidden></div>
+    </div>
+    <div class="pq-side">
+      <div class="pq-ph">Параметры запроса</div>
+      <div class="pq-sec">СВОЙСТВА</div>
+      <label class="pq-prop">Имя<input id="pq-name" readonly></label>
+      <div class="pq-sec">ПРИМЕНЕННЫЕ ШАГИ</div>
+      <ol class="pq-steps" id="pq-steps"></ol>
+    </div>
+  </div>
+  <div class="pbi-status"><span id="st"></span><span>Профилирование столбцов на основе первых 1000 строк · данные обрабатываются в браузере</span></div>
+  <div class="pq-menu" id="pq-menu" hidden></div>
+  <div class="pq-modal" id="pq-modal" hidden><div class="pq-dlg" role="dialog" aria-modal="true"></div></div>
+</div>

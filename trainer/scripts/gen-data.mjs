@@ -75,6 +75,12 @@ for (const t of bi.tasks) {
     if ((t.options || []).some(o => !o.why)) fail(t._file, 'у каждого варианта нужно объяснение why');
   } else if (t.check === 'order') {
     if (!Array.isArray(t.steps) || t.steps.length < 3) fail(t._file, 'в order нужно минимум 3 шага');
+  } else if (t.check === 'dax') {
+    for (const k of ['measure_name', 'answer', 'visual']) if (!t[k]) fail(t._file, 'в задаче dax нет поля ' + k);
+    if (t.answer && !t.answer.startsWith(t.measure_name + ' =')) fail(t._file, 'answer должен начинаться с «' + t.measure_name + ' =»');
+    // формулы проверяются в tests/bi.test.ts движком DAX
+  } else if (t.check === 'pq') {
+    for (const k of ['source', 'answer']) if (!t[k]) fail(t._file, 'в задаче pq нет поля ' + k);
   } else fail(t._file, 'неизвестный check ' + t.check);
 }
 

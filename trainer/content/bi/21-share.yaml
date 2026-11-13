@@ -1,8 +1,8 @@
 id: share-moscow
 slug: dolya-v-vyruchke-all
 module: bi
-track: 2
-order: 3
+track: 6
+order: 21
 title: Доля Москвы в выручке
 seo_title: "Power BI: доля от общего итога через ALL — кейс с ответом"
 check: number

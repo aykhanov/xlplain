@@ -1,9 +1,18 @@
 - id: 1
-  name: Меры и расчёты
+  name: Первые меры
   xp: 20
 - id: 2
-  name: DAX и контекст фильтра
+  name: CALCULATE и контекст фильтра
   xp: 30
 - id: 3
-  name: Power Query и модель данных
+  name: Итераторы и связи
+  xp: 30
+- id: 4
+  name: Логика времени
+  xp: 40
+- id: 5
+  name: Power Query
+  xp: 30
+- id: 6
+  name: Практика в своём Power BI
   xp: 30

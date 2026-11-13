@@ -1,8 +1,8 @@
 id: ytd
 slug: totalytd-narastayushchiy-itog-s-nachala-goda
 module: bi
-track: 2
-order: 5
+track: 4
+order: 12
 title: Нарастающий итог с начала года
 seo_title: "TOTALYTD в DAX: нарастающий итог — тест с разбором"
 check: choice

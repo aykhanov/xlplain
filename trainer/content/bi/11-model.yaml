@@ -2,7 +2,7 @@ id: model
 slug: model-dannyh-zvezda-svyazi
 module: bi
 track: 3
-order: 7
+order: 11
 title: Связь справочника товаров и продаж
 seo_title: "Модель данных Power BI: связь «один ко многим» — тест с разбором"
 check: choice

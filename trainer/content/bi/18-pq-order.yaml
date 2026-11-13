@@ -1,8 +1,8 @@
 id: pq-order
 slug: power-query-poryadok-shagov-ochistki
 module: bi
-track: 3
-order: 6
+track: 5
+order: 18
 title: Порядок шагов очистки выгрузки
 seo_title: "Power Query: порядок шагов очистки выгрузки из 1С — тест с разбором"
 check: order

@@ -11,7 +11,7 @@ let k = 0;
       <div class="lvl">{tr.name} · {tr.xp} XP{tr.premium && <span class="prem">ПЛАТНЫЙ</span>}</div>
       {tasks.filter((t: any) => t.track === tr.id).map((t: any) => { k++; return (
         <a class={'item' + (t.id === current ? ' on' : '')} href={taskUrl(mod, t.slug)} data-task={t.id}>
-          <span class="dot">{k}</span><span class="tt">{t.title}<small>{t.fn || ({ number: 'расчёт', choice: 'выбор ответа', order: 'порядок шагов' } as any)[t.check]}</small></span>
+          <span class="dot">{k}</span><span class="tt">{t.title}<small>{t.fn || ({ number: 'расчёт', choice: 'выбор ответа', order: 'порядок шагов', dax: 'мера DAX', pq: 'редактор Power Query' } as any)[t.check]}</small></span>
         </a>
       ); })}
     </>

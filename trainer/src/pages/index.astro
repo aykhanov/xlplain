@@ -4,7 +4,7 @@ import { MODULES, url, tasksWord } from '../lib/data';
 const cards = [
   { mod: 'excel', tag: 'Excel', h: 'Формулы Excel', p: 'Живая таблица и формулы как в русском Excel. Ответ проверяется на 12 вариантах данных.', li: ['СУММ, ЕСЛИ, ВПР, СЧЁТЕСЛИ', 'ИНДЕКС + ПОИСКПОЗ, СУММЕСЛИМН', 'текст, даты, округление'] },
   { mod: 'sql', tag: 'SQL', h: 'SQL для тех, кто живёт в Excel', p: 'Запросы к учебной базе «компания» прямо в браузере. В каждой задаче — как это делается в Excel.', li: ['SELECT, WHERE, ORDER BY', 'GROUP BY, HAVING, JOIN', 'подзапросы, CTE, оконные функции'] },
-  { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Кейсы на настоящем датасете: считаете в своём Power BI, вводите ответ и получаете разбор.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, TOTALYTD', 'Power Query и модель данных'] },
+  { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Окно в стиле Power BI Desktop прямо в браузере: пишете меры DAX, смотрите матрицу и срезы, чистите выгрузки в Power Query.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, RANKX, TOTALYTD', 'Power Query: шаги, unpivot, группировка'] },
 ] as const;
 const total = cards.reduce((s, c) => s + MODULES[c.mod].data.tasks.length, 0);
 const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ key: c.mod + ':' + t.id, name: c.tag + ': ' + t.name, ids: MODULES[c.mod].data.tasks.filter((x: any) => x.track === t.id).map((x: any) => c.mod + ':' + x.id) })));

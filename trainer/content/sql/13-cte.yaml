@@ -1,0 +1,34 @@
+id: cte
+slug: cte-with-top-klientov
+module: sql
+track: 4
+order: 13
+fn: WITH (CTE)
+title: Три клиента с наибольшей оплатой
+seo_title: "WITH (CTE) в SQL: топ клиентов по оплатам — задача с решением"
+story: Директор хочет поблагодарить трёх клиентов, которые заплатили больше всех.
+goal: Выведите имя клиента и сумму его оплат для трёх клиентов с наибольшей суммой, от большей к меньшей
+starter: |-
+  WITH paid AS (
+    SELECT o.client_id, SUM(p.amount) AS total
+    FROM payments p
+    JOIN orders o ON o.id = p.order_id
+    GROUP BY o.client_id
+  )
+  SELECT * FROM paid;
+answer: |-
+  WITH paid AS (
+    SELECT o.client_id, SUM(p.amount) AS total
+    FROM payments p
+    JOIN orders o ON o.id = p.order_id
+    GROUP BY o.client_id
+  )
+  SELECT c.name, paid.total
+  FROM paid
+  JOIN clients c ON c.id = paid.client_id
+  ORDER BY paid.total DESC
+  LIMIT 3;
+order_matters: true
+hint: WITH paid AS (…) — это временная таблица с суммой оплат по клиентам. Дальше к ней можно обращаться как к обычной таблице.
+excel: В Excel это промежуточный лист со сводной по клиентам, к которому вы потом делаете ВПР имён и сортировку.
+tip: CTE можно писать несколько подряд через запятую. Длинный запрос, разбитый на шаги, легче проверять.

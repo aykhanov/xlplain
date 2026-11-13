@@ -1,0 +1,27 @@
+id: case
+slug: case-when-krupnye-zakazy
+module: sql
+track: 4
+order: 14
+fn: CASE WHEN
+title: Крупные и обычные заказы
+seo_title: "CASE WHEN в SQL: разбить на категории — задача с решением"
+story: Заказ считается крупным, если сумма по его строкам 10 000 ₽ и больше.
+goal: Выведите категорию («крупный» или «обычный») и число заказов в каждой
+starter: |-
+  SELECT order_id, SUM(qty * price) AS total
+  FROM order_items
+  GROUP BY order_id;
+answer: |-
+  WITH t AS (
+    SELECT order_id, SUM(qty * price) AS total
+    FROM order_items
+    GROUP BY order_id
+  )
+  SELECT CASE WHEN total >= 10000 THEN 'крупный' ELSE 'обычный' END AS kind, COUNT(*)
+  FROM t
+  GROUP BY kind;
+order_matters: false
+hint: CASE WHEN условие THEN значение ELSE другое END — это ЕСЛИ из Excel. Сначала посчитайте сумму заказа, потом разбейте по категориям.
+excel: "В Excel это столбец =ЕСЛИ(сумма>=10000;\"крупный\";\"обычный\") и сводная по нему."
+tip: В GROUP BY можно сослаться на псевдоним столбца в SQLite и PostgreSQL, а в SQL Server придётся повторить всё выражение CASE.

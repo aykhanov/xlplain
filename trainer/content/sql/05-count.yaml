@@ -1,0 +1,16 @@
+id: count
+slug: count-skolko-strok
+module: sql
+track: 2
+order: 5
+fn: COUNT
+title: Отменённые заказы
+seo_title: "COUNT в SQL: посчитать строки по условию — задача с решением"
+story: Руководитель хочет знать, сколько заказов отменили за всё время.
+goal: Посчитайте число заказов со статусом «Отменён»
+starter: SELECT * FROM orders;
+answer: SELECT COUNT(*) FROM orders WHERE status = 'Отменён';
+order_matters: false
+hint: COUNT(*) считает строки, которые остались после WHERE. Результат — одна ячейка с числом.
+excel: "Это СЧЁТЕСЛИ(статус; \"Отменён\") в Excel."
+tip: COUNT(столбец) не считает пустые значения (NULL), а COUNT(*) считает все строки. Разница пригодится, когда в данных есть пропуски.

@@ -1,0 +1,19 @@
+---
+import { MODULES, taskUrl } from '../lib/data';
+interface Props { mod: 'excel' | 'sql' | 'bi'; current?: string }
+const { mod, current } = Astro.props;
+const { tracks, tasks } = MODULES[mod].data;
+let k = 0;
+---
+<aside id="list">
+  {tracks.map((tr: any) => (
+    <>
+      <div class="lvl">{tr.name} · {tr.xp} XP{tr.premium && <span class="prem">ПЛАТНЫЙ</span>}</div>
+      {tasks.filter((t: any) => t.track === tr.id).map((t: any) => { k++; return (
+        <a class={'item' + (t.id === current ? ' on' : '')} href={taskUrl(mod, t.slug)} data-task={t.id}>
+          <span class="dot">{k}</span><span class="tt">{t.title}<small>{t.fn || ({ number: 'расчёт', choice: 'выбор ответа', order: 'порядок шагов' } as any)[t.check]}</small></span>
+        </a>
+      ); })}
+    </>
+  ))}
+</aside>

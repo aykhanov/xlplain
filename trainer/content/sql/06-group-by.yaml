@@ -1,0 +1,16 @@
+id: group-by
+slug: group-by-klienty-po-gorodam
+module: sql
+track: 2
+order: 6
+fn: GROUP BY
+title: Клиенты по городам
+seo_title: "GROUP BY в SQL: количество по группам — задача с решением"
+story: Нужно понять, в каких городах больше всего клиентов.
+goal: Для каждого города выведите название и число клиентов
+starter: SELECT city FROM clients;
+answer: SELECT city, COUNT(*) FROM clients GROUP BY city;
+order_matters: false
+hint: GROUP BY city собирает строки с одинаковым городом в группу, а COUNT(*) считает строки в каждой группе.
+excel: Это сводная таблица в Excel, где «Город» в строках, а «Количество» в значениях.
+tip: Всё, что стоит в SELECT без агрегатной функции, должно быть и в GROUP BY. Иначе SQL Server и PostgreSQL выдадут ошибку.

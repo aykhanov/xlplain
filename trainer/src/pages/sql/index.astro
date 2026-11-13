@@ -1,0 +1,10 @@
+---
+import ModuleIndex from '../../components/ModuleIndex.astro';
+import { tasksWord, MODULES, SCHEMA } from '../../lib/data';
+const n = MODULES.sql.data.tasks.length;
+---
+<ModuleIndex mod="sql" h1="SQL для тех, кто живёт в Excel" title="Тренажёр SQL онлайн бесплатно — задачи с проверкой и параллелью с Excel | XLPlain"
+  description={`Тренажёр SQL в браузере: ${tasksWord(n)} от SELECT до оконных функций на учебной базе «компания». Мгновенная проверка, разбор и подсказка, как то же самое делается в Excel.`}
+  lead={`${tasksWord(n)} на учебной базе «компания»: клиенты, заказы, товары, оплаты. Запрос выполняется прямо в браузере, ответ проверяется на двух базах с разными данными, а в каждом разборе есть подсказка, как то же самое делается в Excel.`}>
+  <p class="hintline">Таблицы базы: {SCHEMA.map(t => t.table + ' (' + t.title.toLowerCase() + ')').join(', ')}. Диалект — SQLite.</p>
+</ModuleIndex>

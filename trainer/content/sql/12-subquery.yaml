@@ -1,0 +1,16 @@
+id: subquery
+slug: podzapros-dorozhe-srednego
+module: sql
+track: 4
+order: 12
+fn: подзапрос
+title: Товары дороже среднего
+seo_title: "Подзапрос в SQL: сравнить со средним — задача с решением"
+story: Для акции нужно выбрать товары, которые дороже средней цены по каталогу.
+goal: Выведите названия и цены товаров, цена которых выше средней
+starter: SELECT AVG(price) FROM products;
+answer: SELECT name, price FROM products WHERE price > (SELECT AVG(price) FROM products);
+order_matters: false
+hint: Подзапрос в скобках считается первым и возвращает одно число — среднюю цену. С ним и сравниваем.
+excel: В Excel вы бы посчитали СРЗНАЧ в отдельной ячейке и поставили фильтр «больше» со ссылкой на неё.
+tip: Подзапрос, который возвращает одно значение, можно ставить в любое место, где ожидается число, даже в SELECT.

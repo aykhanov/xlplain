@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /trenazher-beta/
 
 Sitemap: https://xlplain.ru/sitemap.xml

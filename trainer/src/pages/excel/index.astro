@@ -1,0 +1,8 @@
+---
+import ModuleIndex from '../../components/ModuleIndex.astro';
+import { tasksWord, MODULES } from '../../lib/data';
+const n = MODULES.excel.data.tasks.length;
+---
+<ModuleIndex mod="excel" h1="Тренажёр формул Excel" title="Тренажёр формул Excel онлайн бесплатно — задачи с проверкой | XLPlain"
+  description={`Бесплатный тренажёр Excel в браузере: ${tasksWord(n)} от СУММ до ВПР, ИНДЕКС+ПОИСКПОЗ и СУММЕСЛИМН. Живая таблица, мгновенная проверка, разбор и лайфхак после каждой задачи.`}
+  lead={`${tasksWord(n)} в живой таблице: от первой формулы до ИНДЕКС+ПОИСКПОЗ. Синтаксис как в русском Excel, ответ проверяется на 12 вариантах данных, после каждой задачи — разбор и лайфхак.`} />

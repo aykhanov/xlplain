@@ -1,0 +1,16 @@
+id: order-limit
+slug: order-by-limit-samye-dorogie
+module: sql
+track: 1
+order: 3
+fn: ORDER BY · LIMIT
+title: Пять самых дорогих товаров
+seo_title: "ORDER BY и LIMIT в SQL: топ-5 по цене — задача с решением"
+story: Для витрины нужны пять самых дорогих товаров каталога.
+goal: Выведите название и цену пяти самых дорогих товаров, от дорогого к дешёвому
+starter: SELECT name, price FROM products;
+answer: SELECT name, price FROM products ORDER BY price DESC LIMIT 5;
+order_matters: true
+hint: ORDER BY price DESC сортирует по убыванию цены, LIMIT 5 оставляет первые пять строк.
+excel: В Excel — сортировка от Я до А по столбцу «Цена» и первые пять строк. В SQL сортировка не меняет таблицу, а только порядок результата.
+tip: В SQL Server вместо LIMIT пишут SELECT TOP 5 … ORDER BY price DESC. Смысл тот же, отличается только синтаксис.

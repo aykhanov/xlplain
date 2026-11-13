@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { MODULES, url, tasksWord } from '../lib/data';
+const cards = [
+  { mod: 'excel', tag: 'Excel', h: 'Формулы Excel', p: 'Живая таблица и формулы как в русском Excel. Ответ проверяется на 12 вариантах данных.', li: ['СУММ, ЕСЛИ, ВПР, СЧЁТЕСЛИ', 'ИНДЕКС + ПОИСКПОЗ, СУММЕСЛИМН', 'текст, даты, округление'] },
+  { mod: 'sql', tag: 'SQL', h: 'SQL для тех, кто живёт в Excel', p: 'Запросы к учебной базе «компания» прямо в браузере. В каждой задаче — как это делается в Excel.', li: ['SELECT, WHERE, ORDER BY', 'GROUP BY, HAVING, JOIN', 'подзапросы, CTE, оконные функции'] },
+  { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Кейсы на настоящем датасете: считаете в своём Power BI, вводите ответ и получаете разбор.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, TOTALYTD', 'Power Query и модель данных'] },
+] as const;
+const total = cards.reduce((s, c) => s + MODULES[c.mod].data.tasks.length, 0);
+const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ key: c.mod + ':' + t.id, name: c.tag + ': ' + t.name, ids: MODULES[c.mod].data.tasks.filter((x: any) => x.track === t.id).map((x: any) => c.mod + ':' + x.id) })));
+---
+<Base title="Тренажёр Excel, SQL и Power BI онлайн — задачи с проверкой | XLPlain" description={`Бесплатный онлайн-тренажёр: ${tasksWord(total)} по Excel, SQL и Power BI с мгновенной проверкой, разбором и лайфхаками. Без регистрации, работает в браузере и на телефоне.`} path="">
+  <div class="hub">
+    <h1>Тренажёр Excel, SQL и Power BI</h1>
+    <p class="lead">{tasksWord(total)} на сюжетах из работы: продажи, сверки, отчёты для руководителя. Решайте в браузере — проверка сразу, после каждой задачи разбор и лайфхак. Регистрация не нужна, прогресс хранится в браузере.</p>
+    <div class="modgrid">
+      {cards.map(c => { const n = MODULES[c.mod].data.tasks.length; return (
+        <a class="mod" href={url(c.mod + '/')} data-mod={c.mod} data-n={n}>
+          <span class="tag">{c.tag}</span>
+          <h2>{c.h}</h2>
+          <p>{c.p}</p>
+          <ul>{c.li.map(x => <li>{x}</li>)}</ul>
+          <div class="bar"><i style="width:0"></i></div>
+          <span class="st">0 из {n} решено</span>
+          <span class="go">Начать →</span>
+        </a>
+      ); })}
+    </div>
+    <div class="badges" id="badges">
+      {badges.map(b => <span class="badge" data-ids={b.ids.join(',')}>{b.name}</span>)}
+    </div>
+    <p class="hintline">Значок трека загорается, когда решены все его задачи.</p>
+  </div>
+  <script>
+    import { load, solvedIn } from '../lib/progress';
+    const s = load();
+    document.querySelectorAll<HTMLElement>('.mod').forEach(a => {
+      const n = +a.dataset.n!, k = solvedIn(s, a.dataset.mod!).length;
+      (a.querySelector('.bar i') as HTMLElement).style.width = Math.round(100 * k / n) + '%';
+      a.querySelector('.st')!.textContent = k + ' из ' + n + ' решено';
+      if (k) a.querySelector('.go')!.textContent = 'Продолжить →';
+    });
+    document.querySelectorAll<HTMLElement>('.badge').forEach(b => { if (b.dataset.ids!.split(',').every(id => s.solved[id])) b.classList.add('got'); });
+  </script>
+</Base>

@@ -1,0 +1,9 @@
+- id: 1
+  name: Меры и расчёты
+  xp: 20
+- id: 2
+  name: DAX и контекст фильтра
+  xp: 30
+- id: 3
+  name: Power Query и модель данных
+  xp: 30

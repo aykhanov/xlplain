@@ -1,0 +1,24 @@
+id: left-join
+slug: left-join-klienty-bez-zakazov
+module: sql
+track: 3
+order: 10
+fn: LEFT JOIN
+title: Клиенты без заказов
+seo_title: "LEFT JOIN в SQL: найти записи без пары — задача с решением"
+story: Маркетолог хочет написать тем, кто зарегистрировался, но так ничего и не заказал.
+goal: Выведите имена клиентов, у которых нет ни одного заказа
+starter: |-
+  SELECT c.name, o.id
+  FROM clients c
+  LEFT JOIN orders o ON o.client_id = c.id;
+answer: |-
+  SELECT c.name
+  FROM clients c
+  LEFT JOIN orders o ON o.client_id = c.id
+  WHERE o.id IS NULL;
+order_matters: false
+hint: LEFT JOIN оставляет всех клиентов. Если заказов нет, столбцы заказа будут NULL — их и отбираем через WHERE o.id IS NULL.
+excel: В Excel это ВПР, который вернул #Н/Д, — такие строки и есть «без пары».
+tip: Сравнение с NULL через = не работает, всегда пишите IS NULL или IS NOT NULL.
+xlplain: Найти строки без пары между двумя таблицами в Excel умеет «Сверка» XLPlain — она сразу показывает, чего нет в каждой из таблиц.

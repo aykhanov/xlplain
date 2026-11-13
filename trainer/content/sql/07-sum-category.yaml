@@ -1,0 +1,23 @@
+id: sum-category
+slug: sum-group-by-vyruchka-po-kategoriyam
+module: sql
+track: 2
+order: 7
+fn: SUM · GROUP BY
+title: Выручка по категориям
+seo_title: "SUM и GROUP BY в SQL: выручка по категориям — задача с решением"
+story: "В строках заказов (order_items) есть количество и цена. Категория товара хранится в products."
+goal: Для каждой категории выведите название и сумму qty × price по всем строкам заказов
+starter: |-
+  SELECT p.category, oi.qty, oi.price
+  FROM order_items oi
+  JOIN products p ON p.id = oi.product_id;
+answer: |-
+  SELECT p.category, SUM(oi.qty * oi.price)
+  FROM order_items oi
+  JOIN products p ON p.id = oi.product_id
+  GROUP BY p.category;
+order_matters: false
+hint: Внутри SUM можно считать выражение — SUM(qty * price) сначала перемножит в каждой строке, потом сложит. JOIN в заготовке уже приклеил категорию.
+excel: В Excel вы бы добавили столбец «Сумма = кол-во × цена», ВПР категории и сводную. В SQL это один запрос.
+tip: Короткие псевдонимы таблиц (oi, p) сильно упрощают длинные запросы. Задаются сразу после имени таблицы.

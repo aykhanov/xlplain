@@ -1,0 +1,19 @@
+id: self-join
+slug: self-join-sotrudnik-i-rukovoditel
+module: sql
+track: 3
+order: 11
+fn: JOIN к себе
+title: Кто чей руководитель
+seo_title: "Самосоединение в SQL: сотрудник и руководитель — задача с решением"
+story: В таблице employees у сотрудника есть manager_id — номер руководителя из этой же таблицы.
+goal: Выведите имя каждого сотрудника, у которого есть руководитель, и имя руководителя
+starter: SELECT name, manager_id FROM employees;
+answer: |-
+  SELECT e.name, m.name
+  FROM employees e
+  JOIN employees m ON m.id = e.manager_id;
+order_matters: false
+hint: Таблица соединяется сама с собой под двумя псевдонимами — e для сотрудника и m для руководителя.
+excel: В Excel это ВПР из таблицы сотрудников в саму себя по номеру руководителя.
+tip: Если нужно оставить и директора без руководителя, замените JOIN на LEFT JOIN — в столбце руководителя у него будет NULL.

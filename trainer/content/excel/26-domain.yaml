@@ -1,0 +1,21 @@
+id: domain
+slug: pstr-nayti-domen-iz-email
+module: excel
+track: 3
+order: 26
+title: Домен из email
+fn: ПСТР + НАЙТИ
+seo_title: "ПСТР + НАЙТИ в Excel: задача «Домен из email» с решением"
+story: Нужно понять, с каких почтовых сервисов пишут клиенты.
+goal: Достаньте всё, что стоит после «@»
+grid:
+  - [ Email, Домен ]
+  - [ anna.petrova@mail.ru, null ]
+target: B2
+answer: =ПСТР(A2;НАЙТИ("@";A2)+1;100)
+vary:
+  - cells: A2
+    template: "{oneOf:anna|igor.s|m.orlova|dina1990}@{oneOf:mail.ru|yandex.ru|gmail.com|bk.ru}"
+hint: 'НАЙТИ("@";A2) скажет, на какой позиции собака. ПСТР(текст; с какой позиции; сколько символов) вырежет кусок: =ПСТР(A2;НАЙТИ("@";A2)+1;100). 100 — просто «с запасом».'
+tip: НАЙТИ различает регистр, а ПОИСК — нет и понимает шаблоны * и ?. Для поиска «@» разницы нет.
+verified: перенесено из тренажёра v1, проверено в Excel ранее

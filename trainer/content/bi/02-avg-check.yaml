@@ -1,0 +1,24 @@
+id: avg-check
+slug: srednij-chek-divide-distinctcount
+module: bi
+track: 1
+order: 2
+title: Средний чек
+seo_title: "Power BI: средний чек через DIVIDE и DISTINCTCOUNT — кейс с ответом"
+check: number
+dataset: true
+story: "Средний чек — выручка, делённая на число заказов. Один заказ занимает в файле несколько строк, по строке на товар."
+goal: Посчитайте средний чек по всем доставленным заказам за всё время, ₽ (до копеек)
+unit: ₽
+tolerance: 1
+compute: |-
+  SELECT ROUND(SUM(oi.qty * oi.price) * 1.0 / COUNT(DISTINCT o.id), 2)
+  FROM order_items oi JOIN orders o ON o.id = oi.order_id WHERE o.status = 'Доставлен'
+solution: |-
+  Средний чек =
+  DIVIDE(
+      CALCULATE(SUM('Продажи'[Сумма]); 'Продажи'[Статус] = "Доставлен");
+      CALCULATE(DISTINCTCOUNT('Продажи'[Номер заказа]); 'Продажи'[Статус] = "Доставлен")
+  )
+hint: Делить на COUNTROWS нельзя — получится средняя строка, а не средний заказ. Число заказов считает DISTINCTCOUNT по номеру заказа.
+tip: DIVIDE вместо знака / не падает с ошибкой при делении на ноль и возвращает пусто. В отчётах это выглядит аккуратнее.

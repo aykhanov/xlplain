@@ -1,0 +1,30 @@
+id: running-total
+slug: okonnye-funkcii-narastayushchiy-itog
+module: sql
+track: 5
+order: 15
+premium: true
+fn: SUM OVER
+title: Нарастающий итог оплат
+seo_title: "SUM OVER в SQL: нарастающий итог — задача с решением"
+story: Финансисту нужен нарастающий итог оплат по дням за октябрь 2026 года.
+goal: "Для каждой даты октября, когда были оплаты, выведите дату, сумму оплат за день и нарастающий итог с начала месяца, по возрастанию даты"
+starter: |-
+  SELECT paid_date, SUM(amount) AS day_total
+  FROM payments
+  WHERE paid_date BETWEEN '2026-10-01' AND '2026-10-31'
+  GROUP BY paid_date;
+answer: |-
+  WITH d AS (
+    SELECT paid_date, SUM(amount) AS day_total
+    FROM payments
+    WHERE paid_date BETWEEN '2026-10-01' AND '2026-10-31'
+    GROUP BY paid_date
+  )
+  SELECT paid_date, day_total, SUM(day_total) OVER (ORDER BY paid_date) AS running
+  FROM d
+  ORDER BY paid_date;
+order_matters: true
+hint: SUM(…) OVER (ORDER BY дата) складывает текущую строку со всеми предыдущими, не схлопывая строки в одну, как GROUP BY.
+excel: "В Excel это формула =СУММ($B$2:B2), протянутая вниз, — смешанная ссылка растягивает диапазон."
+tip: "Добавьте PARTITION BY, и итог будет начинаться заново в каждой группе: SUM(…) OVER (PARTITION BY client_id ORDER BY дата)."

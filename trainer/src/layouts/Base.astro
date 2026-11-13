@@ -1,0 +1,71 @@
+---
+import '../styles/trainer.css';
+import { url, PROD_BASE, MODULES, totalXp } from '../lib/data';
+interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi'; jsonld?: any[]; og?: string }
+const { title, description, path, mod, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261113.jpg' } = Astro.props;
+const beta = __BETA__;
+const canonical = PROD_BASE + path;
+const m = mod ? MODULES[mod] : null;
+---
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<meta name="robots" content={beta ? 'noindex,nofollow' : 'index,follow'}>
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={og}>
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/xlplain-mark.svg?v=5">
+<meta name="theme-color" content="#1d6b45">
+{jsonld.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+</head>
+<body>
+{!beta && <Fragment set:html={`<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081','ym');ym(113091081,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});</script>`} />}
+{beta && <div class="beta"><b>Тестовая версия.</b> Здесь проверяем новый тренажёр перед запуском. Поисковики эту страницу не видят, Метрика не считает.</div>}
+<header class="top" data-mod={mod || ''} data-total={m ? m.data.tasks.length : 0} data-maxxp={mod ? totalXp(mod) : 0}>
+  <a class="brand" href={url()}><div class="logo">fx</div><div>Тренажёр Excel, SQL и Power BI<small>от XLPlain — надстройки для Excel</small></div></a>
+  <nav class="mods" aria-label="Модули">
+    <a href={url('excel/')} class={mod === 'excel' ? 'on' : ''}>Excel</a>
+    <a href={url('sql/')} class={mod === 'sql' ? 'on' : ''}>SQL</a>
+    <a href={url('bi/')} class={mod === 'bi' ? 'on' : ''}>Power BI</a>
+  </nav>
+  <div class="prog">
+    <span class="streak" id="streak" hidden></span>
+    {mod && <><div class="meter"><i id="bar" style="width:0"></i></div><span class="xp" id="xp">0 XP</span><span class="count" id="count"></span></>}
+  </div>
+</header>
+<slot />
+<footer style="max-width:1240px;margin:0 auto;padding:22px 28px 40px;border-top:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--mute)"><a href="/" style="color:inherit;font-weight:700">XLPlain — надстройка для Excel</a><a href="/stati.html" style="color:inherit">Статьи по Excel</a><a href="/#buy" style="color:inherit">Купить XLPlain</a><a href="https://www.instagram.com/xlplain/" target="_blank" rel="noopener" style="color:inherit">Instagram*</a><a href="https://www.threads.com/@xlplain" target="_blank" rel="noopener" style="color:inherit">Threads*</a><span style="flex-basis:100%;font-size:12px">* Instagram и Threads принадлежат компании Meta, признанной экстремистской и запрещённой на территории РФ.</span></footer>
+<script>
+  import { load, streak, xpOf, solvedIn, plural } from '../lib/progress';
+  const s = load();
+  const h = document.querySelector('header.top') as HTMLElement;
+  const n = streak(s);
+  const st = document.getElementById('streak');
+  if (st && n > 0) { st.hidden = false; st.textContent = 'Серия: ' + n + ' ' + plural(n, 'день', 'дня', 'дней'); }
+  const mod = h.dataset.mod;
+  if (mod) {
+    const xp = xpOf(s, mod), max = +h.dataset.maxxp!;
+    document.getElementById('xp')!.textContent = xp + ' XP';
+    (document.getElementById('bar') as HTMLElement).style.width = Math.min(100, Math.round(100 * xp / max)) + '%';
+    document.getElementById('count')!.textContent = 'Решено ' + solvedIn(s, mod).length + ' из ' + h.dataset.total;
+    const cont = document.getElementById('continue') as HTMLAnchorElement | null;
+    if (cont && solvedIn(s, mod).length) {
+      const list: [string, string][] = JSON.parse(cont.dataset.list!);
+      const next = list.find(([id]) => !s.solved[mod + ':' + id]);
+      if (next) { cont.href = cont.dataset.base + mod + '/' + next[1] + '/'; cont.textContent = 'Продолжить с того места, где остановились →'; }
+      else cont.textContent = 'Все задачи решены — повторить с первой →';
+    }
+    document.querySelectorAll<HTMLElement>('[data-task]').forEach(el => { if (s.solved[mod + ':' + el.dataset.task]) { el.classList.add('done'); const d = el.querySelector('.dot'); if (d) d.textContent = '✓'; } });
+  }
+</script>
+</body>
+</html>

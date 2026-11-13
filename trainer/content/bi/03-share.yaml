@@ -1,0 +1,22 @@
+id: share-moscow
+slug: dolya-v-vyruchke-all
+module: bi
+track: 2
+order: 3
+title: Доля Москвы в выручке
+seo_title: "Power BI: доля от общего итога через ALL — кейс с ответом"
+check: number
+dataset: true
+story: Для презентации нужна доля Москвы в выручке по доставленным заказам за всё время.
+goal: Посчитайте долю Москвы в выручке доставленных заказов, % (до десятых)
+unit: "%"
+tolerance: 0.1
+compute: |-
+  SELECT ROUND(100.0 * SUM(CASE WHEN c.city = 'Москва' THEN oi.qty * oi.price ELSE 0 END) / SUM(oi.qty * oi.price), 1)
+  FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN clients c ON c.id = o.client_id
+  WHERE o.status = 'Доставлен'
+solution: |-
+  Доля города =
+  DIVIDE([Выручка доставленных]; CALCULATE([Выручка доставленных]; ALL('Продажи'[Город])))
+hint: Числитель — выручка в текущем городе, знаменатель — та же мера, но с ALL по городу, чтобы снять фильтр города.
+tip: ALLSELECTED вместо ALL считает долю от того, что выбрано в срезах, а не от всей таблицы.

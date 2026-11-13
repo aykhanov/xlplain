@@ -1,0 +1,21 @@
+id: join
+slug: join-zakazy-s-imenem-klienta
+module: sql
+track: 3
+order: 9
+fn: JOIN
+title: Заказы октября с именем клиента
+seo_title: "JOIN в SQL: соединить две таблицы — задача с решением"
+story: В таблице orders вместо имени клиента стоит только его номер client_id. Бухгалтерии нужен понятный список.
+goal: Выведите номер заказа, дату и имя клиента для заказов с 1 по 31 октября 2026 года
+starter: SELECT id, order_date, client_id FROM orders;
+answer: |-
+  SELECT o.id, o.order_date, c.name
+  FROM orders o
+  JOIN clients c ON c.id = o.client_id
+  WHERE o.order_date BETWEEN '2026-10-01' AND '2026-10-31';
+order_matters: false
+hint: JOIN … ON c.id = o.client_id находит для каждого заказа клиента с тем же номером. Даты здесь хранятся текстом в формате ГГГГ-ММ-ДД, поэтому BETWEEN работает.
+excel: Это ВПР по номеру клиента, протянутый на весь столбец. Только JOIN не ломается, когда таблицу пересортируют.
+tip: Пишите в ON условие связи, а в WHERE — фильтры. Так запрос читается легче и работает одинаково во всех базах.
+xlplain: Объединить несколько таблиц по ключу без ВПР можно и в Excel — в XLPlain это делает инструмент «Объединение таблиц».

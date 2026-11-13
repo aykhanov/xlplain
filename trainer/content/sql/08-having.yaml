@@ -1,0 +1,16 @@
+id: having
+slug: having-filtr-po-gruppam
+module: sql
+track: 2
+order: 8
+fn: HAVING
+title: Крупные города
+seo_title: "HAVING в SQL: фильтр после группировки — задача с решением"
+story: Отдел развития ищет города, где у компании больше семи клиентов.
+goal: Выведите города, в которых больше 7 клиентов, и число клиентов в каждом
+starter: SELECT city, COUNT(*) FROM clients GROUP BY city;
+answer: SELECT city, COUNT(*) FROM clients GROUP BY city HAVING COUNT(*) > 7;
+order_matters: false
+hint: WHERE фильтрует строки до группировки, а HAVING — уже готовые группы. Условие на COUNT(*) пишется в HAVING.
+excel: В Excel вы бы построили сводную и потом отфильтровали её по значению «Количество > 7».
+tip: "Порядок частей запроса всегда один: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY."

@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import Aside from '../../components/Aside.astro';
+import { MODULES, taskUrl, url, neighbours, trackOf, SCHEMA, plural } from '../../lib/data';
+export function getStaticPaths() { return MODULES.sql.data.tasks.map((t: any) => ({ params: { slug: t.slug }, props: { task: t } })); }
+const { task } = Astro.props as any;
+const { i, n, prev, next } = neighbours('sql', task.id);
+const tr = trackOf('sql', task);
+const desc = `${task.story} ${task.goal}. Пишите запрос к учебной базе прямо в браузере — проверка сразу, разбор и параллель с Excel.`;
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Тренажёр', item: 'https://xlplain.ru/trenazher/' },
+    { '@type': 'ListItem', position: 2, name: 'SQL', item: 'https://xlplain.ru/trenazher/sql/' },
+    { '@type': 'ListItem', position: 3, name: task.title }] },
+  { '@context': 'https://schema.org', '@type': 'LearningResource', name: task.seo_title, learningResourceType: 'Задача с проверкой', educationalLevel: tr.name, inLanguage: 'ru', isAccessibleForFree: !task.premium, provider: { '@type': 'Organization', name: 'XLPlain', url: 'https://xlplain.ru/' } },
+];
+const clientTask = { id: task.id, starter: task.starter || '', answer: task.answer, order_matters: !!task.order_matters, xp: tr.xp, hint: task.hint, excel: task.excel, tip: task.tip, xlplain: task.xlplain, workerUrl: url('sql/sql-worker.js'), schema: SCHEMA };
+---
+<Base title={task.seo_title + ' | XLPlain'} description={desc} path={`sql/${task.slug}/`} mod="sql" jsonld={ld}>
+<div class="wrap">
+  <Aside mod="sql" current={task.id} />
+  <main>
+    <p class="bc"><a href={url()}>Тренажёр</a> / <a href={url('sql/')}>SQL</a> / {tr.name}</p>
+    <section class="card">
+      <div class="crumbs"><span>{tr.name} · задача {i + 1} из {n}</span><span class="chip">{task.fn}</span>{task.premium && <span class="prem">ПЛАТНЫЙ ТРЕК · в бете открыт</span>}</div>
+      <h1 class="h">{task.title}</h1>
+      <p class="story">{task.story}</p>
+      <div class="goal">{task.goal}</div>
+      <div class="sqlwrap">
+        <div>
+          <div class="editor"><div id="ed"></div>
+            <div class="edbar"><button class="run" id="run">▶ Выполнить</button><button class="checkbtn" id="check">Проверить</button><small>Ctrl + Enter — выполнить</small></div>
+          </div>
+          <div class="result" id="result" hidden></div>
+        </div>
+        <div class="schema">
+          <h3>Учебная база «компания»</h3>
+          {SCHEMA.map(t => <details open={task.answer.includes(t.table)}><summary>{t.table} <span>{t.title}, {t.rows} {plural(t.rows, 'строка', 'строки', 'строк')}</span></summary>{t.cols.map(c => <code data-ins={c}>{c}</code>)}</details>)}
+        </div>
+      </div>
+      <div class="fb" id="fb"></div>
+      <div class="actions">
+        {prev ? <a class="btn" href={taskUrl('sql', prev.slug)}>← Назад</a> : <button class="btn" disabled>← Назад</button>}
+        <button class="btn" id="hintb">Подсказка</button>
+        <button class="btn" id="solb">Показать решение</button>
+        {next ? <a class="btn main" id="next" href={taskUrl('sql', next.slug)} hidden>Следующая задача →</a> : <a class="btn main" id="next" href={url('bi/')} hidden>Дальше — Power BI →</a>}
+      </div>
+      <div class="note" id="hint" hidden>{task.hint}</div>
+      <div class="note" id="sol" hidden>Решение:<pre class="sol">{task.answer}</pre></div>
+      <p class="report">Запросы выполняются в SQLite прямо в браузере. Синтаксис почти везде как в SQL Server и PostgreSQL, отличия отмечены в лайфхаках. Нашли ошибку? <a href={`mailto:support@xlplain.ru?subject=${encodeURIComponent('Ошибка в задаче тренажёра: sql/' + task.id)}`}>Напишите нам</a>.</p>
+    </section>
+  </main>
+</div>
+<script type="application/json" id="taskdata" set:html={JSON.stringify(clientTask)} />
+<script>import '../../client/sql-task';</script>
+</Base>

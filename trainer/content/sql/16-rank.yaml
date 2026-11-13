@@ -1,0 +1,23 @@
+id: rank
+slug: okonnye-funkcii-rank-v-kategorii
+module: sql
+track: 5
+order: 16
+premium: true
+fn: ROW_NUMBER
+title: Самый дорогой товар в каждой категории
+seo_title: "ROW_NUMBER в SQL: лучший в каждой группе — задача с решением"
+story: Для каждой категории нужно показать самый дорогой товар.
+goal: Выведите категорию, название и цену самого дорогого товара в каждой категории
+starter: SELECT category, name, price FROM products ORDER BY category, price DESC;
+answer: |-
+  SELECT category, name, price FROM (
+    SELECT category, name, price,
+           ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn
+    FROM products
+  ) t
+  WHERE rn = 1;
+order_matters: false
+hint: ROW_NUMBER() нумерует строки внутри каждой категории от дорогого к дешёвому. Остаётся оставить строки с номером 1.
+excel: В Excel это МАКСЕСЛИ по категории и ИНДЕКС+ПОИСКПОЗ, чтобы достать название.
+tip: Если цены могут совпадать и нужны все лидеры, используйте RANK() вместо ROW_NUMBER().

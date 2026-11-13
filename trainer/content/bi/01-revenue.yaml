@@ -1,0 +1,21 @@
+id: revenue-oct
+slug: vyruchka-za-mesyac-dax
+module: bi
+track: 1
+order: 1
+title: Выручка за октябрь
+seo_title: "Power BI: мера выручки за месяц — кейс с ответом"
+check: number
+dataset: true
+story: "В файле продаж каждая строка — товар в заказе. Сумма = количество × цена. Отменённые и не доставленные заказы в выручку не идут."
+goal: Посчитайте выручку по доставленным заказам за октябрь 2026 года, ₽
+unit: ₽
+tolerance: 1
+compute: |-
+  SELECT SUM(oi.qty * oi.price) FROM order_items oi JOIN orders o ON o.id = oi.order_id
+  WHERE o.status = 'Доставлен' AND o.order_date BETWEEN '2026-10-01' AND '2026-10-31'
+solution: |-
+  Выручка = SUM('Продажи'[Сумма])
+  Выручка доставленных = CALCULATE([Выручка]; 'Продажи'[Статус] = "Доставлен")
+hint: Сделайте простую меру SUM по столбцу «Сумма», а статус и месяц задайте фильтрами визуала или внутри CALCULATE.
+tip: "Держите базовую меру [Выручка] отдельно и стройте остальные поверх неё через CALCULATE. Так формулы короче, а правка в одном месте меняет все отчёты."

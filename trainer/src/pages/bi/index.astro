@@ -1,0 +1,10 @@
+---
+import ModuleIndex from '../../components/ModuleIndex.astro';
+import { plural, MODULES, url } from '../../lib/data';
+const n = MODULES.bi.data.tasks.length;
+---
+<ModuleIndex mod="bi" h1="Тренажёр Power BI: DAX, Power Query, модель" title="Тренажёр Power BI онлайн — кейсы по DAX и Power Query с разбором | XLPlain"
+  description={`${n} ${plural(n, 'кейс', 'кейса', 'кейсов')} по Power BI: меры DAX, CALCULATE и контекст фильтра, функции времени, Power Query и модель данных. Датасет для скачивания, проверка ответа и разбор с готовой формулой.`}
+  lead={`${n} ${plural(n, 'кейс', 'кейса', 'кейсов')}: часть решается в вашем Power BI на нашем датасете продаж — вы считаете меру и вводите число, часть проверяет понимание DAX, Power Query и модели данных. После ответа — готовая формула и разбор.`}>
+  <p><a class="dl" href={url('data/prodazhi.csv')} download="prodazhi.csv">⬇ Скачать датасет «Продажи» <small>CSV, разделитель «;», UTF-8</small></a></p>
+</ModuleIndex>

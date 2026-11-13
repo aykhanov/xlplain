@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import Aside from '../../components/Aside.astro';
+import { MODULES, taskUrl, url, neighbours, trackOf } from '../../lib/data';
+import { sheetHtml } from '../../lib/sheet';
+import { XL } from '../../engine/excel';
+export function getStaticPaths() { return MODULES.excel.data.tasks.map((t: any) => ({ params: { slug: t.slug }, props: { task: t } })); }
+const { task } = Astro.props as any;
+const { i, n, prev, next } = neighbours('excel', task.id);
+const tr = trackOf('excel', task);
+const desc = `${task.story} ${task.goal}. Решите в живой таблице прямо в браузере: проверка сразу, разбор и лайфхак после ответа.`;
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Тренажёр', item: 'https://xlplain.ru/trenazher/' },
+    { '@type': 'ListItem', position: 2, name: 'Excel', item: 'https://xlplain.ru/trenazher/excel/' },
+    { '@type': 'ListItem', position: 3, name: task.title }] },
+  { '@context': 'https://schema.org', '@type': 'LearningResource', name: task.seo_title, learningResourceType: 'Задача с проверкой', educationalLevel: tr.name, inLanguage: 'ru', isAccessibleForFree: true, teaches: task.fn, provider: { '@type': 'Organization', name: 'XLPlain', url: 'https://xlplain.ru/' } },
+];
+const clientTask = { ...task, xp: tr.xp, nextUrl: next ? taskUrl('excel', next.slug) : null };
+---
+<Base title={task.seo_title + ' | XLPlain'} description={desc} path={`excel/${task.slug}/`} mod="excel" jsonld={ld}>
+<div class="wrap">
+  <Aside mod="excel" current={task.id} />
+  <main>
+    <p class="bc"><a href={url()}>Тренажёр</a> / <a href={url('excel/')}>Excel</a> / {tr.name}</p>
+    <section class="card">
+      <div class="crumbs"><span>{tr.name} · задача {i + 1} из {n}</span><span class="chip">{task.fn}</span></div>
+      <h1 class="h">{task.title}</h1>
+      <p class="story">{task.story}</p>
+      <div class="goal">{task.goal} <span class="tcell">→ ячейка {task.target}</span></div>
+
+      <div class="fbar">
+        <div class="namebox">{task.target}</div>
+        <div class="fx">fx</div>
+        <input id="f" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="= формула" aria-label="Формула">
+        <button id="check" class="checkbtn">Проверить</button>
+      </div>
+      <div class="keys">
+        <button data-k="=">=</button><button data-k="(">(</button><button data-k=")">)</button><button data-k=";">;</button><button data-k=":">:</button><button data-k='""'>" "</button><button data-k="&amp;">&amp;</button><button data-k="*">*</button><button data-k="/">/</button><button data-k="&gt;=">&gt;=</button>
+      </div>
+      <div class="sheetbox"><table id="sheet" set:html={sheetHtml(task)}></table></div>
+      <p class="tip">Пока набираете формулу, кликайте по ячейкам или протягивайте мышкой — адреса подставятся сами. Enter — проверить.</p>
+      <div class="fb" id="fb"></div>
+      <div class="actions">
+        {prev ? <a class="btn" href={taskUrl('excel', prev.slug)}>← Назад</a> : <button class="btn" disabled>← Назад</button>}
+        <button class="btn" id="hintb">Подсказка</button>
+        <button class="btn" id="solb">Показать решение</button>
+        {next ? <a class="btn main" id="next" href={taskUrl('excel', next.slug)} hidden>Следующая задача →</a> : <a class="btn main" id="next" href={url('sql/')} hidden>Дальше — SQL →</a>}
+      </div>
+      <div class="note" id="hint" hidden>{task.hint}</div>
+      <div class="note" id="sol" hidden>Решение: <code>{task.answer}</code></div>
+      <p class="report">Нашли ошибку в задаче? <a href={`mailto:support@xlplain.ru?subject=${encodeURIComponent('Ошибка в задаче тренажёра: excel/' + task.id)}`}>Напишите нам</a> — исправим за сутки.</p>
+    </section>
+    <details>
+      <summary>Справочник функций</summary>
+      <div class="ref">{XL.HELP.map(([sig, d, ex]: string[]) => <div class="fn"><code>{sig}</code><span>{d}</span><em>{ex}</em></div>)}</div>
+    </details>
+  </main>
+</div>
+<script type="application/json" id="taskdata" set:html={JSON.stringify(clientTask)} />
+<script>import '../../client/excel-task';</script>
+</Base>

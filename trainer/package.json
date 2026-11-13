@@ -1,0 +1,25 @@
+{
+  "name": "xlplain-trainer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "node scripts/gen-data.mjs",
+    "dev": "astro dev",
+    "build": "npm run gen && astro build && node scripts/post-build.mjs",
+    "test": "vitest run",
+    "check": "npm run gen && vitest run && npm run build"
+  },
+  "devDependencies": {
+    "astro": "^7.4.12",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0",
+    "yaml": "^2.9.1"
+  },
+  "dependencies": {
+    "@codemirror/lang-sql": "^6.10.0",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "codemirror": "^6.0.2",
+    "sql.js": "^1.16.0"
+  }
+}

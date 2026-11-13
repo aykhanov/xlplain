@@ -1,0 +1,16 @@
+id: where
+slug: where-filtr-po-gorodu
+module: sql
+track: 1
+order: 2
+fn: WHERE
+title: Клиенты из Казани
+seo_title: "WHERE в SQL: фильтр по значению — задача с решением"
+story: В Казани открывается пункт выдачи, нужно предупредить местных клиентов.
+goal: Выведите имена клиентов из Казани
+starter: SELECT name FROM clients;
+answer: SELECT name FROM clients WHERE city = 'Казань';
+order_matters: false
+hint: "Условие отбора пишется после FROM: WHERE city = 'Казань'. Текст берётся в одинарные кавычки."
+excel: Это обычный фильтр по столбцу «Город» в Excel, только записанный словами.
+tip: "Несколько значений сразу: WHERE city IN ('Казань', 'Пермь'). Это короче, чем писать OR несколько раз."

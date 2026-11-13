@@ -306,7 +306,7 @@ section {
   display: grid;
   grid-template-columns: minmax(0, .95fr) minmax(380px, .75fr);
   gap: 54px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .purchase-copy {
@@ -365,6 +365,9 @@ section {
 }
 
 .purchase-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -673,3 +676,8 @@ footer img[alt^="XLPlain"] {
   body::before { right: -210px; }
   body::after { left: -120px; top: 360px; }
 }
+
+.purchase-card .status-badge { align-self: flex-start; }
+.footer-social { display: flex; gap: 16px; margin-top: 10px; }
+.footer-social a { color: var(--muted); font-size: 14px; }
+.footer-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; max-width: 420px; }

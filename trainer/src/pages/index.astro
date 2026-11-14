@@ -7,6 +7,7 @@ const cards = [
   { mod: 'pq', tag: 'Power Query', h: 'Power Query', p: 'Редактор как в Excel и Power BI: чистите выгрузки из 1С, объединяете запросы вместо ВПР, пишете свои столбцы на M.', li: ['шапка, пустые строки, типы, заполнить вниз', 'слияние, добавление, условный столбец', 'unpivot, сведение, группировка'] },
   { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Окно в стиле Power BI Desktop прямо в браузере: пишете меры DAX, смотрите матрицу и срезы.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, RANKX, TOTALYTD', 'модель данных и логика времени'] },
 ] as const;
+const hashMap = Object.fromEntries(MODULES.excel.data.tasks.map((t: any) => [t.id, url('excel/' + t.slug + '/')]));
 const total = cards.reduce((s, c) => s + MODULES[c.mod].data.tasks.length, 0);
 const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ key: c.mod + ':' + t.id, name: c.tag + ': ' + t.name, ids: MODULES[c.mod].data.tasks.filter((x: any) => x.track === t.id).map((x: any) => c.mod + ':' + x.id) })));
 ---
@@ -43,4 +44,8 @@ const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ 
     });
     document.querySelectorAll<HTMLElement>('.badge').forEach(b => { if (b.dataset.ids!.split(',').every(id => s.solved[id])) b.classList.add('got'); });
   </script>
+<script is:inline define:vars={{ hashMap }}>
+  // старые ссылки вида /trenazher/#vlookup ведут на страницу задачи
+  (function () { var h = decodeURIComponent(location.hash.slice(1)); if (h && hashMap[h]) location.replace(hashMap[h]); })();
+</script>
 </Base>

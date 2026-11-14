@@ -35,6 +35,8 @@ const base = ['id', 'slug', 'module', 'track', 'order', 'title', 'seo_title', 's
 const excel = loadModule('excel', [...base, 'fn', 'grid', 'target', 'answer']);
 const sql = loadModule('sql', [...base, 'answer', 'excel']);
 const bi = loadModule('bi', [...base, 'check']);
+const pq = loadModule('pq', [...base, 'check', 'source', 'answer', 'explanation']);
+for (const t of pq.tasks) { if (t.check !== 'pq') fail(t._file, 'в модуле pq check должен быть pq'); if (!Array.isArray(t.answer) || !t.answer.length) fail(t._file, 'answer — список шагов'); }
 
 // --- учебная база ---
 const SQL = await initSqlJs();
@@ -88,7 +90,7 @@ if (errors.length) { console.error('Ошибки в задачах:\n' + errors.
 
 const schema = Object.entries(SCHEMA).map(([t, cols]) => ({ table: t, title: DESCR[t], cols: cols.map(([c]) => c), rows: db1[t].length }));
 const strip = ({ _file, ...t }) => t;
-for (const [name, m] of Object.entries({ excel, sql, bi })) fs.writeFileSync(path.join(out, name + '.json'), JSON.stringify({ tracks: m.tracks, tasks: m.tasks.map(strip) }));
+for (const [name, m] of Object.entries({ excel, sql, bi, pq })) fs.writeFileSync(path.join(out, name + '.json'), JSON.stringify({ tracks: m.tracks, tasks: m.tasks.map(strip) }));
 fs.writeFileSync(path.join(out, 'schema.json'), JSON.stringify(schema));
-console.log(`OK: Excel ${excel.tasks.length}, SQL ${sql.tasks.length}, Power BI ${bi.tasks.length}; строк в датасете ${rows.length - 1}`);
+console.log(`OK: Excel ${excel.tasks.length}, SQL ${sql.tasks.length}, Power BI ${bi.tasks.length}, Power Query ${pq.tasks.length}; строк в датасете ${rows.length - 1}`);
 for (const t of bi.tasks.filter(t => t.check === 'number')) console.log('  ', t.id, '=', t.expected);

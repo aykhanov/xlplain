@@ -1,11 +1,13 @@
 import excel from '../generated/excel.json';
 import sql from '../generated/sql.json';
 import bi from '../generated/bi.json';
+import pq from '../generated/pq.json';
 import schema from '../generated/schema.json';
 
 export const MODULES = {
   excel: { id: 'excel', name: 'Excel', title: 'Тренажёр формул Excel', data: excel as any },
   sql: { id: 'sql', name: 'SQL', title: 'Тренажёр SQL', data: sql as any },
+  pq: { id: 'pq', name: 'Power Query', title: 'Тренажёр Power Query', data: pq as any },
   bi: { id: 'bi', name: 'Power BI', title: 'Тренажёр Power BI', data: bi as any },
 } as const;
 export type ModId = keyof typeof MODULES;

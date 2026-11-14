@@ -1,7 +1,7 @@
 ---
 import '../styles/trainer.css';
 import { url, PROD_BASE, MODULES, totalXp } from '../lib/data';
-interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi'; jsonld?: any[]; og?: string }
+interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi' | 'pq'; jsonld?: any[]; og?: string }
 const { title, description, path, mod, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261113.jpg' } = Astro.props;
 const beta = __BETA__;
 const canonical = PROD_BASE + path;
@@ -31,10 +31,11 @@ const m = mod ? MODULES[mod] : null;
 {!beta && <Fragment set:html={`<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113091081','ym');ym(113091081,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});</script>`} />}
 {beta && <div class="beta"><b>Тестовая версия.</b> Здесь проверяем новый тренажёр перед запуском. Поисковики эту страницу не видят, Метрика не считает.</div>}
 <header class="top" data-mod={mod || ''} data-total={m ? m.data.tasks.length : 0} data-maxxp={mod ? totalXp(mod) : 0}>
-  <a class="brand" href={url()}><div class="logo">fx</div><div>Тренажёр Excel, SQL и Power BI<small>от XLPlain — надстройки для Excel</small></div></a>
+  <a class="brand" href={url()}><div class="logo">fx</div><div>Тренажёр Excel, SQL, Power Query, Power BI<small>от XLPlain — надстройки для Excel</small></div></a>
   <nav class="mods" aria-label="Модули">
     <a href={url('excel/')} class={mod === 'excel' ? 'on' : ''}>Excel</a>
     <a href={url('sql/')} class={mod === 'sql' ? 'on' : ''}>SQL</a>
+    <a href={url('pq/')} class={mod === 'pq' ? 'on' : ''}>Power Query</a>
     <a href={url('bi/')} class={mod === 'bi' ? 'on' : ''}>Power BI</a>
   </nav>
   <div class="prog">

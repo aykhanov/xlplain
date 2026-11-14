@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import Aside from '../../components/Aside.astro';
+import PqFrame from '../../components/PqFrame.astro';
+import { MODULES, taskUrl, url, neighbours, trackOf } from '../../lib/data';
+import '../../styles/pbi.css';
+export function getStaticPaths() { return MODULES.pq.data.tasks.map((t: any) => ({ params: { slug: t.slug }, props: { task: t } })); }
+const { task } = Astro.props as any;
+const { i, n, prev, next } = neighbours('pq', task.id);
+const tr = trackOf('pq', task);
+const desc = `${task.story} ${task.goal} Задача по Power Query в редакторе прямо в браузере, с проверкой и разбором.`;
+const ld = [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Тренажёр', item: 'https://xlplain.ru/trenazher/' },
+  { '@type': 'ListItem', position: 2, name: 'Power Query', item: 'https://xlplain.ru/trenazher/pq/' },
+  { '@type': 'ListItem', position: 3, name: task.title }] },
+  { '@context': 'https://schema.org', '@type': 'LearningResource', name: task.seo_title, learningResourceType: 'Задача с проверкой', educationalLevel: tr.name, inLanguage: 'ru', isAccessibleForFree: true, provider: { '@type': 'Organization', name: 'XLPlain', url: 'https://xlplain.ru/' } }];
+const clientTask = { id: task.id, module: 'pq', check: 'pq', xp: tr.xp, answer: task.answer, source: task.source, queries: task.queries, query_name: task.query_name, explanation: task.explanation, tip: task.tip, hint: task.hint };
+---
+<Base title={task.seo_title + ' | XLPlain'} description={desc} path={`pq/${task.slug}/`} mod="pq" jsonld={ld}>
+<div class="wrap wide">
+  <Aside mod="pq" current={task.id} />
+  <main>
+    <p class="bc"><a href={url()}>Тренажёр</a> / <a href={url('pq/')}>Power Query</a> / {tr.name}</p>
+    <section class="card">
+      <div class="crumbs"><span>{tr.name} · задача {i + 1} из {n}</span><span class="chip">редактор Power Query</span></div>
+      <h1 class="h">{task.title}</h1>
+      <p class="story">{task.story}</p>
+      <div class="goal">{task.goal}</div>
+      <PqFrame />
+      <div class="fb" id="fb"></div>
+      <div class="actions">
+        {prev ? <a class="btn" href={taskUrl('pq', prev.slug)}>← Назад</a> : <button class="btn" disabled>← Назад</button>}
+        {next ? <a class="btn main" id="next" href={taskUrl('pq', next.slug)} hidden>Следующая задача →</a> : <a class="btn main" id="next" href={url()} hidden>К списку модулей →</a>}
+      </div>
+      <div class="note" id="hint" hidden>{task.hint}</div>
+      <div class="note" id="sol" hidden>Эталонное решение (за задачу после просмотра — половина XP):<pre class="sol"></pre></div>
+      <p class="report">Тренажёр повторяет редактор Power Query из Excel и Power BI и выполняет шаги прямо в браузере. Проверка идёт на вашей выгрузке и на второй, с другими данными. Нашли ошибку? <a href={`mailto:support@xlplain.ru?subject=${encodeURIComponent('Ошибка в задаче тренажёра: pq/' + task.id)}`}>Напишите нам</a>.</p>
+    </section>
+  </main>
+</div>
+<script type="application/json" id="taskdata" set:html={JSON.stringify(clientTask)} />
+<script>import '../../client/pq-editor';</script>
+</Base>

@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { MODULES, taskUrl, url } from '../lib/data';
-interface Props { mod: 'excel' | 'sql' | 'bi'; h1: string; lead: string; title: string; description: string }
+interface Props { mod: 'excel' | 'sql' | 'bi' | 'pq'; h1: string; lead: string; title: string; description: string }
 const { mod, h1, lead, title, description } = Astro.props;
 const { tracks, tasks } = MODULES[mod].data;
 const first = tasks[0];

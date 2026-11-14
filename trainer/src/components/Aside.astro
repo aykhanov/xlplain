@@ -1,6 +1,6 @@
 ---
 import { MODULES, taskUrl } from '../lib/data';
-interface Props { mod: 'excel' | 'sql' | 'bi'; current?: string }
+interface Props { mod: 'excel' | 'sql' | 'bi' | 'pq'; current?: string }
 const { mod, current } = Astro.props;
 const { tracks, tasks } = MODULES[mod].data;
 let k = 0;

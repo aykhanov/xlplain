@@ -1,0 +1,8 @@
+---
+import ModuleIndex from '../../components/ModuleIndex.astro';
+import { tasksWord, MODULES } from '../../lib/data';
+const n = MODULES.pq.data.tasks.length;
+---
+<ModuleIndex mod="pq" h1="Тренажёр Power Query" title="Тренажёр Power Query онлайн бесплатно — задачи в редакторе с проверкой | XLPlain"
+  description={`Бесплатный тренажёр Power Query в браузере: ${tasksWord(n)} на выгрузках из 1С, CRM и банка. Редактор как в Excel и Power BI: примененные шаги, код M, слияние запросов, свой столбец. Проверка и разбор.`}
+  lead={`${tasksWord(n)} в редакторе, похожем на Power Query из Excel и Power BI: лента, фильтры столбцов, «Примененные шаги», код M и расширенный редактор. Чистите отчёты из 1С, объединяете запросы вместо ВПР, пишете свои столбцы на M. Ничего устанавливать не нужно, всё выполняется в браузере.`} />

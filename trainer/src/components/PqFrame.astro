@@ -8,7 +8,7 @@
     <span class="pbi-tag">тренажёр XLPlain</span>
     <button class="pbi-full" id="full" title="Развернуть на весь экран" aria-label="Развернуть на весь экран">⤢</button>
   </div>
-  <div class="pbi-tabs" id="pq-tabs" role="tablist"><span>Файл</span><span class="on" data-tab="home">Главная</span><span data-tab="tr">Преобразование</span><span data-tab="add">Добавить столбец</span><span data-tab="view">Просмотр</span></div>
+  <div class="pbi-tabs" id="pq-tabs" role="tablist"><span>Файл</span><span class="on" data-tab="home">Главная</span><span data-tab="tr">Преобразование</span><span data-tab="add">Добавить столбец</span><span data-tab="view">Просмотр</span><div class="pq-tbtns"><button class="tb go" id="pqcheck">✓ Проверить решение</button><button class="tb" id="pqhint">Подсказка</button><button class="tb" id="pqsol">Показать решение</button></div></div>
   <div class="pbi-ribbon" id="pq-ribbon"></div>
   <div class="pbi-fx pq-fx">
     <button class="fxb x" disabled>✕</button><button class="fxb ok" disabled>✓</button>
@@ -16,7 +16,7 @@
     <div class="pq-formula" id="pq-formula"></div>
   </div>
   <div class="pq-body">
-    <div class="pq-queries"><div class="pq-ph">Запросы [1]</div><div class="pq-q on" id="pq-qname">Запрос</div></div>
+    <div class="pq-queries"><div class="pq-ph" id="pq-qhead">Запросы [1]</div><div id="pq-qlist"></div></div>
     <div class="pq-main">
       <div class="pq-grid" id="pq-grid" tabindex="0"></div>
       <div class="pq-errpane" id="pq-errpane" hidden></div>

@@ -4,14 +4,15 @@ import { MODULES, url, tasksWord } from '../lib/data';
 const cards = [
   { mod: 'excel', tag: 'Excel', h: 'Формулы Excel', p: 'Живая таблица и формулы как в русском Excel. Ответ проверяется на 12 вариантах данных.', li: ['СУММ, ЕСЛИ, ВПР, СЧЁТЕСЛИ', 'ИНДЕКС + ПОИСКПОЗ, СУММЕСЛИМН', 'текст, даты, округление'] },
   { mod: 'sql', tag: 'SQL', h: 'SQL для тех, кто живёт в Excel', p: 'Запросы к учебной базе «компания» прямо в браузере. В каждой задаче — как это делается в Excel.', li: ['SELECT, WHERE, ORDER BY', 'GROUP BY, HAVING, JOIN', 'подзапросы, CTE, оконные функции'] },
-  { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Окно в стиле Power BI Desktop прямо в браузере: пишете меры DAX, смотрите матрицу и срезы, чистите выгрузки в Power Query.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, RANKX, TOTALYTD', 'Power Query: шаги, unpivot, группировка'] },
+  { mod: 'pq', tag: 'Power Query', h: 'Power Query', p: 'Редактор как в Excel и Power BI: чистите выгрузки из 1С, объединяете запросы вместо ВПР, пишете свои столбцы на M.', li: ['шапка, пустые строки, типы, заполнить вниз', 'слияние, добавление, условный столбец', 'unpivot, сведение, группировка'] },
+  { mod: 'bi', tag: 'Power BI', h: 'Power BI и DAX', p: 'Окно в стиле Power BI Desktop прямо в браузере: пишете меры DAX, смотрите матрицу и срезы.', li: ['меры: выручка, средний чек, доля', 'CALCULATE, ALL, RANKX, TOTALYTD', 'модель данных и логика времени'] },
 ] as const;
 const total = cards.reduce((s, c) => s + MODULES[c.mod].data.tasks.length, 0);
 const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ key: c.mod + ':' + t.id, name: c.tag + ': ' + t.name, ids: MODULES[c.mod].data.tasks.filter((x: any) => x.track === t.id).map((x: any) => c.mod + ':' + x.id) })));
 ---
-<Base title="Тренажёр Excel, SQL и Power BI онлайн — задачи с проверкой | XLPlain" description={`Бесплатный онлайн-тренажёр: ${tasksWord(total)} по Excel, SQL и Power BI с мгновенной проверкой, разбором и лайфхаками. Без регистрации, работает в браузере и на телефоне.`} path="">
+<Base title="Тренажёр Excel, SQL, Power Query и Power BI онлайн — задачи с проверкой | XLPlain" description={`Бесплатный онлайн-тренажёр: ${tasksWord(total)} по Excel, SQL, Power Query и Power BI с мгновенной проверкой, разбором и лайфхаками. Без регистрации, работает в браузере и на телефоне.`} path="">
   <div class="hub">
-    <h1>Тренажёр Excel, SQL и Power BI</h1>
+    <h1>Тренажёр Excel, SQL, Power Query и Power BI</h1>
     <p class="lead">{tasksWord(total)} на сюжетах из работы: продажи, сверки, отчёты для руководителя. Решайте в браузере — проверка сразу, после каждой задачи разбор и лайфхак. Регистрация не нужна, прогресс хранится в браузере.</p>
     <div class="modgrid">
       {cards.map(c => { const n = MODULES[c.mod].data.tasks.length; return (

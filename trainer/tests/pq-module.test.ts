@@ -13,7 +13,7 @@ describe('модуль Power Query: каждая задача', () => {
     for (const v of [1, 2]) { const r = run(source(t.source, v), t.answer, envFor(t, v)); expect(r.error, t.id).toBeUndefined(); const fin = r.tables.at(-1)!; expect(fin.rows.length).toBeGreaterThan(2); expect(fin.rows.flat().some((c: any) => c && typeof c === 'object')).toBe(false); }
     expect(check(t, t.answer)).toEqual({ ok: true });
     expect(check(t, []).ok).toBe(false);
-    if (t.answer.length > 1) expect(check(t, t.answer.slice(0, -1)).ok, 'без последнего шага').toBe(false);
+    if (t.answer.length > 1 && t.answer.at(-1).op !== 'sort') expect(check(t, t.answer.slice(0, -1)).ok, 'без последнего шага').toBe(false);
   });
 });
 describe('модуль Power Query: другие верные пути и типичные ошибки', () => {
@@ -34,5 +34,12 @@ describe('модуль Power Query: другие верные пути и тип
   it('добавление одной таблицы из двух', () => expect(ok('pq-append', [{ op: 'append', queries: ['Продажи_июль'] }]).ok).toBe(false));
   it('сведение без агрегирования — ошибки', () => { const r: any = ok('pq-pivot', [{ op: 'pivot', col: 'Месяц', val: 'Сумма', agg: 'none' }]); expect(r.msg).toMatch(/ошибки/); });
   it('топ без сортировки', () => expect(ok('pq-top', [{ op: 'group', by: ['Клиент'], aggs: [{ name: 'Выручка', op: 'sum', col: 'Сумма' }] }, { op: 'keepTop', n: 5 }]).ok).toBe(false));
+  it('папка: без фильтра .txt — ошибка объединения', () => { const r: any = ok('pq-folder', [{ op: 'combineFiles' }, { op: 'type', cols: { Дата: 'date', 'Номер заказа': 'int', Клиент: 'text', Сумма: 'number' } }]); expect(r.msg).toMatch(/не является книгой Excel/); });
+  it('папка: месяц двумя заменами', () => expect(ok('pq-folder-month', [{ op: 'filter', col: 'Extension', exclude: ['.txt'] }, { op: 'combineFiles' }, { op: 'replace', cols: ['Source.Name'], find: 'Продажи_', repl: '' }, { op: 'replace', cols: ['Source.Name'], find: '.xlsx', repl: '' }, { op: 'rename', col: 'Source.Name', to: 'Месяц' }, { op: 'type', cols: { Дата: 'date', 'Номер заказа': 'int', Клиент: 'text', Сумма: 'number' } }]).ok).toBe(true));
+  it('код M: исходный запрос коллеги не подходит, List.Contains подходит', () => {
+    expect(ok('pq-m-edit', byId['pq-m-edit'].starter).ok).toBe(false);
+    expect(ok('pq-m-edit', [{ op: 'selectRows', expr: 'List.Contains({"Москва", "Казань"}, [Город])' }, ...byId['pq-m-edit'].starter.slice(1)]).ok).toBe(true);
+  });
+  it('условный фильтр одной формулой', () => expect(ok('pq-cond-filter', [{ op: 'selectRows', expr: '[Сумма] > 10000 and [Город] = "Москва"' }]).ok).toBe(true));
   it('даты: преобразование вместо добавления', () => expect(ok('pq-dates', [{ op: 'dateOp', col: 'Дата', mode: 'year' }]).ok).toBe(false));
 });

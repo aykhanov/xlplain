@@ -1,7 +1,8 @@
 // @ts-nocheck
 // Редактор Power Query: лента, сетка, фильтры, несколько запросов, слияние, свой столбец, «Примененные шаги».
-import { run, stepNames, mCode, fullM, show, isErr, isTbl, checkPq, TYPE_NAME, condM } from '../engine/pq';
+import { run, stepNames, mCode, fullM, show, isErr, isTbl, isBin, applyStep, checkPq, TYPE_NAME, condM } from '../engine/pq';
 import { parseM, M_FUNCTIONS } from '../engine/m';
+import { parseQuery, parseStepExpr, lineOf } from '../engine/m-steps';
 import { SOURCES, source } from '../lib/pq-sources';
 import { load, save, markSolved, goal, refreshHeader } from '../lib/progress';
 import { esc } from '../lib/sheet';
@@ -22,10 +23,12 @@ let viewQ = null;                // имя другого (готового) з�
 $('#pq-file').textContent = qname; $('#pq-name').value = qname;
 function renderQueries() {
   $('#pq-qhead').textContent = `Запросы [${1 + OTHERS.length}]`;
-  $('#pq-qlist').innerHTML = [qname, ...OTHERS].map((n, i) => `<div class="pq-q${(i === 0 && !viewQ) || viewQ === n ? ' on' : ''}" data-q="${i ? esc(n) : ''}" title="${i ? 'Готовый запрос, его можно только посмотреть' : 'Запрос, который нужно преобразовать'}">${esc(n)}${i ? '<span class="ro">готов</span>' : ''}</div>`).join('');
+  const helpers = steps.some(s => s.op === 'combineFiles') ? ['Параметр1', 'Пример файла', 'Преобразовать файл', 'Преобразовать пример файла'] : [];
+  if (helpers.length) $('#pq-qhead').textContent = `Запросы [${1 + OTHERS.length + helpers.length}]`;
+  $('#pq-qlist').innerHTML = (helpers.length ? `<div class="pq-grp">▾ Вспомогательные запросы [${helpers.length}]</div>` + helpers.map(h => `<div class="pq-q helper" data-helper="1">${h === 'Преобразовать файл' ? '<i>fx</i> ' : ''}${esc(h)}</div>`).join('') + `<div class="pq-grp">▾ Другие запросы [${1 + OTHERS.length}]</div>` : '') + [qname, ...OTHERS].map((n, i) => `<div class="pq-q${(i === 0 && !viewQ) || viewQ === n ? ' on' : ''}" data-q="${i ? esc(n) : ''}" title="${i ? 'Готовый запрос, его можно только посмотреть' : 'Запрос, который нужно преобразовать'}">${esc(n)}${i ? '<span class="ro">готов</span>' : ''}</div>`).join('');
 }
 
-let steps = []; try { steps = JSON.parse(S.drafts[KEY] || (S.solved[KEY] && S.solved[KEY].a) || '[]'); } catch { steps = []; }
+let steps = []; try { steps = JSON.parse(S.drafts[KEY] || (S.solved[KEY] && S.solved[KEY].a) || JSON.stringify(task.starter || [])); } catch { steps = []; }
 if (!Array.isArray(steps)) steps = [];
 let cur = steps.length;          // выбранный шаг: 0 = «Источник»
 let selCols = [];
@@ -80,7 +83,7 @@ const RIBBON = () => ({
     ]],
     ['Сортировка', [{ small: true, items: [{ label: 'По возрастанию', icon: I.sortA, run: () => sortOp(false) }, { label: 'По убыванию', icon: I.sortZ, run: () => sortOp(true) }] }]],
     ['Преобразование', [{ small: true, items: [{ label: 'Тип данных: ' + curTypeName(), menu: typeMenu }, { label: 'Использовать первую строку в качестве заголовков', icon: I.hdr, run: () => add({ op: 'promote' }) }, { label: 'Заменить значения', icon: I.repl, run: () => replaceDlg() }] }]],
-    ['Объединить', [{ small: true, items: [{ label: 'Объединить запросы', icon: I.merge, run: () => mergeDlg() }, { label: 'Добавить запросы', icon: I.append, run: () => appendDlg() }] }]],
+    ['Объединить', [{ small: true, items: [{ label: 'Объединить запросы', icon: I.merge, run: () => mergeDlg() }, { label: 'Добавить запросы', icon: I.append, run: () => appendDlg() }, { label: 'Объединить файлы', icon: I.append, run: () => combineDlg() }] }]],
   ],
   tr: [
     ['Таблица', [{ big: 'Группировать по', icon: I.group, run: () => groupDlg() }, { big: 'Использовать первую строку в качестве заголовков', icon: I.hdr, run: () => add({ op: 'promote' }) }]],
@@ -135,9 +138,9 @@ function openMenu(anchor, items, x?, y?) {
 }
 const closeMenu = () => { $('#pq-menu').hidden = true; };
 document.addEventListener('mousedown', e => { if (!e.target.closest('#pq-menu') && !e.target.closest('[data-r]') && !e.target.closest('.pq-filter-dd')) closeMenu(); });
-function dialog(title, body, onOk, okLabel = 'ОК') {
+function dialog(title, body, onOk, okLabel = 'ОК', cancel = okLabel !== 'Готово') {
   const md = $('#pq-modal'); const d = md.querySelector('.pq-dlg');
-  d.innerHTML = `<div class="dh">${esc(title)}<button class="dx" aria-label="Закрыть">✕</button></div><div class="db">${body}</div><div class="df"><button class="pb" data-ok>${okLabel}</button>${okLabel === 'Готово' ? '' : '<button data-cancel>Отмена</button>'}</div>`;
+  d.innerHTML = `<div class="dh">${esc(title)}<button class="dx" aria-label="Закрыть">✕</button></div><div class="db">${body}</div><div class="df"><button class="pb" data-ok>${okLabel}</button>${cancel ? '<button data-cancel>Отмена</button>' : ''}</div>`;
   md.hidden = false;
   const close = () => { md.hidden = true; };
   d.querySelector('.dx').onclick = close; const cb = d.querySelector('[data-cancel]'); if (cb) cb.onclick = close;
@@ -210,8 +213,18 @@ function groupDlg() {
   d.querySelector('.adda').onclick = () => d.querySelector('#gaggs').insertAdjacentHTML('beforeend', aggRow(d.querySelectorAll('.grow2').length, 'Сумма', 'sum'));
 }
 function advanced() {
-  const code = fullM(steps, SRC.expr);
-  dialog(qname, `<p class="dnote">Расширенный редактор показывает код M, который Power Query записал по вашим шагам. В тренажёре он только для чтения.</p><pre class="pq-adv">${esc(code)}</pre>`, () => {}, 'Готово');
+  const code = fullM(steps, viewQ ? (SOURCES[task.queries[viewQ]]?.expr || 'Источник') : SRC.expr);
+  if (viewQ) return dialog(viewQ, `<p class="dnote">Готовый запрос, только для просмотра.</p><pre class="pq-adv">${esc(code)}</pre>`, () => {}, 'Готово', false);
+  dialog(qname, `<p class="dnote">Код M всего запроса. Его можно править: каждый шаг — функция Table.… от предыдущего шага. Шаг «Источник» менять не нужно.</p><div class="adv-wrap"><pre class="adv-ln" aria-hidden="true"></pre><textarea id="adv" class="pq-adv" spellcheck="false" autocomplete="off"></textarea></div><p class="dnote" id="advs"></p>`, d => {
+    try { const ns = parseQuery(d.querySelector('#adv').value, OTHERS); start(); steps = ns; cur = steps.length; persist(); recompute(); clearFb(); }
+    catch (e) { return lineOf(d.querySelector('#adv').value, e.pos) + e.message; }
+  }, 'Готово', true);
+  const d = $('#pq-modal .pq-dlg'); const ta = d.querySelector('#adv'); const ln = d.querySelector('.adv-ln');
+  ta.value = code;
+  const upd = () => { ln.textContent = ta.value.split('\n').map((_, k) => k + 1).join('\n'); ln.scrollTop = ta.scrollTop; const st = d.querySelector('#advs'); try { parseQuery(ta.value, OTHERS); st.className = 'dnote ok'; st.textContent = '✓ Синтаксических ошибок не обнаружено.'; } catch (e) { st.className = 'dnote bad'; st.textContent = '⚠ ' + lineOf(ta.value, e.pos) + e.message; } };
+  ta.oninput = upd; ta.onscroll = () => { ln.scrollTop = ta.scrollTop; }; upd();
+  ta.addEventListener('keydown', e => { if (e.key === 'Enter') e.stopPropagation(); if (e.key === 'Tab') { e.preventDefault(); const a2 = ta.selectionStart; ta.value = ta.value.slice(0, a2) + '    ' + ta.value.slice(ta.selectionEnd); ta.selectionStart = ta.selectionEnd = a2 + 4; upd(); } });
+  setTimeout(() => ta.focus(), 40);
 }
 
 function dedupe() { if (!needCols()) return; const t = curTable(); add({ op: 'dedupe', cols: selCols.length === t.cols.length ? [] : [...selCols] }); }
@@ -326,7 +339,7 @@ function pivotDlg() {
   });
 }
 /* ───── сетка ───── */
-function tIcon(t) { return `<span class="ti t-${t}">${{ any: 'ABC<br>123', text: 'ABC', number: '1.2', int: '1²3', date: '▦', table: '▤' }[t]}</span>`; }
+function tIcon(t) { return `<span class="ti t-${t}">${{ any: 'ABC<br>123', text: 'ABC', number: '1.2', int: '1²3', date: '▦', table: '▤', binary: '01<br>10' }[t]}</span>`; }
 function recompute() { res = run(base, steps, env); if (cur > steps.length) cur = steps.length; render(); }
 function render() {
   renderRibbon(); renderQueries();
@@ -334,6 +347,7 @@ function render() {
   renderSteps();
   const names = stepNames(steps);
   const errAt = res.error ? res.error.step + 1 : Infinity;
+  fxEdit = false; $('#pqfx-ok').disabled = true; $('#pqfx-x').disabled = true;
   $('#pq-formula').textContent = cur === 0 ? '= ' + SRC.expr : '= ' + mCode(steps[cur - 1], cur > 1 ? names[cur - 2] : 'Источник');
   const ep = $('#pq-errpane');
   if (cur >= errAt) {
@@ -359,11 +373,11 @@ function grid(t) {
   t.cols.forEach((c, i) => {
     const vals = t.rows.map(r => r[i]); const n = vals.length || 1;
     const er = vals.filter(isErr).length, em = vals.filter(v => v === null || v === '').length, ok = n - er - em;
-    h += `<th class="${selCols.includes(c.name) ? 'sel' : ''}" data-c="${esc(c.name)}"><div class="hc"><button class="tbtn" data-type="${esc(c.name)}" title="Тип: ${TYPE_NAME[c.type]}">${tIcon(c.type)}</button><span class="hn">${esc(c.name)}</span>${c.type === 'table' ? `<button class="fbtn pq-filter-dd xbtn" data-expand="${esc(c.name)}" title="Развернуть">⇔</button>` : `<button class="fbtn pq-filter-dd" data-filter="${esc(c.name)}" title="Фильтр">▾</button>`}</div><div class="q" title="Допустимые: ${Math.round(ok / n * 100)} %, ошибки: ${Math.round(er / n * 100)} %, пустые: ${Math.round(em / n * 100)} %"><i style="width:${ok / n * 100}%" class="qv"></i><i style="width:${er / n * 100}%" class="qe"></i><i style="width:${em / n * 100}%" class="qn"></i></div></th>`;
+    h += `<th class="${selCols.includes(c.name) ? 'sel' : ''}" data-c="${esc(c.name)}"><div class="hc"><button class="tbtn" data-type="${esc(c.name)}" title="Тип: ${TYPE_NAME[c.type]}">${tIcon(c.type)}</button><span class="hn">${esc(c.name)}</span>${c.type === 'binary' ? `<button class="fbtn pq-filter-dd xbtn" data-combine="1" title="Объединить файлы">⇓⇓</button>` : c.type === 'table' ? `<button class="fbtn pq-filter-dd xbtn" data-expand="${esc(c.name)}" title="Развернуть">⇔</button>` : `<button class="fbtn pq-filter-dd" data-filter="${esc(c.name)}" title="Фильтр">▾</button>`}</div><div class="q" title="Допустимые: ${Math.round(ok / n * 100)} %, ошибки: ${Math.round(er / n * 100)} %, пустые: ${Math.round(em / n * 100)} %"><i style="width:${ok / n * 100}%" class="qv"></i><i style="width:${er / n * 100}%" class="qe"></i><i style="width:${em / n * 100}%" class="qn"></i></div></th>`;
   });
   h += '</tr></thead><tbody>';
   shown.forEach((r, k) => {
-    h += `<tr><th class="rn">${k + 1}</th>` + r.map((v, i) => { const ty = t.cols[i].type; const cls = v === null ? 'nul' : isErr(v) ? 'err' : isTbl(v) ? 'tbl' : (ty === 'number' || ty === 'int' || ty === 'date') ? 'n' : ''; return `<td class="${cls}${selCols.includes(t.cols[i].name) ? ' sel' : ''}"${isErr(v) ? ` data-err="${esc(v.err)}"` : ''}>${esc(show(v, ty))}</td>`; }).join('') + '</tr>';
+    h += `<tr><th class="rn">${k + 1}</th>` + r.map((v, i) => { const ty = t.cols[i].type; const cls = v === null ? 'nul' : isErr(v) ? 'err' : isTbl(v) || isBin(v) ? 'tbl' : (ty === 'number' || ty === 'int' || ty === 'date') ? 'n' : ''; return `<td class="${cls}${selCols.includes(t.cols[i].name) ? ' sel' : ''}"${isErr(v) ? ` data-err="${esc(v.err)}"` : ''}>${esc(show(v, ty))}</td>`; }).join('') + '</tr>';
   });
   h += '</tbody></table>';
   if (!t.rows.length) h += '<p class="pq-empty">В таблице нет строк.</p>';
@@ -381,7 +395,7 @@ function renderSteps() {
   const names = stepNames(steps); const errAt = res.error ? res.error.step : -1;
   $('#pq-steps').innerHTML = [`<li data-s="0" class="${cur === 0 ? 'on' : ''}"><span>Источник</span></li>`, ...names.map((n, i) => `<li data-s="${i + 1}" class="${cur === i + 1 ? 'on' : ''}${i === errAt ? ' bad' : ''}">${i === errAt ? '<b class="w">⚠</b>' : ''}<span>${esc(n)}</span><button data-del="${i}" title="Удалить шаг" aria-label="Удалить шаг">✕</button></li>`)].join('');
 }
-$('#pq-qlist').addEventListener('click', e => { const q = e.target.closest('.pq-q'); if (!q) return; viewQ = q.dataset.q || null; if (!viewQ) $('#pq-name').value = qname; closeMenu(); render(); });
+$('#pq-qlist').addEventListener('click', e => { const q = e.target.closest('.pq-q'); if (!q) return; if (q.dataset.helper) return toast('Вспомогательные запросы Power Query создал сам при объединении файлов. Их менять не нужно.'); viewQ = q.dataset.q || null; if (!viewQ) $('#pq-name').value = qname; closeMenu(); render(); });
 $('#pq-steps').addEventListener('click', e => {
   if (viewQ) return;
   const del = e.target.closest('[data-del]');
@@ -391,6 +405,7 @@ $('#pq-steps').addEventListener('click', e => {
 $('#pq-grid').addEventListener('click', e => {
   if (viewQ) { if (e.target.closest('button')) toast(`Запрос «${viewQ}» уже готов. Вернитесь к запросу «${qname}» в панели слева.`); return; }
   const xb = e.target.closest('[data-expand]'); if (xb) { expandDlg(xb.dataset.expand); return; }
+  if (e.target.closest('[data-combine]')) { combineDlg(); return; }
   const tb = e.target.closest('[data-type]'); if (tb) { const rc = tb.getBoundingClientRect(); selCols = [tb.dataset.type]; updateSel(); openMenu(null, typeMenu(), rc.left, rc.bottom); return; }
   const fb = e.target.closest('[data-filter]'); if (fb) { filterMenu(fb.dataset.filter, fb); return; }
   const th = e.target.closest('thead th[data-c]');
@@ -416,7 +431,7 @@ function filterMenu(col, anchor) {
   const seen = new Map(); for (const r of t.rows) { const v = r[i]; if (isErr(v)) continue; const k = v === null ? '∅' : typeof v + ':' + v; if (!seen.has(k)) seen.set(k, v); }
   const vals = [...seen.values()].sort((a, b) => a === null ? -1 : b === null ? 1 : typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b), 'ru')).slice(0, 500);
   const m = $('#pq-menu'); const host = $('#pbi').getBoundingClientRect(); const r = anchor.getBoundingClientRect();
-  m.innerHTML = `<div class="pq-filter"><button class="fl" data-fa="asc">↑ Сортировка по возрастанию</button><button class="fl" data-fa="desc">↓ Сортировка по убыванию</button><hr><button class="fl" data-fa="rmempty">Удалить пустые</button><hr><input class="fs" placeholder="Поиск"><label class="fa"><input type="checkbox" checked data-all> (Выделить все)</label><div class="fv">${vals.map((v, k) => `<label><input type="checkbox" checked data-k="${k}"> ${v === null ? '<i>(null)</i>' : esc(show(v, ty))}</label>`).join('')}</div><div class="ff"><button class="pb" data-fa="ok">ОК</button><button data-fa="cancel">Отмена</button></div></div>`;
+  m.innerHTML = `<div class="pq-filter"><button class="fl" data-fa="asc">↑ Сортировка по возрастанию</button><button class="fl" data-fa="desc">↓ Сортировка по убыванию</button><hr><button class="fl" data-fa="rmempty">Удалить пустые</button><button class="fl" data-fa="cond">${ty === 'number' || ty === 'int' ? 'Числовые фильтры…' : ty === 'date' ? 'Фильтры дат…' : 'Текстовые фильтры…'}</button><hr><input class="fs" placeholder="Поиск"><label class="fa"><input type="checkbox" checked data-all> (Выделить все)</label><div class="fv">${vals.map((v, k) => `<label><input type="checkbox" checked data-k="${k}"> ${v === null ? '<i>(null)</i>' : esc(show(v, ty))}</label>`).join('')}</div><div class="ff"><button class="pb" data-fa="ok">ОК</button><button data-fa="cancel">Отмена</button></div></div>`;
   m.hidden = false; m.style.left = Math.min(r.left - host.left - 160, host.width - 280) + 'px'; m.style.top = (r.bottom - host.top + 2) + 'px';
   const boxes = () => [...m.querySelectorAll('[data-k]')];
   m.querySelector('[data-all]').onchange = e => boxes().forEach(b => { if (b.closest('label').style.display !== 'none') b.checked = e.target.checked; });
@@ -425,6 +440,7 @@ function filterMenu(col, anchor) {
     const a = e.target.closest('[data-fa]'); if (!a) return;
     if (a.dataset.fa === 'cancel') return closeMenu();
     if (a.dataset.fa === 'asc' || a.dataset.fa === 'desc') { closeMenu(); selCols = [col]; return sortOp(a.dataset.fa === 'desc'); }
+    if (a.dataset.fa === 'cond') { closeMenu(); return condFilterDlg(col, ty); }
     if (a.dataset.fa === 'rmempty') { closeMenu(); return add({ op: 'filter', col, exclude: [null, ''] }); }
     const keep = boxes().filter(b => b.checked).map(b => vals[+b.dataset.k]), drop = boxes().filter(b => !b.checked).map(b => vals[+b.dataset.k]);
     closeMenu();
@@ -436,6 +452,60 @@ function filterMenu(col, anchor) {
 $('#full').onclick = () => { const on = $('#pbi').classList.toggle('fs'); document.body.classList.toggle('pbi-lock', on); $('#full').textContent = on ? '⤡' : '⤢'; };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#pbi').classList.contains('fs') && $('#pq-modal').hidden && $('#pq-menu').hidden) $('#full').click(); if ((e.ctrlKey || e.metaKey) && e.key === 'z' && document.activeElement?.closest?.('#pbi') && steps.length && $('#pq-modal').hidden) { e.preventDefault(); steps.splice(cur - 1, 1); cur = Math.max(0, cur - 1); persist(); recompute(); } });
 
+function combineDlg() {
+  const t = curTable(); const ci = t.cols.findIndex(c => c.type === 'binary');
+  if (ci < 0) return toast('Объединять файлы можно, когда источник — папка и в таблице есть столбец Content с двоичными данными.');
+  const files = t.rows.filter(r => isBin(r[ci])).map(r => r[ci].bin);
+  if (!files.length) return toast('В таблице не осталось файлов.');
+  const prev = k => { const f = files[k]; if (!/\.(xlsx|xls|csv)$/i.test(f.name)) return `<p class="dnote bad">⚠ «${esc(f.name)}» — не книга Excel. Такой файл сломает объединение: отфильтруйте его по столбцу Extension.</p>`; const pt = applyStep(f.table, { op: 'promote' }); return `<div class="cprev"><table><thead><tr>${pt.cols.map(c => `<th>${esc(c.name)}</th>`).join('')}</tr></thead><tbody>${pt.rows.slice(0, 5).map(r => `<tr>${r.map(v => `<td>${esc(show(v, 'any'))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; };
+  dialog('Объединение файлов', `<p>Выберите пример файла: по нему Power Query определит структуру и применит те же шаги ко всем файлам папки.</p><label class="dlab">Пример файла<select id="cfx">${files.map((f, k) => `<option value="${k}">${k ? esc(f.name) : 'Первый файл (' + esc(f.name) + ')'}</option>`).join('')}</select></label><div id="cfp">${prev(0)}</div>`, () => { add({ op: 'combineFiles' }); selCols = []; render(); });
+  const d = $('#pq-modal .pq-dlg'); d.querySelector('#cfx').onchange = e => { d.querySelector('#cfp').innerHTML = prev(+e.target.value); };
+}
+function condFilterDlg(col, ty) {
+  const num = ty === 'number' || ty === 'int', dt = ty === 'date';
+  const ops = num ? [['=', 'равно'], ['<>', 'не равно'], ['>', 'больше'], ['>=', 'больше или равно'], ['<', 'меньше'], ['<=', 'меньше или равно']]
+    : dt ? [['=', 'равно'], ['<', 'до'], ['>', 'после'], ['>=', 'не ранее'], ['<=', 'не позднее']]
+    : [['=', 'равно'], ['<>', 'не равно'], ['begins', 'начинается с'], ['notbegins', 'не начинается с'], ['ends', 'заканчивается на'], ['contains', 'содержит'], ['notcontains', 'не содержит']];
+  const row = k => `<div class="frow"><select class="fo">${k ? '<option value="">—</option>' : ''}${ops.map(([o, l]) => `<option value="${o}">${l}</option>`).join('')}</select><input class="fvv" placeholder="${dt ? 'дд.мм.гггг' : num ? 'число' : 'значение'}" autocomplete="off"></div>`;
+  dialog('Фильтрация строк', `<p>Оставьте строки, где «${esc(col)}»:</p>${row(0)}<div class="fandor"><label><input type="radio" name="fj" value="and" checked> И</label><label><input type="radio" name="fj" value="or"> Или</label></div>${row(1)}`, d => {
+    const f = `[${col}]`;
+    const conds = [...d.querySelectorAll('.frow')].map(r => ({ o: r.querySelector('.fo').value, v: r.querySelector('.fvv').value.trim() })).filter(c => c.o);
+    const parts = [];
+    for (const c of conds) {
+      if (c.v === '') return 'Укажите значение для каждого условия.';
+      let lit;
+      if (num) { const x = Number(c.v.replace(/\s/g, '').replace(',', '.')); if (!isFinite(x)) return `«${c.v}» — не число.`; lit = String(x); }
+      else if (dt) { const m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(c.v); if (!m) return 'Дату пишите так: 01.07.2026.'; lit = `#date(${+m[3]}, ${+m[2]}, ${+m[1]})`; }
+      else lit = '"' + c.v.replace(/"/g, '""') + '"';
+      parts.push(c.o === 'begins' ? `Text.StartsWith(${f}, ${lit})` : c.o === 'notbegins' ? `not Text.StartsWith(${f}, ${lit})` : c.o === 'ends' ? `Text.EndsWith(${f}, ${lit})` : c.o === 'contains' ? `Text.Contains(${f}, ${lit})` : c.o === 'notcontains' ? `not Text.Contains(${f}, ${lit})` : `${f} ${c.o} ${lit}`);
+    }
+    const j = d.querySelector('[name=fj]:checked').value;
+    add({ op: 'selectRows', expr: parts.length > 1 ? parts.join(` ${j} `) : parts[0] });
+  });
+}
+/* ───── строка формул ───── */
+let fxEdit = false;
+function fxOpen() {
+  if (viewQ) return toast(`Запрос «${viewQ}» уже готов, его формулы не меняются.`);
+  if (cur === 0) return toast('Шаг «Источник» подключает файл, в тренажёре его менять не нужно.');
+  if (fxEdit) return;
+  fxEdit = true; const box = $('#pq-formula'); const txt = box.textContent;
+  box.innerHTML = '<input id="pqfin" spellcheck="false" autocomplete="off">'; const inp = $('#pqfin'); inp.value = txt; inp.focus();
+  $('#pqfx-ok').disabled = false; $('#pqfx-x').disabled = false;
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); fxApply(); } if (e.key === 'Escape') { e.preventDefault(); fxClose(); } });
+}
+function fxClose() { fxEdit = false; $('#pqfx-ok').disabled = true; $('#pqfx-x').disabled = true; render(); }
+function fxApply() {
+  const inp = $('#pqfin'); if (!inp) return;
+  const names = stepNames(steps); const prev = cur > 1 ? names[cur - 2] : 'Источник';
+  try {
+    const st = parseStepExpr(inp.value, prev, OTHERS);
+    if (steps[cur - 1].step) st.step = steps[cur - 1].step;
+    start(); steps[cur - 1] = st; persist(); res = run(base, steps, env); clearFb(); fxClose();
+  } catch (e) { inp.classList.add('bad'); toast((e.message || String(e)).slice(0, 220)); }
+}
+$('#pq-formula').addEventListener('click', fxOpen);
+$('#pqfx-ok').onclick = fxApply; $('#pqfx-x').onclick = fxClose;
 /* ───── проверка ───── */
 const clearFb = () => { const fb = $('#fb'); if (fb.classList.contains('bad')) { fb.className = 'fb'; fb.innerHTML = ''; } };
 const bad = msg => { const fb = $('#fb'); fb.className = 'fb bad'; fb.innerHTML = msg; fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };

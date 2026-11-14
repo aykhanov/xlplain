@@ -1,8 +1,8 @@
 // @ts-nocheck
 /* Движок шагов Power Query для тренажёра: применяет шаги к таблице, пишет код M, сравнивает результат. */
-export type PType = 'any' | 'text' | 'number' | 'int' | 'date' | 'table';
-import { parseM, evalM, isDate as mIsDate, MError } from './m';
-export type Cell = string | number | null | { err: string } | { table: PTable };
+export type PType = 'any' | 'text' | 'number' | 'int' | 'date' | 'table' | 'binary';
+import { parseM, evalM, isDate as mIsDate, MError, callFn } from './m';
+export type Cell = string | number | null | { err: string } | { table: PTable } | { bin: { name: string; table: PTable } };
 export interface PCol { name: string; type: PType }
 export interface PTable { cols: PCol[]; rows: Cell[][] }
 export interface Step { op: string; [k: string]: any }
@@ -10,9 +10,10 @@ export class StepError extends Error {}
 const se = (m: string): never => { throw new StepError(m); };
 export const isErr = (c: Cell): c is { err: string } => !!c && typeof c === 'object' && 'err' in c;
 export const isTbl = (c: Cell): c is { table: PTable } => !!c && typeof c === 'object' && 'table' in c;
+export const isBin = (c: Cell): c is { bin: { name: string; table: PTable } } => !!c && typeof c === 'object' && 'bin' in c;
 export interface Env { queries: Record<string, PTable> }
-export const TYPE_NAME: Record<PType, string> = { any: 'Любой', text: 'Текст', number: 'Десятичное число', int: 'Целое число', date: 'Дата', table: 'Таблица' };
-const M_TYPE: Record<PType, string> = { any: 'type any', text: 'type text', number: 'type number', int: 'Int64.Type', date: 'type date', table: 'type table' };
+export const TYPE_NAME: Record<PType, string> = { any: 'Любой', text: 'Текст', number: 'Десятичное число', int: 'Целое число', date: 'Дата', table: 'Таблица', binary: 'Двоичные данные' };
+const M_TYPE: Record<PType, string> = { any: 'type any', text: 'type text', number: 'type number', int: 'Int64.Type', date: 'type date', table: 'type table', binary: 'type binary' };
 
 const ser = (y: number, m: number, d: number) => Math.round(Date.UTC(y, m - 1, d) / 864e5) + 25569;
 export const dstr = (s: number) => { const d = new Date((s - 25569) * 864e5); return String(d.getUTCDate()).padStart(2, '0') + '.' + String(d.getUTCMonth() + 1).padStart(2, '0') + '.' + d.getUTCFullYear(); };
@@ -20,6 +21,7 @@ export function show(c: Cell, type: PType): string {
   if (c === null) return 'null';
   if (isErr(c)) return 'Error';
   if (isTbl(c)) return 'Table';
+  if (isBin(c)) return 'Binary';
   if (typeof c === 'number') return type === 'date' ? dstr(c) : String(c).replace('.', ',');
   return c;
 }
@@ -49,7 +51,7 @@ function conv(v: Cell, type: PType): Cell {
   }
   return v;
 }
-const key = (c: Cell) => c === null ? '∅' : isErr(c) ? '⚠' : isTbl(c) ? 'T' + c.table.rows.length : typeof c === 'number' ? 'n' + c : 's' + c;
+const key = (c: Cell) => c === null ? '∅' : isErr(c) ? '⚠' : isTbl(c) ? 'T' + c.table.rows.length : isBin(c) ? 'B' + c.bin.name : typeof c === 'number' ? 'n' + c : 's' + c;
 const blank = (c: Cell) => c === null || c === '';
 const proper = (s: string) => s.toLowerCase().replace(/(^|[^A-Za-zА-Яа-яЁё0-9])([A-Za-zА-Яа-яЁё])/g, (_, a, b) => a + b.toUpperCase());
 
@@ -78,6 +80,7 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
     }
     case 'replace': {
       const ix = s.cols.map(n => colIx(t, n));
+      if (s.mode === 'value') { const eqv = (v: Cell) => v === s.find || (typeof v === 'number' && typeof s.find === 'number' && v === s.find); return { cols, rows: rows.map(r => { const x = [...r]; for (const i of ix) if (eqv(x[i])) x[i] = s.repl; return x; }) }; }
       const fnum = Number(String(s.find).replace(',', '.'));
       return { cols, rows: rows.map(r => { const x = [...r]; for (const i of ix) { const v = x[i]; if (typeof v === 'string') x[i] = s.find === '' ? v : v.split(s.find).join(s.repl); else if (typeof v === 'number' && v === fnum) { const rn = Number(String(s.repl).replace(',', '.')); x[i] = isFinite(rn) && s.repl !== '' ? rn : s.repl; } else if (v === null && s.find === 'null') x[i] = s.repl; } return x; }) };
     }
@@ -89,6 +92,7 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
     case 'removeCols': { const ix = new Set(s.cols.map(n => colIx(t, n))); return { cols: cols.filter((_, i) => !ix.has(i)), rows: rows.map(r => r.filter((_, i) => !ix.has(i))) }; }
     case 'keepCols': { const ix = s.cols.map(n => colIx(t, n)); return { cols: ix.map(i => cols[i]), rows: rows.map(r => ix.map(i => r[i])) }; }
     case 'rename': {
+      if (s.pairs) { let x = t; for (const [a, b] of s.pairs) x = applyStep(x, { op: 'rename', col: a, to: b }, env); return x; }
       const i = colIx(t, s.col);
       if (s.to !== s.col && cols.some(c => c.name === s.to)) se(`Expression.Error: Столбец «${s.to}» уже существует в таблице.`);
       return { cols: cols.map((c, k) => k === i ? { ...c, name: s.to } : c), rows };
@@ -97,8 +101,8 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
       const i = colIx(t, s.col);
       const parts = rows.map(r => r[i] === null ? [null] : typeof r[i] === 'string' ? (r[i] as string).split(s.delim) : [r[i]]);
       const k = Math.max(1, ...parts.map(p => p.length));
-      const nc = Array.from({ length: k }, (_, j) => ({ name: s.col + '.' + (j + 1), type: 'text' as PType }));
-      return { cols: [...cols.slice(0, i), ...nc, ...cols.slice(i + 1)], rows: rows.map((r, n) => [...r.slice(0, i), ...Array.from({ length: k }, (_, j) => parts[n][j] ?? null), ...r.slice(i + 1)]) };
+      const nc = Array.from({ length: s.names ? s.names.length : k }, (_, j) => ({ name: s.names ? s.names[j] : s.col + '.' + (j + 1), type: 'text' as PType }));
+      return { cols: [...cols.slice(0, i), ...nc, ...cols.slice(i + 1)], rows: rows.map((r, n) => [...r.slice(0, i), ...Array.from({ length: nc.length }, (_, j) => j === nc.length - 1 && s.names && parts[n].length > nc.length ? parts[n].slice(j).join(s.delim) : parts[n][j] ?? null), ...r.slice(i + 1)]) };
     }
     case 'fillDown': {
       const ix = s.cols.map(n => colIx(t, n)); const last = ix.map(() => null as Cell);
@@ -111,7 +115,7 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
       const types = new Set(piv.map(i => cols[i].type));
       const out: Cell[][] = [];
       for (const r of rows) for (const i of piv) if (r[i] !== null) out.push([...keep.map(k => r[k]), cols[i].name, r[i]]);
-      return { cols: [...keep.map(k => cols[k]), { name: 'Атрибут', type: 'text' }, { name: 'Значение', type: types.size === 1 ? [...types][0] : 'any' }], rows: out };
+      return { cols: [...keep.map(k => cols[k]), { name: s.attr || 'Атрибут', type: 'text' }, { name: s.value || 'Значение', type: types.size === 1 ? [...types][0] : 'any' }], rows: out };
     }
     case 'group': {
       const by = s.by.map(n => colIx(t, n));
@@ -135,6 +139,37 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
       return { cols: [...by.map(i => cols[i]), ...aggs.map(a => ({ name: a.name, type: (a.op === 'count' ? 'int' : a.op === 'avg' ? 'number' : cols[a.i].type) as PType }))], rows: out };
     }
 
+
+    case 'selectRows': {
+      let ast; try { ast = parseM(s.expr); } catch (e) { se('Expression.SyntaxError: ' + e.message); }
+      return { cols, rows: rows.filter((r, k) => {
+        let v; try { v = evalM(ast, rowGetter(cols, r)); } catch (e) { se(`${/^(Expression|DataFormat)\./.test(e.message) ? '' : 'Expression.Error: '}${e.message} (строка ${k + 1})`); }
+        if (v !== null && typeof v !== 'boolean') se(`Expression.Error: Условие фильтра должно давать true или false, а дало ${show(v as any, 'any')}.`);
+        return v === true;
+      }) };
+    }
+    case 'transform': {
+      const parts = s.cols.map(c => ({ i: colIx(t, c.col), c, ast: /^\s*each\b/.test(c.fn) ? (() => { try { return parseM(c.fn); } catch (e) { se('Expression.SyntaxError: ' + e.message); } })() : null }));
+      const nc = cols.map(c => ({ ...c })); for (const p of parts) if (p.c.type) nc[p.i].type = p.c.type;
+      return { cols: nc, rows: rows.map(r => { const x = [...r]; for (const p of parts) {
+        const v0 = x[p.i]; if (isErr(v0)) continue;
+        const arg = cols[p.i].type === 'date' && typeof v0 === 'number' ? { date: v0 } : v0;
+        try { const v = p.ast ? evalM(p.ast, () => { throw new MError('Expression.Error: Внутри TransformColumns к значению обращаются через _, а не по имени столбца.'); }, arg as any) : callFn(p.c.fn, [arg as any]); x[p.i] = mIsDate(v) ? v.date : typeof v === 'boolean' ? (v ? 'TRUE' : 'FALSE') : v as Cell; if (p.c.type && p.c.type !== 'any' && p.c.type !== 'date') x[p.i] = conv(x[p.i], p.c.type); }
+        catch (e) { x[p.i] = { err: /^(Expression|DataFormat)\./.test(e.message) ? e.message : 'Expression.Error: ' + e.message }; }
+      } return x; }) };
+    }
+    case 'combineFiles': {
+      const ci = cols.findIndex(c => c.type === 'binary'); if (ci < 0) se('Expression.Error: В таблице нет столбца с двоичными данными (Content).');
+      const ni = cols.findIndex(c => c.name === 'Name');
+      const parts: PTable[] = [];
+      for (const r of rows) { const b = r[ci]; if (!isBin(b)) continue; const ext = (b.bin.name.match(/\.\w+$/) || [''])[0].toLowerCase(); if (!['.xlsx', '.xls', '.csv'].includes(ext)) se(`DataFormat.Error: Файл «${b.bin.name}» не является книгой Excel. Отфильтруйте лишние файлы до объединения.`); parts.push(applyStep(b.bin.table, { op: 'promote' })); }
+      if (!parts.length) se('Expression.Error: Нет файлов для объединения.');
+      const names: string[] = []; for (const pt of parts) for (const c of pt.cols) if (!names.includes(c.name)) names.push(c.name);
+      const want = s.cols && s.cols.length ? s.cols : names;
+      const out: Cell[][] = []; let k = 0;
+      for (const r of rows) { if (!isBin(r[ci])) continue; const pt = parts[k++]; for (const x of pt.rows) out.push([ni >= 0 ? r[ni] : (r[ci] as any).bin.name, ...want.map(n => { const j = pt.cols.findIndex(c => c.name === n); return j < 0 ? null : x[j]; })]); }
+      return { cols: [{ name: 'Source.Name', type: 'text' }, ...want.map(n => ({ name: n, type: 'any' as PType }))], rows: out };
+    }
     case 'keepTop': return { cols, rows: rows.slice(0, s.n) };
     case 'removeErrors': { const ix = (s.cols && s.cols.length ? s.cols : cols.map(c => c.name)).map(n => colIx(t, n)); return { cols, rows: rows.filter(r => !ix.some(i => isErr(r[i]))) }; }
     case 'fillUp': {
@@ -249,6 +284,9 @@ export function applyStep(t: PTable, s: Step, env: Env = { queries: {} }): PTabl
   return se('Неизвестная операция ' + s.op);
 }
 
+function rowGetter(cols: PCol[], r: Cell[]) {
+  return (n: string) => { const i = cols.findIndex(c => c.name === n); if (i < 0) throw new MError(`Expression.Error: Поле «${n}» записи не найдено.`); const v = r[i]; if (isErr(v)) throw new MError(v.err); if (isTbl(v) || isBin(v)) return null; return cols[i].type === 'date' && typeof v === 'number' ? { date: v } : v; };
+}
 const OPM = { eq: '=', ne: '<>', gt: '>', ge: '>=', lt: '<', le: '<=' };
 const lit2 = (v: any) => v === null || v === undefined || v === '' ? 'null' : typeof v === 'number' ? String(v) : /^-?\d+(\.\d+)?$/.test(String(v).replace(',', '.')) && String(v).trim() !== '' ? String(v).replace(',', '.') : '"' + String(v).replace(/"/g, '""') + '"';
 export function condM(s: Step): string {
@@ -280,11 +318,11 @@ const BASE_NAME: Record<string, string> = {
   removeTop: 'Удаленные верхние строки', removeBottom: 'Удаленные нижние строки', removeBlank: 'Удаленные пустые строки', promote: 'Повышенные заголовки', demote: 'Пониженные заголовки',
   type: 'Измененный тип', filter: 'Строки с примененным фильтром', replace: 'Замененное значение', trim: 'Обрезанный текст', clean: 'Очищенный текст', upper: 'Текст в верхнем регистре',
   lower: 'Текст в нижнем регистре', proper: 'Каждое слово с прописной буквы', removeCols: 'Удаленные столбцы', keepCols: 'Другие удаленные столбцы', rename: 'Переименованные столбцы',
-  split: 'Разделить столбец по разделителю', fillDown: 'Заполнено вниз', unpivotOther: 'Столбец со снятым свертыванием', unpivot: 'Столбец со снятым свертыванием', group: 'Сгруппированные строки', keepTop: 'Сохраненные первые строки', removeErrors: 'Удаленные ошибки', fillUp: 'Заполнено вверх', dedupe: 'Удаленные дубликаты', sort: 'Отсортированные строки', index: 'Добавлен индекс', addCol: 'Добавлен пользовательский объект', condCol: 'Добавлен условный столбец', extract: 'Извлеченный текст', dateOp: 'Извлеченная дата', pivot: 'Столбец сведения', merge: 'Объединенные запросы', expand: 'Развернутый элемент', aggregate: 'Статистическое выражение', append: 'Добавленный запрос',
+  split: 'Разделить столбец по разделителю', fillDown: 'Заполнено вниз', unpivotOther: 'Столбец со снятым свертыванием', unpivot: 'Столбец со снятым свертыванием', group: 'Сгруппированные строки', keepTop: 'Сохраненные первые строки', removeErrors: 'Удаленные ошибки', fillUp: 'Заполнено вверх', dedupe: 'Удаленные дубликаты', sort: 'Отсортированные строки', index: 'Добавлен индекс', addCol: 'Добавлен пользовательский объект', condCol: 'Добавлен условный столбец', extract: 'Извлеченный текст', dateOp: 'Извлеченная дата', pivot: 'Столбец сведения', merge: 'Объединенные запросы', expand: 'Развернутый элемент', aggregate: 'Статистическое выражение', append: 'Добавленный запрос', selectRows: 'Строки с примененным фильтром', transform: 'Преобразованный столбец', combineFiles: 'Объединенные файлы',
 };
 export function stepNames(steps: Step[]): string[] {
   const used = new Map<string, number>([['Источник', 1]]);
-  return steps.map(s => { const b = s.op === 'expand' ? 'Развернутый элемент ' + s.col : s.op === 'extract' && s.add ? 'Вставлен ' + DEFAULT_NEW[s.mode].toLowerCase() : s.op === 'dateOp' ? (s.add ? 'Вставлен ' : 'Извлечен ') + DEFAULT_NEW[s.mode].toLowerCase() : (BASE_NAME[s.op] || s.op); const k = used.get(b) || 0; used.set(b, k + 1); return k ? b + k : b; });
+  return steps.map(s => { const b = s.step ? s.step : s.op === 'expand' ? 'Развернутый элемент ' + s.col : s.op === 'extract' && s.add ? 'Вставлен ' + DEFAULT_NEW[s.mode].toLowerCase() : s.op === 'dateOp' ? (s.add ? 'Вставлен ' : 'Извлечен ') + DEFAULT_NEW[s.mode].toLowerCase() : (BASE_NAME[s.op] || s.op); const k = used.get(b) || 0; used.set(b, k + 1); return k ? b + k : b; });
 }
 const q = (n: string) => /^[A-Za-zА-Яа-яЁё_][\wА-Яа-яЁё]*$/.test(n) && !n.includes(' ') ? n : '#"' + n.replace(/"/g, '""') + '"';
 const lit = (v: Cell) => v === null ? 'null' : typeof v === 'number' ? String(v) : '"' + String(v).replace(/"/g, '""') + '"';
@@ -299,16 +337,20 @@ export function mCode(s: Step, prev: string): string {
     case 'demote': return `Table.DemoteHeaders(${p})`;
     case 'type': return `Table.TransformColumnTypes(${p},{${Object.entries(s.cols).map(([n, t]) => `{"${n}", ${M_TYPE[t as PType]}}`).join(', ')}})`;
     case 'filter': { const f = `[${s.col}]`; return `Table.SelectRows(${p}, each ${s.exclude ? '(' + s.exclude.map(v => `${f} <> ${lit(v)}`).join(' and ') + ')' : '(' + s.keep.map(v => `${f} = ${lit(v)}`).join(' or ') + ')'})`; }
-    case 'replace': return `Table.ReplaceValue(${p},${lit(s.find)},${lit(s.repl)},Replacer.ReplaceText,${list(s.cols)})`;
+    case 'replace': return `Table.ReplaceValue(${p},${s.mode !== 'value' && s.find === 'null' ? 'null' : lit(s.find)},${lit(s.repl)},Replacer.Replace${s.mode === 'value' ? 'Value' : 'Text'},${list(s.cols)})`;
     case 'trim': case 'clean': case 'upper': case 'lower': case 'proper': { const fn = { trim: 'Text.Trim', clean: 'Text.Clean', upper: 'Text.Upper', lower: 'Text.Lower', proper: 'Text.Proper' }[s.op]; return `Table.TransformColumns(${p},{${s.cols.map(c => `{"${c}", ${fn}, type text}`).join(', ')}})`; }
     case 'removeCols': return `Table.RemoveColumns(${p},${list(s.cols)})`;
     case 'keepCols': return `Table.SelectColumns(${p},${list(s.cols)})`;
-    case 'rename': return `Table.RenameColumns(${p},{{"${s.col}", "${s.to}"}})`;
-    case 'split': return `Table.SplitColumn(${p}, "${s.col}", Splitter.SplitTextByDelimiter("${s.delim}", QuoteStyle.Csv))`;
+    case 'rename': return `Table.RenameColumns(${p},{${(s.pairs || [[s.col, s.to]]).map(([a, b]) => `{"${a}", "${b}"}`).join(', ')}})`;
+    case 'split': return `Table.SplitColumn(${p}, "${s.col}", Splitter.SplitTextByDelimiter("${s.delim}", QuoteStyle.Csv)${s.names ? ', ' + list(s.names) : ''})`;
     case 'fillDown': return `Table.FillDown(${p},${list(s.cols)})`;
-    case 'unpivotOther': return `Table.UnpivotOtherColumns(${p}, ${list(s.cols)}, "Атрибут", "Значение")`;
-    case 'unpivot': return `Table.Unpivot(${p}, ${list(s.cols)}, "Атрибут", "Значение")`;
+    case 'unpivotOther': return `Table.UnpivotOtherColumns(${p}, ${list(s.cols)}, "${s.attr || 'Атрибут'}", "${s.value || 'Значение'}")`;
+    case 'unpivot': return `Table.Unpivot(${p}, ${list(s.cols)}, "${s.attr || 'Атрибут'}", "${s.value || 'Значение'}")`;
 
+
+    case 'selectRows': return `Table.SelectRows(${p}, each ${s.expr.replace(/^\s*each\s+/, '')})`;
+    case 'transform': return `Table.TransformColumns(${p},{${s.cols.map(c => `{"${c.col}", ${c.fn}${c.type ? ', ' + M_TYPE[c.type] : ''}}`).join(', ')}})`;
+    case 'combineFiles': return `Table.ExpandTableColumn(Table.RenameColumns(Table.SelectColumns(Table.AddColumn(${p}, "Преобразовать файл", each #"Преобразовать файл"([Content])), {"Name", "Преобразовать файл"}), {{"Name", "Source.Name"}}), "Преобразовать файл", ${list(s.cols || [])})`;
     case 'keepTop': return `Table.FirstN(${p},${s.n})`;
     case 'removeErrors': return `Table.RemoveRowsWithErrors(${p}${s.cols && s.cols.length ? ', ' + list(s.cols) : ''})`;
     case 'fillUp': return `Table.FillUp(${p},${list(s.cols)})`;

@@ -130,7 +130,9 @@ const FN: Record<string, Function> = {
   'Date.AddMonths': nn((v, n) => { const [y, m, d] = ymd(dte(v, 'Date.AddMonths')); const k = m - 1 + num(n, 'Date.AddMonths'); const ny = y + Math.floor(k / 12), nm = ((k % 12) + 12) % 12 + 1; return { date: ser(ny, nm, Math.min(d, dim(ny, nm))) }; }),
   'Date.From': v => { if (v === null) return null; if (isDate(v)) return v; if (typeof v === 'number') return { date: Math.floor(v) }; const m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(String(v).trim()) || null; if (m) return { date: ser(+m[3], +m[2], +m[1]) }; const m2 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v).trim()); if (m2) return { date: ser(+m2[1], +m2[2], +m2[3]) }; return fail(`DataFormat.Error: Не удалось выполнить синтаксический анализ значения как Date. Подробности: ${v}`); },
 };
+FN['List.Contains'] = (l, v) => (Array.isArray(l) ? l : fail('Expression.Error: List.Contains ожидает список: List.Contains({"А", "Б"}, [Столбец]).')).some(x => eq(x, v));
 FN['#date'] = (y, m, d) => ({ date: ser(num(y, '#date'), num(m, '#date'), num(d, '#date')) });
+export function callFn(name: string, args: MVal[]): MVal { const f = FN[name]; if (!f) fail(`Функция «${name}» не найдена или пока не поддерживается в тренажёре.`); return f(...args); }
 export const M_FUNCTIONS = Object.keys(FN).filter(f => f !== '#date').sort();
 
 function eq(a, b) {

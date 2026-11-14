@@ -14,7 +14,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
   { '@type': 'ListItem', position: 2, name: 'Power Query', item: 'https://xlplain.ru/trenazher/pq/' },
   { '@type': 'ListItem', position: 3, name: task.title }] },
   { '@context': 'https://schema.org', '@type': 'LearningResource', name: task.seo_title, learningResourceType: 'Задача с проверкой', educationalLevel: tr.name, inLanguage: 'ru', isAccessibleForFree: true, provider: { '@type': 'Organization', name: 'XLPlain', url: 'https://xlplain.ru/' } }];
-const clientTask = { id: task.id, module: 'pq', check: 'pq', xp: tr.xp, answer: task.answer, source: task.source, queries: task.queries, query_name: task.query_name, explanation: task.explanation, tip: task.tip, hint: task.hint };
+const clientTask = { id: task.id, module: 'pq', check: 'pq', xp: tr.xp, answer: task.answer, starter: task.starter, source: task.source, queries: task.queries, query_name: task.query_name, explanation: task.explanation, tip: task.tip, hint: task.hint };
 ---
 <Base title={task.seo_title + ' | XLPlain'} description={desc} path={`pq/${task.slug}/`} mod="pq" jsonld={ld}>
 <div class="wrap wide">

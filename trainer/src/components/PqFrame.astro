@@ -11,9 +11,9 @@
   <div class="pbi-tabs" id="pq-tabs" role="tablist"><span>Файл</span><span class="on" data-tab="home">Главная</span><span data-tab="tr">Преобразование</span><span data-tab="add">Добавить столбец</span><span data-tab="view">Просмотр</span><div class="pq-tbtns"><button class="tb go" id="pqcheck">✓ Проверить решение</button><button class="tb" id="pqhint">Подсказка</button><button class="tb" id="pqsol">Показать решение</button></div></div>
   <div class="pbi-ribbon" id="pq-ribbon"></div>
   <div class="pbi-fx pq-fx">
-    <button class="fxb x" disabled>✕</button><button class="fxb ok" disabled>✓</button>
+    <button class="fxb x" id="pqfx-x" disabled title="Отменить">✕</button><button class="fxb ok" id="pqfx-ok" disabled title="Применить (Enter)">✓</button>
     <span class="fxl">fx</span>
-    <div class="pq-formula" id="pq-formula"></div>
+    <div class="pq-formula" id="pq-formula" title="Щёлкните, чтобы изменить формулу шага"></div>
   </div>
   <div class="pq-body">
     <div class="pq-queries"><div class="pq-ph" id="pq-qhead">Запросы [1]</div><div id="pq-qlist"></div></div>

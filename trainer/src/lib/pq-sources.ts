@@ -141,6 +141,17 @@ Object.assign(SOURCES, {
     return typed([['Менеджер', 'text'], ['Месяц', 'text'], ['Сумма', 'number']], os.map(o => [emp.get(o.employee_id).name, M[+o.order_date.slice(5, 7) - 1], sums.get(o.id)]));
   } },
 });
+const MONTH_FILES = { 6: 'июнь', 7: 'июль', 8: 'август', 9: 'сентябрь', 10: 'октябрь' };
+Object.assign(SOURCES, {
+  // Папка с ежемесячными выгрузками и лишним текстовым файлом
+  folder: { file: 'Продажи', expr: 'Folder.Files("C:\\Отчеты\\Продажи")', make(v: number): PTable {
+    const months = v === 1 ? [6, 7, 8] : [6, 7, 8, 9];
+    const rows: any[][] = months.map(m => { const t = monthSales(v, m); const name = `Продажи_${MONTH_FILES[m]}.xlsx`; return [{ bin: { name, table: raw([t.cols.map(c => c.name), ...t.rows.map(r => [ddmm(isoOf(r[0])), r[1], r[2], r[3]])]) } }, name, '.xlsx', ser(`2026-${String(m + 1).padStart(2, '0')}-02`), 'C:\\Отчеты\\Продажи\\']; });
+    rows.splice(1, 0, [{ bin: { name: 'Прочитай меня.txt', table: raw([['Выгрузки кладём сюда первого числа']]) } }, 'Прочитай меня.txt', '.txt', ser('2026-06-01'), 'C:\\Отчеты\\Продажи\\']);
+    return typed([['Content', 'binary'], ['Name', 'text'], ['Extension', 'text'], ['Date modified', 'date'], ['Folder Path', 'text']], rows);
+  } },
+});
+const isoOf = (s: number) => new Date((s - 25569) * 864e5).toISOString().slice(0, 10);
 function monthSales(v: number, m: number): PTable {
   const { db, cl, sums } = base(v);
   const os = db.orders.filter(o => o.status !== 'Отменён' && +o.order_date.slice(5, 7) === m).slice(0, v === 1 ? 15 : 22);

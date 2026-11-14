@@ -3,7 +3,6 @@ slug: okonnye-funkcii-rank-v-kategorii
 module: sql
 track: 5
 order: 16
-premium: true
 fn: ROW_NUMBER
 title: Самый дорогой товар в каждой категории
 seo_title: "ROW_NUMBER в SQL: лучший в каждой группе — задача с решением"

@@ -3,7 +3,6 @@ slug: okonnye-funkcii-narastayushchiy-itog
 module: sql
 track: 5
 order: 15
-premium: true
 fn: SUM OVER
 title: Нарастающий итог оплат
 seo_title: "SUM OVER в SQL: нарастающий итог — задача с решением"

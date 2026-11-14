@@ -118,7 +118,7 @@ Object.assign(SOURCES, {
     const os = db.orders.filter(o => o.status !== 'Отменён').slice(0, v === 1 ? 60 : 90);
     return typed([['Номер заказа', 'int'], ['Дата', 'date'], ['Клиент', 'text'], ['Город', 'text'], ['Менеджер', 'text'], ['Сумма', 'number']], os.map(o => [o.id, ser(o.order_date), cl.get(o.client_id).name, cl.get(o.client_id).city, emp.get(o.employee_id).name, sums.get(o.id)]));
   } },
-  ordersCodes: { file: 'Заказы.xlsx', expr: xl('Заказы.xlsx', 'Заказы'), make(v: number): PTable {
+  ordersCodes: { file: 'Заказы_с_кодами.xlsx', expr: xl('Заказы_с_кодами.xlsx', 'Заказы'), make(v: number): PTable {
     const { db, sums } = base(v); const os = db.orders.filter(o => o.status !== 'Отменён').slice(0, v === 1 ? 40 : 55);
     return typed([['Номер заказа', 'int'], ['Дата', 'date'], ['Код клиента', 'int'], ['Сумма', 'number']], os.map(o => [o.id, ser(o.order_date), o.client_id, sums.get(o.id)]));
   } },

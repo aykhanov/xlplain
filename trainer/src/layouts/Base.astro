@@ -2,7 +2,7 @@
 import '../styles/trainer.css';
 import { url, PROD_BASE, MODULES, totalXp } from '../lib/data';
 interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi' | 'pq'; jsonld?: any[]; og?: string }
-const { title, description, path, mod, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261113.jpg' } = Astro.props;
+const { title, description, path, mod, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261114.jpg' } = Astro.props;
 const beta = __BETA__;
 const canonical = PROD_BASE + path;
 const m = mod ? MODULES[mod] : null;

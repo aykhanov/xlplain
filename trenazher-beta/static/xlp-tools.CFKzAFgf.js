@@ -1,0 +1,1 @@
+function e(e){let t=(e||``).toLowerCase();return/дубл/.test(t)?`dubli`:/сверк|сверить|сверя/.test(t)?`sverka`:/очистк|пробел|телефон|фио|регистр/.test(t)?`ochistka`:/объедин|сопостав/.test(t)?`obedinenie`:null}export{e as t};

@@ -1,8 +1,8 @@
 ---
 import '../styles/trainer.css';
 import { url, PROD_BASE, MODULES, totalXp } from '../lib/data';
-interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi' | 'pq'; jsonld?: any[]; og?: string }
-const { title, description, path, mod, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261114.jpg' } = Astro.props;
+interface Props { title: string; description: string; path: string; mod?: 'excel' | 'sql' | 'bi' | 'pq'; nav?: string; jsonld?: any[]; og?: string }
+const { title, description, path, mod, nav, jsonld = [], og = 'https://xlplain.ru/assets/og-trenazher-20261114.jpg' } = Astro.props;
 const beta = __BETA__;
 const canonical = PROD_BASE + path;
 const m = mod ? MODULES[mod] : null;
@@ -37,6 +37,7 @@ const m = mod ? MODULES[mod] : null;
     <a href={url('sql/')} class={mod === 'sql' ? 'on' : ''}>SQL</a>
     <a href={url('pq/')} class={mod === 'pq' ? 'on' : ''}>Power Query</a>
     <a href={url('bi/')} class={mod === 'bi' ? 'on' : ''}>Power BI</a>
+    <a href={url('xlplain/')} class={'xlp-nav' + (nav === 'xlplain' ? ' on' : '')}>XLPlain онлайн</a>
   </nav>
   <div class="prog">
     <span class="streak" id="streak" hidden></span>

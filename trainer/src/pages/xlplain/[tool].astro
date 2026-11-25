@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/xlp.css';
+import { url } from '../../lib/data';
+import { XLP_TOOLS } from '../../lib/xlp-tools';
+export function getStaticPaths() { return XLP_TOOLS.map(t => ({ params: { tool: t.id }, props: { tool: t } })); }
+const { tool } = Astro.props as any;
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Тренажёр', item: 'https://xlplain.ru/trenazher/' },
+    { '@type': 'ListItem', position: 2, name: 'XLPlain онлайн', item: 'https://xlplain.ru/trenazher/xlplain/' },
+    { '@type': 'ListItem', position: 3, name: tool.title }] },
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'XLPlain онлайн: ' + tool.title, applicationCategory: 'BusinessApplication', operatingSystem: 'Браузер', isAccessibleForFree: true, inLanguage: 'ru', url: 'https://xlplain.ru/trenazher/xlplain/' + tool.id + '/' },
+];
+---
+<Base title={tool.seo + ' | XLPlain'} description={tool.desc} path={`xlplain/${tool.id}/`} nav="xlplain" jsonld={ld}>
+<div class="wrap">
+  <aside id="list">
+    <div class="lvl">XLPlain онлайн</div>
+    {XLP_TOOLS.map((t, k) => (
+      <a class={'item' + (t.id === tool.id ? ' on' : '')} href={url('xlplain/' + t.id + '/')}><span class="dot">{k + 1}</span><span class="tt">{t.title}<small>{t.tag.toLowerCase()}</small></span></a>
+    ))}
+    <div class="lvl">Ещё</div>
+    <a class="item" href={url()}><span class="dot">fx</span><span class="tt">Тренажёр<small>102 задачи</small></span></a>
+  </aside>
+  <main>
+    <p class="bc"><a href={url()}>Тренажёр</a> / <a href={url('xlplain/')}>XLPlain онлайн</a> / {tool.title}</p>
+    <section class="card xlp" data-tool={tool.id}>
+      <div class="crumbs"><span>XLPlain онлайн</span><span class="chip">{tool.tag}</span></div>
+      <h1 class="h">{tool.h1}</h1>
+      <p class="story">{tool.story}</p>
+      <div class="xnote"><b>Как в надстройке.</b> Здесь работают те же алгоритмы, что в XLPlain для Excel, перенесённые в браузер. Данные обрабатываются на вашем компьютере и никуда не отправляются. {tool.traps}</div>
+      <p class="tip">Ячейки можно править прямо в таблице: щёлкните и введите значение. Или загрузите свой файл Excel/CSV — до 30 строк.</p>
+      <div id="inputs"></div>
+      <div class="note" id="upnote" hidden></div>
+      <h2 class="h2">Настройки</h2>
+      <div class="xform" id="form"></div>
+      <div class="actions"><button class="btn main xrun" id="run">{tool.run}</button></div>
+      <div class="fb bad" id="err" hidden></div>
+      <div id="out"></div>
+      <div class="xcta" id="cta" hidden>
+        <div>
+          <b>В Excel это делает надстройка XLPlain</b>
+          <p>На файлах любого размера, с сохранением настроек в профиль и отчётом в новой книге. Исходные файлы не меняются, данные не уходят с компьютера.</p>
+          <p class="small">3 990 ₽ в год · до 2 компьютеров · 7 дней на возврат, если не подойдёт</p>
+        </div>
+        <div class="xcta-b">
+          <a class="btn main tobuy" href={`/?utm_source=trenazher&utm_medium=xlp_online&utm_campaign=${tool.id}#buy`}>Купить XLPlain</a>
+          <a class="btn" href={tool.site + '?utm_source=trenazher&utm_medium=xlp_online'}>Как это выглядит в Excel</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script>import '../../client/xlp-tool';</script>
+</Base>

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { toolForTip } from '../lib/xlp-tools';
 import { EditorView, basicSetup } from 'codemirror';
 import { keymap } from '@codemirror/view';
 import { sql, SQLite } from '@codemirror/lang-sql';
@@ -78,9 +79,10 @@ function ok(again, gain = 0) {
   const learn = '<div class="learn"><div class="learn-row"><span class="lb">Как это работает</span><p>' + esc(task.hint) + '</p></div>'
     + '<div class="learn-row"><span class="lb" style="background:#2f6fdf">А в Excel</span><p>' + esc(task.excel) + '</p></div>'
     + (task.tip ? '<div class="learn-row"><span class="lb tipb">Лайфхак</span><p>' + esc(task.tip) + '</p></div>' : '') + '</div>';
-  const xl = task.xlplain ? '<div class="xltip"><span class="xlb">XLPlain</span><p>' + esc(task.xlplain) + ' <a class="toxl" href="/?utm_source=trenazher&utm_medium=tip&utm_campaign=sql&utm_content=' + task.id + '">Подробнее →</a></p></div>' : '';
+  const xl = task.xlplain ? '<div class="xltip"><span class="xlb">XLPlain</span><p>' + esc(task.xlplain) + ' <a class="toxl" href="/?utm_source=trenazher&utm_medium=tip&utm_campaign=sql&utm_content=' + task.id + '">Подробнее →</a>' + (toolForTip(task.xlplain) ? ' <a class="toxlp" href="' + import.meta.env.BASE_URL + 'xlplain/' + toolForTip(task.xlplain) + '/">Попробовать в браузере →</a>' : '') + '</p></div>' : '';
   fb.innerHTML = (again ? '✓ Задача решена. Можно попробовать другой вариант запроса.' : '<b>Верно!</b> ' + (gain ? '+' + gain + ' XP. ' : '') + 'Запрос проверен на двух базах с разными данными.') + learn + xl;
   fb.querySelectorAll('.toxl').forEach(a => a.addEventListener('click', () => goal('trainer_to_xlplain', { task: task.id })));
+  fb.querySelectorAll('.toxlp').forEach(a => a.addEventListener('click', () => goal('trainer_to_xlp_online', { task: task.id })));
   $('#next').hidden = false;
   document.querySelectorAll('[data-task="' + task.id + '"]').forEach(el => { el.classList.add('done'); const d = el.querySelector('.dot'); if (d) d.textContent = '✓'; });
 }

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import '../styles/xlp.css';
 import { MODULES, url, tasksWord } from '../lib/data';
 const cards = [
   { mod: 'excel', tag: 'Excel', h: 'Формулы Excel', p: 'Живая таблица и формулы как в русском Excel. Ответ проверяется на 12 вариантах данных.', li: ['СУММ, ЕСЛИ, ВПР, СЧЁТЕСЛИ', 'ИНДЕКС + ПОИСКПОЗ, СУММЕСЛИМН', 'текст, даты, округление'] },
@@ -28,6 +29,12 @@ const badges = cards.flatMap(c => MODULES[c.mod].data.tracks.map((t: any) => ({ 
         </a>
       ); })}
     </div>
+    <a class="mod xlpcard" href={url('xlplain/')}>
+      <span class="tag">XLPlain онлайн</span>
+      <h2>Попробуйте надстройку XLPlain в браузере</h2>
+      <p>Сверка двух таблиц, объединение по ключу без ВПР, очистка данных и поиск дублей — на тех же алгоритмах, что в Excel. Можно загрузить свой файл, он не покидает компьютер.</p>
+      <span class="go">Открыть →</span>
+    </a>
     <div class="badges" id="badges">
       {badges.map(b => <span class="badge" data-ids={b.ids.join(',')}>{b.name}</span>)}
     </div>

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { toolForTip } from '../lib/xlp-tools';
 import { XL } from '../engine/excel';
 import { check as checkTask, preview, parseAddr } from '../engine/excel-check';
 import { sheetHtml, fmt, esc } from '../lib/sheet';
@@ -117,11 +118,12 @@ function check() {
 function showOk(again, gain) {
   const fb = $('#fb');
   const learn = '<div class="learn"><div class="learn-row"><span class="lb">Как это работает</span><p>' + esc(task.hint) + '</p></div>' + (task.tip ? '<div class="learn-row"><span class="lb tipb">Лайфхак</span><p>' + esc(task.tip) + '</p></div>' : '') + '</div>';
-  const tip = task.xlplain ? '<div class="xltip"><span class="xlb">XLPlain</span><p>' + esc(task.xlplain) + ' <a class="toxl" href="' + XLURL + '&utm_content=' + task.id + '">Подробнее →</a></p></div>' : '';
+  const tip = task.xlplain ? '<div class="xltip"><span class="xlb">XLPlain</span><p>' + esc(task.xlplain) + ' <a class="toxl" href="' + XLURL + '&utm_content=' + task.id + '">Подробнее →</a>' + (toolForTip(task.xlplain) ? ' <a class="toxlp" href="' + import.meta.env.BASE_URL + 'xlplain/' + toolForTip(task.xlplain) + '/">Попробовать в браузере →</a>' : '') + '</p></div>' : '';
   fb.className = 'fb good';
   if (again) fb.innerHTML = '✓ Задача решена' + (S.solved[KEY].xp ? ' · +' + S.solved[KEY].xp + ' XP' : '') + '. Можно потренировать другой вариант формулы.' + learn + tip;
   else fb.innerHTML = '<b>Верно!</b> ' + (gain ? '+' + gain + ' XP' + (S.revealed[KEY] ? ' (половина — решение было подсмотрено)' : '') + '. ' : '') + 'Формула пересчитается при любых данных — мы проверили на 12 вариантах таблицы.' + learn + tip;
   fb.querySelectorAll('.toxl').forEach(a => a.addEventListener('click', () => goal('trainer_to_xlplain', { task: task.id })));
+  fb.querySelectorAll('.toxlp').forEach(a => a.addEventListener('click', () => goal('trainer_to_xlp_online', { task: task.id })));
 }
 function refreshHeader() { rh(S, 'excel', task.id); }
 

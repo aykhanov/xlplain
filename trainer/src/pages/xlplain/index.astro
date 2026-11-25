@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/xlp.css';
+import { url } from '../../lib/data';
+import { XLP_TOOLS } from '../../lib/xlp-tools';
+const LI: Record<string, string[]> = {
+  sverka: ['добавленные, удалённые, изменённые', '«было → стало» по каждому полю', 'составной ключ, допуск чисел'],
+  obedinenie: ['без ВПР и #Н/Д', 'ключ текстом и числом совпадает', 'три способа объединения'],
+  ochistka: ['ФИО, телефоны, email, даты', 'числа из текста, пробелы', 'предпросмотр до запуска'],
+  dubli: ['по одному полю или нескольким', 'группы и первое вхождение', 'ничего не удаляется'],
+};
+---
+<Base title="XLPlain онлайн — сверка, объединение, очистка и дубли в браузере | XLPlain" description="Попробуйте надстройку XLPlain прямо в браузере: сверка двух таблиц, объединение по ключу без ВПР, очистка данных и поиск дублей. Те же алгоритмы, что в Excel. Можно загрузить свой файл — он не покидает компьютер." path="xlplain/" nav="xlplain">
+  <div class="hub">
+    <p class="bc"><a href={url()}>Тренажёр</a> / XLPlain онлайн</p>
+    <h1>XLPlain онлайн: попробуйте надстройку в браузере</h1>
+    <p class="lead">Четыре инструмента надстройки XLPlain для Excel работают прямо здесь, на тех же алгоритмах. В каждом уже загружен пример с типичными ловушками, а можно открыть свой файл — до 30 строк. Данные обрабатываются на вашем компьютере и никуда не отправляются.</p>
+    <div class="modgrid">
+      {XLP_TOOLS.map(t => (
+        <a class="mod" href={url('xlplain/' + t.id + '/')}>
+          <span class="tag">{t.tag}</span>
+          <h2>{t.title}</h2>
+          <p>{t.story}</p>
+          <ul>{LI[t.id].map(x => <li>{x}</li>)}</ul>
+          <span class="go">Попробовать →</span>
+        </a>
+      ))}
+    </div>
+    <div class="xcta" style="margin-top:22px">
+      <div>
+        <b>Полная версия — в Excel</b>
+        <p>Файлы любого размера, сверка целых папок, объединение до шести таблиц, сводные и дашборды, профили настроек. Работает в настольном Excel для Windows.</p>
+        <p class="small">3 990 ₽ в год · до 2 компьютеров · 7 дней на возврат</p>
+      </div>
+      <div class="xcta-b"><a class="btn main tobuy" href="/?utm_source=trenazher&utm_medium=xlp_online&utm_campaign=hub#buy">Купить XLPlain</a><a class="btn" href="/?utm_source=trenazher&utm_medium=xlp_online#demo">Видео работы в Excel</a></div>
+    </div>
+  </div>
+  <script is:inline>document.querySelectorAll('.tobuy').forEach(function(a){a.addEventListener('click',function(){try{window.ym&&window.ym(113091081,'reachGoal','xlp_buy_click',{tool:'hub'})}catch(e){}})});</script>
+</Base>

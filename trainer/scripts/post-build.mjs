@@ -12,6 +12,8 @@ for (const mod of ['excel', 'sql', 'pq', 'bi']) {
   urls.push(`https://xlplain.ru/trenazher/${mod}/`);
   for (const t of data.tasks) urls.push(`https://xlplain.ru/trenazher/${mod}/${t.slug}/`);
 }
+urls.push('https://xlplain.ru/trenazher/xlplain/');
+for (const t of ['sverka', 'obedinenie', 'ochistka', 'dubli']) urls.push(`https://xlplain.ru/trenazher/xlplain/${t}/`);
 let xml = fs.readFileSync(file, 'utf8');
 const lines = xml.split('\n').filter(l => !l.includes('https://xlplain.ru/trenazher/'));
 const at = lines.findIndex(l => l.includes('</urlset>'));

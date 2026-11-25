@@ -123,6 +123,10 @@
       link.addEventListener('click', function () { reachGoal('buy_cta_click'); });
     });
 
+    document.querySelectorAll('a[href*="/trenazher/xlplain/"]').forEach(function (link) {
+      link.addEventListener('click', function () { reachGoal('site_to_xlp_online', { from: location.pathname }); });
+    });
+
     document.querySelectorAll('form.purchase-form').forEach(function (form) {
       form.addEventListener('submit', function () {
         var action = form.querySelector('input[name="action"]');

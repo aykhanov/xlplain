@@ -78,3 +78,6 @@ table.info td:first-child{font-weight:700;background:#f7f6f1;white-space:nowrap}
 .pt{font-weight:700;font-size:13px;margin:10px 10px 0;color:var(--mute)}
 .pex .pt{margin-left:0}
 @media (max-width:900px){.prev{flex-direction:column}.prev .pex{padding:0 10px 10px}}
+
+.price-old{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6;font-weight:500}
+.promo-badge{display:inline-block;padding:2px 8px;margin-right:4px;border-radius:999px;background:#ff8a00;color:#fff;font-size:12px;font-weight:800;line-height:1.4;vertical-align:middle;white-space:nowrap}

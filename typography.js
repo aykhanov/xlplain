@@ -95,7 +95,7 @@
       softwareRequirements: 'Настольный Microsoft Excel для Windows с разрешённым запуском VBA-макросов',
       offers: {
         '@type': 'Offer',
-        price: '3990',
+        price: '1990',
         priceCurrency: 'RUB',
         availability: 'https://schema.org/InStock',
         url: 'https://xlplain.ru/#buy'

@@ -763,3 +763,9 @@ footer img[alt^="XLPlain"] {
 .demo-links a:not(.button) { font-size: 14px; font-weight: 600; color: #b45f00; }
 .demo-inline { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin: 18px 0 0; }
 .demo-inline span { font-size: 14px; color: var(--muted, #6b7280); }
+
+/* Акция до 31.12.2026 */
+.price-old { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .6; font-weight: 500; margin-left: 4px; }
+.promo-badge { display: inline-block; padding: 3px 9px; margin-right: 6px; border-radius: 999px; background: #ff8a00; color: #fff; font-size: 13px; font-weight: 800; line-height: 1.4; vertical-align: middle; white-space: nowrap; }
+.section-title .price-old { font-size: .75em; }
+.button .price-old { opacity: .75; }
